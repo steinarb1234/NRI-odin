@@ -61,7 +61,7 @@ ShaderGroupDesc :: struct {
 RayTracingPipelineDesc :: struct {
 	pipelineLayout:         ^PipelineLayout,
 	shaderLibrary:          ^ShaderLibraryDesc,
-	shaderGroups:           ^ShaderGroupDesc,
+	shaderGroups:           [^]ShaderGroupDesc,
 	shaderGroupNum:         u32,
 	recursionMaxDepth:      u32,
 	rayPayloadMaxSize:      u32,
@@ -275,8 +275,8 @@ AccelerationStructureBitsEnum :: enum u8 {
 AccelerationStructureBits :: bit_set[AccelerationStructureBitsEnum; u8]
 
 AccelerationStructureDesc :: struct {
-	optimizedSize:         u64,                      // can be retrieved by "CmdWriteAccelerationStructuresSizes" and used for compaction via "CmdCopyAccelerationStructure"
-	geometries:            ^BottomLevelGeometryDesc, // needed only for "BOTTOM_LEVEL", "HAS_BUFFER" can be used to indicate a buffer presence (no real entities needed at initialization time)
+	optimizedSize:         u64,                        // can be retrieved by "CmdWriteAccelerationStructuresSizes" and used for compaction via "CmdCopyAccelerationStructure"
+	geometries:            [^]BottomLevelGeometryDesc, // needed only for "BOTTOM_LEVEL", "HAS_BUFFER" can be used to indicate a buffer presence (no real entities needed at initialization time)
 	geometryOrInstanceNum: u32,
 	flags:                 AccelerationStructureBits,
 	type:                  AccelerationStructureType,
@@ -301,7 +301,7 @@ BuildTopLevelAccelerationStructureDesc :: struct {
 BuildBottomLevelAccelerationStructureDesc :: struct {
 	dst:           ^AccelerationStructure,
 	src:           ^AccelerationStructure, // implies "update" instead of "build" if provided (requires "ALLOW_UPDATE")
-	geometries:    ^BottomLevelGeometryDesc,
+	geometries:    [^]BottomLevelGeometryDesc,
 	geometryNum:   u32,
 	scratchBuffer: ^Buffer,
 	scratchOffset: u64,
@@ -374,8 +374,8 @@ RayTracingInterface :: struct {
 	CreateMicromap:                     proc "c" (device: ^Device, micromapDesc: ^MicromapDesc, micromap: ^^Micromap) -> Result,
 	GetAccelerationStructureMemoryDesc: proc "c" (accelerationStructure: ^AccelerationStructure, memoryLocation: MemoryLocation, memoryDesc: ^MemoryDesc),
 	GetMicromapMemoryDesc:              proc "c" (micromap: ^Micromap, memoryLocation: MemoryLocation, memoryDesc: ^MemoryDesc),
-	BindAccelerationStructureMemory:    proc "c" (bindAccelerationStructureMemoryDescs: ^BindAccelerationStructureMemoryDesc, bindAccelerationStructureMemoryDescNum: u32) -> Result,
-	BindMicromapMemory:                 proc "c" (bindMicromapMemoryDescs: ^BindMicromapMemoryDesc, bindMicromapMemoryDescNum: u32) -> Result,
+	BindAccelerationStructureMemory:    proc "c" (bindAccelerationStructureMemoryDescs: [^]BindAccelerationStructureMemoryDesc, bindAccelerationStructureMemoryDescNum: u32) -> Result,
+	BindMicromapMemory:                 proc "c" (bindMicromapMemoryDescs: [^]BindMicromapMemoryDesc, bindMicromapMemoryDescNum: u32) -> Result,
 
 	// Resources and memory (D3D12 style)
 	GetAccelerationStructureMemoryDesc2:  proc "c" (device: ^Device, accelerationStructureDesc: ^AccelerationStructureDesc, memoryLocation: MemoryLocation, memoryDesc: ^MemoryDesc), // requires "features.getMemoryDesc2"
@@ -393,14 +393,14 @@ RayTracingInterface :: struct {
 	// Command buffer
 	// {
 	// Micromap
-	CmdBuildMicromaps:      proc "c" (commandBuffer: ^CommandBuffer, buildMicromapDescs: ^BuildMicromapDesc, buildMicromapDescNum: u32),
-	CmdWriteMicromapsSizes: proc "c" (commandBuffer: ^CommandBuffer, micromaps: ^^Micromap, micromapNum: u32, queryPool: ^QueryPool, queryPoolOffset: u32),
+	CmdBuildMicromaps:      proc "c" (commandBuffer: ^CommandBuffer, buildMicromapDescs: [^]BuildMicromapDesc, buildMicromapDescNum: u32),
+	CmdWriteMicromapsSizes: proc "c" (commandBuffer: ^CommandBuffer, micromaps: [^]^Micromap, micromapNum: u32, queryPool: ^QueryPool, queryPoolOffset: u32),
 	CmdCopyMicromap:        proc "c" (commandBuffer: ^CommandBuffer, dst: ^Micromap, src: ^Micromap, copyMode: CopyMode),
 
 	// Acceleration structure
-	CmdBuildTopLevelAccelerationStructures:    proc "c" (commandBuffer: ^CommandBuffer, buildTopLevelAccelerationStructureDescs: ^BuildTopLevelAccelerationStructureDesc, buildTopLevelAccelerationStructureDescNum: u32),
-	CmdBuildBottomLevelAccelerationStructures: proc "c" (commandBuffer: ^CommandBuffer, buildBotomLevelAccelerationStructureDescs: ^BuildBottomLevelAccelerationStructureDesc, buildBotomLevelAccelerationStructureDescNum: u32),
-	CmdWriteAccelerationStructuresSizes:       proc "c" (commandBuffer: ^CommandBuffer, accelerationStructures: ^^AccelerationStructure, accelerationStructureNum: u32, queryPool: ^QueryPool, queryPoolOffset: u32),
+	CmdBuildTopLevelAccelerationStructures:    proc "c" (commandBuffer: ^CommandBuffer, buildTopLevelAccelerationStructureDescs: [^]BuildTopLevelAccelerationStructureDesc, buildTopLevelAccelerationStructureDescNum: u32),
+	CmdBuildBottomLevelAccelerationStructures: proc "c" (commandBuffer: ^CommandBuffer, buildBotomLevelAccelerationStructureDescs: [^]BuildBottomLevelAccelerationStructureDesc, buildBotomLevelAccelerationStructureDescNum: u32),
+	CmdWriteAccelerationStructuresSizes:       proc "c" (commandBuffer: ^CommandBuffer, accelerationStructures: [^]^AccelerationStructure, accelerationStructureNum: u32, queryPool: ^QueryPool, queryPoolOffset: u32),
 	CmdCopyAccelerationStructure:              proc "c" (commandBuffer: ^CommandBuffer, dst: ^AccelerationStructure, src: ^AccelerationStructure, copyMode: CopyMode),
 
 	// Ray tracing

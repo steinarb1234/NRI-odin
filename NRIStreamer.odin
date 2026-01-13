@@ -52,9 +52,9 @@ StreamerDesc :: struct {
 
 StreamBufferDataDesc :: struct {
 	// Data to upload
-	dataChunks:         ^DataSize, // will be concatenated in dynamic buffer memory
+	dataChunks:         [^]DataSize, // will be concatenated in dynamic buffer memory
 	dataChunkNum:       u32,
-	placementAlignment: u32,       // desired alignment for "BufferOffset::offset"
+	placementAlignment: u32,         // desired alignment for "BufferOffset::offset"
 
 	// Destination
 	dstBuffer: ^Buffer,

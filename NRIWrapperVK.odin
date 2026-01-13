@@ -48,7 +48,7 @@ DeviceCreationVKDesc :: struct {
 	vkInstance:          VKHandle,
 	vkDevice:            VKHandle,
 	vkPhysicalDevice:    VKHandle,
-	queueFamilies:       ^QueueFamilyVKDesc,
+	queueFamilies:       [^]QueueFamilyVKDesc,
 	queueFamilyNum:      u32,
 	minorVersion:        u8,           // >= 2
 

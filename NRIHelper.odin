@@ -33,14 +33,14 @@ VideoMemoryInfo :: struct {
 }
 
 TextureSubresourceUploadDesc :: struct {
-	slices:     rawptr,
+	slices:     [^]rawptr // odin bindings note: this may be the wrong type,
 	sliceNum:   u32,
 	rowPitch:   u32,
 	slicePitch: u32,
 }
 
 TextureUploadDesc :: struct {
-	subresources: ^TextureSubresourceUploadDesc, // if provided, must include ALL subresources = layerNum * mipNum
+	subresources: [^]TextureSubresourceUploadDesc, // if provided, must include ALL subresources = layerNum * mipNum
 	texture:      ^Texture,
 	after:        AccessLayoutStage,
 	planes:       PlaneBits,
@@ -54,9 +54,9 @@ BufferUploadDesc :: struct {
 
 ResourceGroupDesc :: struct {
 	memoryLocation:      MemoryLocation,
-	textures:            ^^Texture,
+	textures:            [^]^Texture,
 	textureNum:          u32,
-	buffers:             ^^Buffer,
+	buffers:             [^]^Buffer,
 	bufferNum:           u32,
 	preferredMemorySize: u64, // desired chunk size (but can be greater if a resource doesn't fit), 256 Mb if 0
 }
@@ -89,10 +89,10 @@ FormatProps :: struct {
 HelperInterface :: struct {
 	// Optimized memory allocation for a group of resources
 	CalculateAllocationNumber: proc "c" (device: ^Device, resourceGroupDesc: ^ResourceGroupDesc) -> u32,
-	AllocateAndBindMemory:     proc "c" (device: ^Device, resourceGroupDesc: ^ResourceGroupDesc, allocations: ^^Memory) -> Result, // "allocations" must have entries >= returned by "CalculateAllocationNumber"
+	AllocateAndBindMemory:     proc "c" (device: ^Device, resourceGroupDesc: ^ResourceGroupDesc, allocations: [^]^Memory) -> Result, // "allocations" must have entries >= returned by "CalculateAllocationNumber"
 
 	// Populate resources with data (not for streaming!)
-	UploadData: proc "c" (queue: ^Queue, textureUploadDescs: ^TextureUploadDesc, textureUploadDescNum: u32, bufferUploadDescs: ^BufferUploadDesc, bufferUploadDescNum: u32) -> Result,
+	UploadData: proc "c" (queue: ^Queue, textureUploadDescs: [^]TextureUploadDesc, textureUploadDescNum: u32, bufferUploadDescs: [^]BufferUploadDesc, bufferUploadDescNum: u32) -> Result,
 
 	// Information about video memory
 	QueryVideoMemoryInfo: proc "c" (device: ^Device, memoryLocation: MemoryLocation, videoMemoryInfo: ^VideoMemoryInfo) -> Result,
@@ -115,7 +115,7 @@ foreign lib {
 	ConvertVKFormatToNRI   :: proc(vkFormat: u32) -> Format ---
 	ConvertNRIFormatToDXGI :: proc(format: Format) -> u32 ---
 	ConvertNRIFormatToVK   :: proc(format: Format) -> u32 ---
-	GetFormatProps         :: proc(format: Format) -> ^FormatProps ---
+	GetFormatProps         :: proc(format: Format) -> [^]FormatProps ---
 
 	// Strings
 	GetGraphicsAPIString :: proc(graphicsAPI: GraphicsAPI) -> cstring ---

@@ -60,15 +60,15 @@ VKBindingOffsets :: struct {
 }
 
 VKExtensions :: struct {
-	instanceExtensions:   ^cstring,
+	instanceExtensions:   [^]cstring,
 	instanceExtensionNum: u32,
-	deviceExtensions:     ^cstring,
+	deviceExtensions:     [^]cstring,
 	deviceExtensionNum:   u32,
 }
 
 // A collection of queues of the same type
 QueueFamilyDesc :: struct {
-	queuePriorities: ^f32, // [-1; 1]: low < 0, normal = 0, high > 0 ("queueNum" entries expected)
+	queuePriorities: [^]f32, // [-1; 1]: low < 0, normal = 0, high > 0 ("queueNum" entries expected)
 	queueNum:        u32,
 	queueType:       QueueType,
 }
@@ -81,7 +81,7 @@ DeviceCreationDesc :: struct {
 	allocationCallbacks: AllocationCallbacks,
 
 	// One "GRAPHICS" queue is created by default
-	queueFamilies:  ^QueueFamilyDesc,
+	queueFamilies:  [^]QueueFamilyDesc,
 	queueFamilyNum: u32, // put "GRAPHICS" queue at the beginning of the list
 
 	// D3D specific
@@ -108,7 +108,7 @@ DeviceCreationDesc :: struct {
 foreign lib {
 	// if "adapterDescs == NULL", then "adapterDescNum" is set to the number of adapters
 	// else "adapterDescNum" must be set to number of elements in "adapterDescs"
-	EnumerateAdapters :: proc(adapterDescs: ^AdapterDesc, adapterDescNum: ^u32) -> Result ---
+	EnumerateAdapters :: proc(adapterDescs: [^]AdapterDesc, adapterDescNum: ^u32) -> Result ---
 	CreateDevice      :: proc(deviceCreationDesc: ^DeviceCreationDesc, device: ^^Device) -> Result ---
 	DestroyDevice     :: proc(device: ^Device) ---
 

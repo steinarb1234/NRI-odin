@@ -36,19 +36,19 @@ ImguiDesc :: struct {
 }
 
 CopyImguiDataDesc :: struct {
-	drawLists:   ^^ImDrawList,    // ImDrawData::CmdLists.Data
-	drawListNum: u32,             // ImDrawData::CmdLists.Size
-	textures:    ^^ImTextureData, // ImDrawData::Textures->Data (same as "ImGui::GetPlatformIO().Textures.Data")
-	textureNum:  u32,             // ImDrawData::Textures->Size (same as "ImGui::GetPlatformIO().Textures.Size")
+	drawLists:   [^]^ImDrawList,    // ImDrawData::CmdLists.Data
+	drawListNum: u32,               // ImDrawData::CmdLists.Size
+	textures:    [^]^ImTextureData, // ImDrawData::Textures->Data (same as "ImGui::GetPlatformIO().Textures.Data")
+	textureNum:  u32,               // ImDrawData::Textures->Size (same as "ImGui::GetPlatformIO().Textures.Size")
 }
 
 DrawImguiDesc :: struct {
-	drawLists:        ^^ImDrawList, // ImDrawData::CmdLists.Data (same as for "CopyImguiDataDesc")
-	drawListNum:      u32,          // ImDrawData::CmdLists.Size (same as for "CopyImguiDataDesc")
-	displaySize:      Dim2_t,       // ImDrawData::DisplaySize
-	hdrScale:         f32,          // SDR intensity in HDR mode (1 by default)
-	attachmentFormat: Format,       // destination attachment (render target) format
-	linearColor:      bool,         // apply de-gamma to vertex colors (needed for sRGB attachments and HDR)
+	drawLists:        [^]^ImDrawList, // ImDrawData::CmdLists.Data (same as for "CopyImguiDataDesc")
+	drawListNum:      u32,            // ImDrawData::CmdLists.Size (same as for "CopyImguiDataDesc")
+	displaySize:      Dim2_t,         // ImDrawData::DisplaySize
+	hdrScale:         f32,            // SDR intensity in HDR mode (1 by default)
+	attachmentFormat: Format,         // destination attachment (render target) format
+	linearColor:      bool,           // apply de-gamma to vertex colors (needed for sRGB attachments and HDR)
 }
 
 // Threadsafe: yes

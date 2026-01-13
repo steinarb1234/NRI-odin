@@ -121,8 +121,8 @@ CoreInterface :: struct {
 	CreateTexture:        proc "c" (device: ^Device, textureDesc: ^TextureDesc, texture: ^^Texture) -> Result,
 	GetBufferMemoryDesc:  proc "c" (buffer: ^Buffer, memoryLocation: MemoryLocation, memoryDesc: ^MemoryDesc),
 	GetTextureMemoryDesc: proc "c" (texture: ^Texture, memoryLocation: MemoryLocation, memoryDesc: ^MemoryDesc),
-	BindBufferMemory:     proc "c" (bindBufferMemoryDescs: ^BindBufferMemoryDesc, bindBufferMemoryDescNum: u32) -> Result,
-	BindTextureMemory:    proc "c" (bindTextureMemoryDescs: ^BindTextureMemoryDesc, bindTextureMemoryDescNum: u32) -> Result,
+	BindBufferMemory:     proc "c" (bindBufferMemoryDescs: [^]BindBufferMemoryDesc, bindBufferMemoryDescNum: u32) -> Result,
+	BindTextureMemory:    proc "c" (bindTextureMemoryDescs: [^]BindTextureMemoryDesc, bindTextureMemoryDescNum: u32) -> Result,
 
 	// Resources and memory (D3D12 style)
 	// - "Get[Resource]MemoryDesc2" requires "maintenance4" support on Vulkan
@@ -143,9 +143,9 @@ CoreInterface :: struct {
 	//       - these offsets are needed in shaders, if the corresponding descriptor set is not the first allocated from the descriptor pool
 	//    - VK: "GetDescriptorSetOffsets" returns "0"
 	//       - use "-fvk-bind-resource-heap" and "-fvk-bind-sampler-heap" DXC options to define bindings mimicking corresponding heaps
-	AllocateDescriptorSets:  proc "c" (descriptorPool: ^DescriptorPool, pipelineLayout: ^PipelineLayout, setIndex: u32, descriptorSets: ^^DescriptorSet, instanceNum: u32, variableDescriptorNum: u32) -> Result,
-	UpdateDescriptorRanges:  proc "c" (updateDescriptorRangeDescs: ^UpdateDescriptorRangeDesc, updateDescriptorRangeDescNum: u32),
-	CopyDescriptorRanges:    proc "c" (copyDescriptorRangeDescs: ^CopyDescriptorRangeDesc, copyDescriptorRangeDescNum: u32),
+	AllocateDescriptorSets:  proc "c" (descriptorPool: ^DescriptorPool, pipelineLayout: ^PipelineLayout, setIndex: u32, descriptorSets: [^]^DescriptorSet, instanceNum: u32, variableDescriptorNum: u32) -> Result,
+	UpdateDescriptorRanges:  proc "c" (updateDescriptorRangeDescs: [^]UpdateDescriptorRangeDesc, updateDescriptorRangeDescNum: u32),
+	CopyDescriptorRanges:    proc "c" (copyDescriptorRangeDescs: [^]CopyDescriptorRangeDesc, copyDescriptorRangeDescNum: u32),
 	ResetDescriptorPool:     proc "c" (descriptorPool: ^DescriptorPool),
 	GetDescriptorSetOffsets: proc "c" (descriptorSet: ^DescriptorSet, resourceHeapOffset: ^u32, samplerHeapOffset: ^u32),
 
@@ -170,17 +170,17 @@ CoreInterface :: struct {
 
 	// Input assembly
 	CmdSetIndexBuffer:   proc "c" (commandBuffer: ^CommandBuffer, buffer: ^Buffer, offset: u64, indexType: IndexType),
-	CmdSetVertexBuffers: proc "c" (commandBuffer: ^CommandBuffer, baseSlot: u32, vertexBufferDescs: ^VertexBufferDesc, vertexBufferNum: u32),
+	CmdSetVertexBuffers: proc "c" (commandBuffer: ^CommandBuffer, baseSlot: u32, vertexBufferDescs: [^]VertexBufferDesc, vertexBufferNum: u32),
 
 	// Initial state (mandatory)
-	CmdSetViewports: proc "c" (commandBuffer: ^CommandBuffer, viewports: ^Viewport, viewportNum: u32),
-	CmdSetScissors:  proc "c" (commandBuffer: ^CommandBuffer, rects: ^Rect, rectNum: u32),
+	CmdSetViewports: proc "c" (commandBuffer: ^CommandBuffer, viewports: [^]Viewport, viewportNum: u32),
+	CmdSetScissors:  proc "c" (commandBuffer: ^CommandBuffer, rects: [^]Rect, rectNum: u32),
 
 	// Initial state (if enabled)
 	CmdSetStencilReference: proc "c" (commandBuffer: ^CommandBuffer, frontRef: u8, backRef: u8),         // "backRef" requires "features.independentFrontAndBackStencilReferenceAndMasks"
 	CmdSetDepthBounds:      proc "c" (commandBuffer: ^CommandBuffer, boundsMin: f32, boundsMax: f32),    // requires "features.depthBoundsTest"
 	CmdSetBlendConstants:   proc "c" (commandBuffer: ^CommandBuffer, color: ^Color32f),
-	CmdSetSampleLocations:  proc "c" (commandBuffer: ^CommandBuffer, locations: ^SampleLocation, locationNum: Sample_t, sampleNum: Sample_t), // requires "tiers.sampleLocations != 0"
+	CmdSetSampleLocations:  proc "c" (commandBuffer: ^CommandBuffer, locations: [^]SampleLocation, locationNum: Sample_t, sampleNum: Sample_t), // requires "tiers.sampleLocations != 0"
 	CmdSetShadingRate:      proc "c" (commandBuffer: ^CommandBuffer, shadingRateDesc: ^ShadingRateDesc), // requires "tiers.shadingRate != 0"
 	CmdSetDepthBias:        proc "c" (commandBuffer: ^CommandBuffer, depthBiasDesc: ^DepthBiasDesc),     // requires "features.dynamicDepthBias", actually it's an override
 
@@ -189,7 +189,7 @@ CoreInterface :: struct {
 
 	// {                {
 	// Clear
-	CmdClearAttachments: proc "c" (commandBuffer: ^CommandBuffer, clearAttachmentDescs: ^ClearAttachmentDesc, clearAttachmentDescNum: u32, rects: ^Rect, rectNum: u32),
+	CmdClearAttachments: proc "c" (commandBuffer: ^CommandBuffer, clearAttachmentDescs: [^]ClearAttachmentDesc, clearAttachmentDescNum: u32, rects: [^]Rect, rectNum: u32),
 
 	// Draw
 	CmdDraw:        proc "c" (commandBuffer: ^CommandBuffer, drawDesc: ^DrawDesc),

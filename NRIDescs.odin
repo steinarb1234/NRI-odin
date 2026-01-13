@@ -3079,7 +3079,7 @@ AttachmentDesc :: struct {
 }
 
 RenderingDesc :: struct {
-	colors:      ^AttachmentDesc,
+	colors:      [^]AttachmentDesc,
 	colorNum:    u32,
 	depth:       AttachmentDesc, // may be treated as "depth-stencil"
 	stencil:     AttachmentDesc, // (optional) separation is needed for multisample resolve

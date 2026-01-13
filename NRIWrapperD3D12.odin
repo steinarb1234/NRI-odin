@@ -40,14 +40,14 @@ ID3D12GraphicsCommandList :: struct {}
 
 // A collection of queues of the same type
 QueueFamilyD3D12Desc :: struct {
-	d3d12Queues: ^^ID3D12CommandQueue, // if not provided, will be created
+	d3d12Queues: [^]^ID3D12CommandQueue, // if not provided, will be created
 	queueNum:    u32,
 	queueType:   QueueType,
 }
 
 DeviceCreationD3D12Desc :: struct {
 	d3d12Device:          ^ID3D12Device,
-	queueFamilies:        ^QueueFamilyD3D12Desc,
+	queueFamilies:        [^]QueueFamilyD3D12Desc,
 	queueFamilyNum:       u32,
 	agsContext:           ^AGSContext,
 	callbackInterface:    CallbackInterface,

@@ -175,7 +175,7 @@ DisplayDesc :: struct {
 SwapChainInterface :: struct {
 	CreateSwapChain:      proc "c" (device: ^Device, swapChainDesc: ^SwapChainDesc, swapChain: ^^SwapChain) -> Result,
 	DestroySwapChain:     proc "c" (swapChain: ^SwapChain),
-	GetSwapChainTextures: proc "c" (swapChain: ^SwapChain, textureNum: ^u32) -> ^^Texture,
+	GetSwapChainTextures: proc "c" (swapChain: ^SwapChain, textureNum: ^u32) -> [^]^Texture,
 
 	// Returns "FAILURE" if swap chain's window is outside of all monitors
 	GetDisplayDesc: proc "c" (swapChain: ^SwapChain, displayDesc: ^DisplayDesc) -> Result,
