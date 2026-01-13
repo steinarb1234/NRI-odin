@@ -14,19 +14,15 @@ when ODIN_DEBUG {
 when ODIN_OS == .Windows {
 	when ODIN_ARCH == .amd64 {
 		foreign import lib {lib_path + "NRI.lib", "system:dxgi.lib", "system:dxguid.lib", "system:d3d12.lib", "system:d3d11.lib", "system:User32.lib"}
-	} else when ODIN_ARCH == .arm64 {
-		foreign import lib {lib_path + "aarch64-windows.lib"}
+	// } else when ODIN_ARCH == .arm64 {
+		// foreign import lib {lib_path + "aarch64-windows.lib"}
 	} else do #panic("Unsupported architecture")
-} else when ODIN_OS == .Darwin {
-	when ODIN_ARCH == .arm64 {
-		foreign import lib {lib_path + "libaarch64-macos.a"}
-	} else do #panic("Unsupported architecture")
-} else when ODIN_OS == .Linux {
-	when ODIN_ARCH == .amd64 {
-		foreign import lib {lib_path + "libx86_64-linux.a"}
-	} else when ODIN_ARCH == .arm64 {
-		foreign import lib {lib_path + "libaarch64-linux.a"}
-	} else do #panic("Unsupported architecture")
+// } else when ODIN_OS == .Linux { // Todo: add linux binaries
+	// when ODIN_ARCH == .amd64 {
+	// 	foreign import lib {lib_path + "libx86_64-linux.a"}
+	// } else when ODIN_ARCH == .arm64 {
+	// 	foreign import lib {lib_path + "libaarch64-linux.a"}
+	// } else do #panic("Unsupported architecture")
 } else do #panic("Unsupported OS")
 
 NRI_SWAP_CHAIN_H :: 1
@@ -40,7 +36,7 @@ NRI_SWAP_CHAIN_H :: 1
 //  - G2084 - SMPTE ST.2084 (Perceptual Quantization)
 // Bits per channel:
 //  - 8, 10, 16 (float)
-SwapChainFormat :: enum i32 {
+SwapChainFormat :: enum u8 {
 	// Transfer function:
 	//  - G10 - linear (gamma 1.0)
 	//  - G22 - sRGB (gamma ~2.2)
@@ -82,48 +78,29 @@ SwapChainFormat :: enum i32 {
 	MAX_NUM            = 4,
 }
 
-// Color space:
-//  - BT.709 - LDR https://en.wikipedia.org/wiki/Rec._709
-//  - BT.2020 - HDR https://en.wikipedia.org/wiki/Rec._2020
-// Transfer function:
-//  - G10 - linear (gamma 1.0)
-//  - G22 - sRGB (gamma ~2.2)
-//  - G2084 - SMPTE ST.2084 (Perceptual Quantization)
-// Bits per channel:
-//  - 8, 10, 16 (float)
-SwapChainFormat :: u8
-
 // https://registry.khronos.org/vulkan/specs/latest/man/html/VkPresentScalingFlagBitsKHR.html
-Scaling :: enum i32 {
+Scaling :: enum u8 {
 	ONE_TO_ONE = 0,
 	STRETCH    = 1,
 	MAX_NUM    = 2,
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkPresentScalingFlagBitsKHR.html
-Scaling :: u8
-
 // https://registry.khronos.org/vulkan/specs/latest/man/html/VkPresentGravityFlagBitsKHR.html
-Gravity :: u8
-
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkPresentGravityFlagBitsKHR.html
-Gravity :: enum i32 {
+Gravity :: enum u8 {
 	MIN      = 0,
 	MAX      = 1,
 	CENTERED = 2,
 	MAX_NUM  = 3,
 }
 
-SwapChainBits :: u8
-
-SwapChainBitsEnum :: enum i32 {
+SwapChainBitsEnum :: enum u8 {
 	VSYNC             = 0,
 	WAITABLE          = 1,
 	ALLOW_TEARING     = 2,
 	ALLOW_LOW_LATENCY = 3,
 }
 
-SwapChainBits :: bit_set[SwapChainBitsEnum; i32]
+SwapChainBits :: bit_set[SwapChainBitsEnum; u8]
 
 WindowsWindow :: struct {
 	hwnd: rawptr, //    HWND

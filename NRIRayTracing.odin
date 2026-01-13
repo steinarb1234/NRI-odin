@@ -15,19 +15,15 @@ when ODIN_DEBUG {
 when ODIN_OS == .Windows {
 	when ODIN_ARCH == .amd64 {
 		foreign import lib {lib_path + "NRI.lib", "system:dxgi.lib", "system:dxguid.lib", "system:d3d12.lib", "system:d3d11.lib", "system:User32.lib"}
-	} else when ODIN_ARCH == .arm64 {
-		foreign import lib {lib_path + "aarch64-windows.lib"}
+	// } else when ODIN_ARCH == .arm64 {
+		// foreign import lib {lib_path + "aarch64-windows.lib"}
 	} else do #panic("Unsupported architecture")
-} else when ODIN_OS == .Darwin {
-	when ODIN_ARCH == .arm64 {
-		foreign import lib {lib_path + "libaarch64-macos.a"}
-	} else do #panic("Unsupported architecture")
-} else when ODIN_OS == .Linux {
-	when ODIN_ARCH == .amd64 {
-		foreign import lib {lib_path + "libx86_64-linux.a"}
-	} else when ODIN_ARCH == .arm64 {
-		foreign import lib {lib_path + "libaarch64-linux.a"}
-	} else do #panic("Unsupported architecture")
+// } else when ODIN_OS == .Linux { // Todo: add linux binaries
+	// when ODIN_ARCH == .amd64 {
+	// 	foreign import lib {lib_path + "libx86_64-linux.a"}
+	// } else when ODIN_ARCH == .arm64 {
+	// 	foreign import lib {lib_path + "libaarch64-linux.a"}
+	// } else do #panic("Unsupported architecture")
 } else do #panic("Unsupported OS")
 
 NRI_RAY_TRACING_H :: 1
@@ -35,10 +31,7 @@ NRI_RAY_TRACING_H :: 1
 AccelerationStructure :: struct {} // bottom- or top- level acceleration structure (aka BLAS or TLAS respectively)
 Micromap              :: struct {} // a micromap that encodes sub-triangle opacity (aka OMM, can be attached to a triangle BLAS)
 
-//============================================================================================================================================================================================
-RayTracingPipelineBits :: u8
-
-RayTracingPipelineBitsEnum :: enum i32 {
+RayTracingPipelineBitsEnum :: enum u8 {
 	//============================================================================================================================================================================================
 	SKIP_TRIANGLES  = 0,
 
@@ -50,7 +43,7 @@ RayTracingPipelineBitsEnum :: enum i32 {
 }
 
 //============================================================================================================================================================================================
-RayTracingPipelineBits :: bit_set[RayTracingPipelineBitsEnum; i32]
+RayTracingPipelineBits :: bit_set[RayTracingPipelineBitsEnum; u8]
 
 ShaderLibraryDesc :: struct {
 	shaders:   ^ShaderDesc,
@@ -78,7 +71,7 @@ RayTracingPipelineDesc :: struct {
 }
 
 //============================================================================================================================================================================================
-MicromapFormat :: enum i32 {
+MicromapFormat :: enum u16 {
 	//============================================================================================================================================================================================
 	OPACITY_2_STATE = 1,
 
@@ -89,10 +82,7 @@ MicromapFormat :: enum i32 {
 	MAX_NUM         = 3,
 }
 
-//============================================================================================================================================================================================
-MicromapFormat :: u16
-
-MicromapSpecialIndex :: enum i32 {
+MicromapSpecialIndex :: enum i8 {
 	FULLY_TRANSPARENT         = -1,
 	FULLY_OPAQUE              = -2,
 	FULLY_UNKNOWN_TRANSPARENT = -3,
@@ -100,16 +90,13 @@ MicromapSpecialIndex :: enum i32 {
 	MAX_NUM                   = -3,
 }
 
-MicromapSpecialIndex :: i8
-MicromapBits         :: u8
-
-MicromapBitsEnum :: enum i32 {
+MicromapBitsEnum :: enum u8 {
 	ALLOW_COMPACTION  = 1,
 	PREFER_FAST_TRACE = 2,
 	PREFER_FAST_BUILD = 3,
 }
 
-MicromapBits :: bit_set[MicromapBitsEnum; i32]
+MicromapBits :: bit_set[MicromapBitsEnum; u8]
 
 MicromapUsageDesc :: struct {
 	triangleNum:      u32, // represents "MicromapTriangle" number for "{format, subdivisionLevel}" pair contained in the micromap
@@ -160,10 +147,7 @@ MicromapTriangle :: struct {
 }
 
 //============================================================================================================================================================================================
-BottomLevelGeometryType :: u8
-
-//============================================================================================================================================================================================
-BottomLevelGeometryType :: enum i32 {
+BottomLevelGeometryType :: enum u8 {
 	//============================================================================================================================================================================================
 	TRIANGLES = 0,
 
@@ -174,14 +158,12 @@ BottomLevelGeometryType :: enum i32 {
 	MAX_NUM   = 2,
 }
 
-BottomLevelGeometryBits :: u8
-
-BottomLevelGeometryBitsEnum :: enum i32 {
+BottomLevelGeometryBitsEnum :: enum u8 {
 	OPAQUE_GEOMETRY                 = 0,
 	NO_DUPLICATE_ANY_HIT_INVOCATION = 1,
 }
 
-BottomLevelGeometryBits :: bit_set[BottomLevelGeometryBitsEnum; i32]
+BottomLevelGeometryBits :: bit_set[BottomLevelGeometryBitsEnum; u8]
 
 BottomLevelTrianglesDesc :: struct {
 	// Vertices
@@ -236,10 +218,7 @@ BottomLevelAabb :: struct {
 	maxZ: f32,
 }
 
-//============================================================================================================================================================================================
-TopLevelInstanceBits :: u32
-
-TopLevelInstanceBitsEnum :: enum i32 {
+TopLevelInstanceBitsEnum :: enum u32 {
 	//============================================================================================================================================================================================
 	TRIANGLE_CULL_DISABLE = 0,
 
@@ -260,7 +239,7 @@ TopLevelInstanceBitsEnum :: enum i32 {
 }
 
 //============================================================================================================================================================================================
-TopLevelInstanceBits :: bit_set[TopLevelInstanceBitsEnum; i32]
+TopLevelInstanceBits :: bit_set[TopLevelInstanceBitsEnum; u32]
 
 TopLevelInstance :: struct {
 	transform:                     [3][4]f32,
@@ -272,7 +251,7 @@ TopLevelInstance :: struct {
 }
 
 //============================================================================================================================================================================================
-AccelerationStructureType :: enum i32 {
+AccelerationStructureType :: enum u8 {
 	//============================================================================================================================================================================================
 	TOP_LEVEL    = 0,
 
@@ -283,10 +262,7 @@ AccelerationStructureType :: enum i32 {
 	MAX_NUM      = 2,
 }
 
-//============================================================================================================================================================================================
-AccelerationStructureType :: u8
-
-AccelerationStructureBitsEnum :: enum i32 {
+AccelerationStructureBitsEnum :: enum u8 {
 	ALLOW_UPDATE            = 0,
 	ALLOW_COMPACTION        = 1,
 	ALLOW_DATA_ACCESS       = 2,
@@ -296,9 +272,7 @@ AccelerationStructureBitsEnum :: enum i32 {
 	PREFER_FAST_BUILD       = 6,
 	MINIMIZE_MEMORY         = 7,
 }
-
-AccelerationStructureBits :: u8
-AccelerationStructureBits :: bit_set[AccelerationStructureBitsEnum; i32]
+AccelerationStructureBits :: bit_set[AccelerationStructureBitsEnum; u8]
 
 AccelerationStructureDesc :: struct {
 	optimizedSize:         u64,                      // can be retrieved by "CmdWriteAccelerationStructuresSizes" and used for compaction via "CmdCopyAccelerationStructure"
@@ -334,10 +308,7 @@ BuildBottomLevelAccelerationStructureDesc :: struct {
 }
 
 //============================================================================================================================================================================================
-CopyMode :: u8
-
-//============================================================================================================================================================================================
-CopyMode :: enum i32 {
+CopyMode :: enum u8 {
 	//============================================================================================================================================================================================
 	CLONE   = 0,
 

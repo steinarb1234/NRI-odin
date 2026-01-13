@@ -14,27 +14,22 @@ when ODIN_DEBUG {
 when ODIN_OS == .Windows {
 	when ODIN_ARCH == .amd64 {
 		foreign import lib {lib_path + "NRI.lib", "system:dxgi.lib", "system:dxguid.lib", "system:d3d12.lib", "system:d3d11.lib", "system:User32.lib"}
-	} else when ODIN_ARCH == .arm64 {
-		foreign import lib {lib_path + "aarch64-windows.lib"}
+	// } else when ODIN_ARCH == .arm64 {
+		// foreign import lib {lib_path + "aarch64-windows.lib"}
 	} else do #panic("Unsupported architecture")
-} else when ODIN_OS == .Darwin {
-	when ODIN_ARCH == .arm64 {
-		foreign import lib {lib_path + "libaarch64-macos.a"}
-	} else do #panic("Unsupported architecture")
-} else when ODIN_OS == .Linux {
-	when ODIN_ARCH == .amd64 {
-		foreign import lib {lib_path + "libx86_64-linux.a"}
-	} else when ODIN_ARCH == .arm64 {
-		foreign import lib {lib_path + "libaarch64-linux.a"}
-	} else do #panic("Unsupported architecture")
+// } else when ODIN_OS == .Linux { // Todo: add linux binaries
+	// when ODIN_ARCH == .amd64 {
+	// 	foreign import lib {lib_path + "libx86_64-linux.a"}
+	// } else when ODIN_ARCH == .arm64 {
+	// 	foreign import lib {lib_path + "libaarch64-linux.a"}
+	// } else do #panic("Unsupported architecture")
 } else do #panic("Unsupported OS")
 
 NRI_UPSCALER_H :: 1
 
 Upscaler     :: struct {}
-UpscalerType :: u8 // Name                                     // Notes
 
-UpscalerType :: enum i32 {
+UpscalerType :: enum u8 {
 	NIS     = 0, // Name                                     // Notes
 	FSR     = 1, // Name                                     // Notes
 	XESS    = 2, // Name                                     // Notes
@@ -43,9 +38,7 @@ UpscalerType :: enum i32 {
 	MAX_NUM = 5, // Name                                     // Notes
 } // Name                                     // Notes
 
-UpscalerMode :: u8 // Scaling factor       // Min jitter phases (or just use unclamped Halton2D)
-
-UpscalerMode :: enum i32 {
+UpscalerMode :: enum u8 {
 	NATIVE            = 0, // Scaling factor       // Min jitter phases (or just use unclamped Halton2D)
 	ULTRA_QUALITY     = 1, // Scaling factor       // Min jitter phases (or just use unclamped Halton2D)
 	QUALITY           = 2, // Scaling factor       // Min jitter phases (or just use unclamped Halton2D)
@@ -55,9 +48,7 @@ UpscalerMode :: enum i32 {
 	MAX_NUM           = 6, // Scaling factor       // Min jitter phases (or just use unclamped Halton2D)
 } // Scaling factor       // Min jitter phases (or just use unclamped Halton2D)
 
-UpscalerBits :: u16
-
-UpscalerBitsEnum :: enum i32 {
+UpscalerBitsEnum :: enum u16 {
 	HDR            = 0,
 	SRGB           = 1,
 	USE_EXPOSURE   = 2,
@@ -69,15 +60,14 @@ UpscalerBitsEnum :: enum i32 {
 	MV_JITTERED    = 8,
 }
 
-UpscalerBits        :: bit_set[UpscalerBitsEnum; i32]
-DispatchUpscaleBits :: u8
+UpscalerBits :: bit_set[UpscalerBitsEnum; u16]
 
-DispatchUpscaleBitsEnum :: enum i32 {
+DispatchUpscaleBitsEnum :: enum u8 {
 	RESET_HISTORY       = 0,
 	USE_SPECULAR_MOTION = 1,
 }
 
-DispatchUpscaleBits :: bit_set[DispatchUpscaleBitsEnum; i32]
+DispatchUpscaleBits :: bit_set[DispatchUpscaleBitsEnum; u8]
 
 UpscalerDesc :: struct {
 	upscaleResolution: Dim2_t,         // output resolution
