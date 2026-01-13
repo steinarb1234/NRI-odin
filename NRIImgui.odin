@@ -30,7 +30,6 @@ NRI_IMGUI_H :: 1
 ImDrawList    :: struct {}
 ImTextureData :: struct {}
 Imgui         :: struct {}
-Streamer      :: struct {}
 
 ImguiDesc :: struct {
 	descriptorPoolSize: u32, // upper bound of textures used by Imgui for drawing: {number of queued frames} * {number of "CmdDrawImgui" calls} * (1 + {"drawList->AddImage*" calls})
