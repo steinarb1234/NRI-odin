@@ -33,7 +33,7 @@ VideoMemoryInfo :: struct {
 }
 
 TextureSubresourceUploadDesc :: struct {
-	slices:     [^]rawptr // odin bindings note: this may be the wrong type,
+	slices:     [^]rawptr, // odin bindings note: this may be the wrong type,
 	sliceNum:   u32,
 	rowPitch:   u32,
 	slicePitch: u32,
