@@ -6,6 +6,6 @@ Copy NRI.dll to the root directory of your project to use the library. Currently
 
 Every graphics API is enabled in the included binaries (D3D11, D3D12 and Vulkan). The Imgui extension is also enabled.
 
-I have made my test code for these bindings public on github [here](https://github.com/steinarb1234/nri-directx12).
+I have made sample code for using these bindings public on github [here](https://github.com/steinarb1234/NRI-odin-samples).
 
 Credit to lodinukal for his NRI bindings. These bindings are built upon his work.
