@@ -88,7 +88,7 @@ Result :: enum i8 {
 }
 
 // The viewport origin is top-left (D3D native) by default, but can be changed to bottom-left (VK native)
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkViewport.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkViewport.html
 // https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ns-d3d12-d3d12_viewport
 Viewport :: struct {
 	x:                f32,
@@ -100,7 +100,7 @@ Viewport :: struct {
 	originBottomLeft: bool, // expects "features.viewportOriginBottomLeft"
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkRect2D.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkRect2D.html
 Rect :: struct {
 	x:      i16,
 	y:      i16,
@@ -140,7 +140,7 @@ SampleLocation :: struct {
 	x, y: i8, // [-8; 7]
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkFormat.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkFormat.html
 // https://learn.microsoft.com/en-us/windows/win32/api/dxgiformat/ne-dxgiformat-dxgi_format
 // left -> right : low -> high bits
 // Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1777,7 +1777,7 @@ PlaneBitsEnum :: enum u8 {
 }
 
 // https://learn.microsoft.com/en-us/windows/win32/direct3d12/subresources#plane-slice
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageAspectFlagBits.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkImageAspectFlagBits.html
 PlaneBits :: bit_set[PlaneBitsEnum; u8]
 
 FormatSupportBitsEnum :: enum u16 {
@@ -1830,17 +1830,17 @@ StageBitsEnum :: enum u32 {
 	INDIRECT                 = 22,
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineStageFlagBits2.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkPipelineStageFlagBits2.html
 // https://microsoft.github.io/DirectX-Specs/d3d/D3D12EnhancedBarriers.html#d3d12_barrier_sync
 StageBits :: bit_set[StageBitsEnum; u32]
 STAGEBITS_MESH_SHADERS         :: StageBits {.TASK_SHADER, .MESH_SHADER}
 STAGEBITS_ALL_SHADERS          :: StageBits {.VERTEX_SHADER, .TESS_CONTROL_SHADER, .TESS_EVALUATION_SHADER, .GEOMETRY_SHADER, .TASK_SHADER, .MESH_SHADER, .FRAGMENT_SHADER, .COMPUTE_SHADER, .RAYGEN_SHADER, .MISS_SHADER, .INTERSECTION_SHADER, .CLOSEST_HIT_SHADER, .ANY_HIT_SHADER, .CALLABLE_SHADER}
 STAGEBITS_ALL                  :: StageBits {}
 STAGEBITS_NONE                 :: transmute(StageBits)(u32(0x7FFFFFFF))
-STAGEBITS_RAY_TRACING_SHADERS  :: StageBits {.RAYGEN_SHADER, .MISS_SHADER, .INTERSECTION_SHADER, .CLOSEST_HIT_SHADER, .ANY_HIT_SHADER, .CALLABLE_SHADER}
 STAGEBITS_TESSELLATION_SHADERS :: StageBits {.TESS_CONTROL_SHADER, .TESS_EVALUATION_SHADER}
-STAGEBITS_GRAPHICS_SHADERS     :: StageBits {.VERTEX_SHADER, .TESS_CONTROL_SHADER, .TESS_EVALUATION_SHADER, .GEOMETRY_SHADER, .TASK_SHADER, .MESH_SHADER, .FRAGMENT_SHADER}
 STAGEBITS_GRAPHICS             :: StageBits {.INDEX_INPUT, .VERTEX_SHADER, .TESS_CONTROL_SHADER, .TESS_EVALUATION_SHADER, .GEOMETRY_SHADER, .TASK_SHADER, .MESH_SHADER, .FRAGMENT_SHADER, .DEPTH_STENCIL_ATTACHMENT, .COLOR_ATTACHMENT}
+STAGEBITS_RAY_TRACING_SHADERS  :: StageBits {.RAYGEN_SHADER, .MISS_SHADER, .INTERSECTION_SHADER, .CLOSEST_HIT_SHADER, .ANY_HIT_SHADER, .CALLABLE_SHADER}
+STAGEBITS_GRAPHICS_SHADERS     :: StageBits {.VERTEX_SHADER, .TESS_CONTROL_SHADER, .TESS_EVALUATION_SHADER, .GEOMETRY_SHADER, .TASK_SHADER, .MESH_SHADER, .FRAGMENT_SHADER}
 
 AccessBitsEnum :: enum u32 {
 	INDEX_BUFFER                   = 0,
@@ -1868,16 +1868,16 @@ AccessBitsEnum :: enum u32 {
 	CLEAR_STORAGE                  = 22,
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkAccessFlagBits2.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkAccessFlagBits2.html
 // https://microsoft.github.io/DirectX-Specs/d3d/D3D12EnhancedBarriers.html#d3d12_barrier_access
 AccessBits :: bit_set[AccessBitsEnum; u32]
-ACCESSBITS_COLOR_ATTACHMENT         :: AccessBits {.COLOR_ATTACHMENT_READ, .COLOR_ATTACHMENT_WRITE}
 ACCESSBITS_ACCELERATION_STRUCTURE   :: AccessBits {.ACCELERATION_STRUCTURE_READ, .ACCELERATION_STRUCTURE_WRITE}
 ACCESSBITS_MICROMAP                 :: AccessBits {.MICROMAP_READ, .MICROMAP_WRITE}
 ACCESSBITS_DEPTH_STENCIL_ATTACHMENT :: AccessBits {.DEPTH_STENCIL_ATTACHMENT_READ, .DEPTH_STENCIL_ATTACHMENT_WRITE}
+ACCESSBITS_COLOR_ATTACHMENT         :: AccessBits {.COLOR_ATTACHMENT_READ, .COLOR_ATTACHMENT_WRITE}
 
 // "Layout" is ignored if "features.enhancedBarriers" is not supported
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageLayout.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkImageLayout.html
 // https://microsoft.github.io/DirectX-Specs/d3d/D3D12EnhancedBarriers.html#d3d12_barrier_layout
 Layout :: enum u8 {
 	UNDEFINED                         = 0,  // Compatible "AccessBits":
@@ -1944,7 +1944,7 @@ BarrierDesc :: struct {
 	textureNum: u32,
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageType.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkImageType.html
 // https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ne-d3d12-d3d12_resource_dimension
 TextureType :: enum u8 {
 	TEXTURE_1D = 0,
@@ -1957,7 +1957,7 @@ TextureType :: enum u8 {
 // In most of cases "SharingMode" can be ignored. Where is it needed?
 // - VK: use "EXCLUSIVE" for attachments participating into multi-queue activities to preserve DCC (Delta Color Compression) on some HW
 // - D3D12: use "SIMULTANEOUS" to concurrently use a texture as a "SHADER_RESOURCE" (or "SHADER_RESOURCE_STORAGE") and as a "COPY_DESTINATION" for non overlapping texture regions
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkSharingMode.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkSharingMode.html
 SharingMode :: enum u8 {
 	CONCURRENT   = 0,
 	EXCLUSIVE    = 1,
@@ -1974,7 +1974,7 @@ TextureUsageBitsEnum :: enum u8 {
 	INPUT_ATTACHMENT         = 5, // Min compatible access:                   Usage:
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageUsageFlagBits.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkImageUsageFlagBits.html
 // https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ne-d3d12-d3d12_resource_flags
 TextureUsageBits :: bit_set[TextureUsageBitsEnum; u8]
 
@@ -1993,7 +1993,7 @@ BufferUsageBitsEnum :: enum u16 {
 	MICROMAP_STORAGE                   = 11, // Min compatible access:                   Usage:
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkBufferUsageFlagBits.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkBufferUsageFlagBits.html
 BufferUsageBits :: bit_set[BufferUsageBitsEnum; u16]
 
 TextureDesc :: struct {
@@ -2010,13 +2010,13 @@ TextureDesc :: struct {
 	optimizedClearValue: ClearValue, // D3D12: not needed on desktop, since any HW can track many clear values
 }
 
-// "structureStride" values:
-// 0  - allows only "typed" views
-// 4  - allows "typed", "byte address (raw)" and "structured" views
-//      D3D11: allows to create multiple "structured" views for a single resource, disobeying the spec)
-// >4 - allows only "structured" views
-//      D3D11: locks this buffer to a single "structured" layout
-// VK: buffers always created with sharing mode "CONCURRENT" to match D3D12 spec
+// - VK: buffers are always created with sharing mode "CONCURRENT" to match D3D12 spec
+// - "structureStride" values:
+//   - 0  - allows only "typed" views
+//   - 4  - allows "typed", "byte address" and "structured" views
+//          D3D11: allows to create multiple "structured" views for a single resource, disobeying the spec
+//   - >4 - allows only "structured" views
+//          D3D11: locks this buffer to a single "structured" layout
 BufferDesc :: struct {
 	size:            u64,
 	structureStride: u32,
@@ -2072,46 +2072,33 @@ BindTextureMemoryDesc :: struct {
 }
 
 // https://microsoft.github.io/DirectX-Specs/d3d/ResourceBinding.html#creating-descriptors
-Texture1DViewType :: enum u8 {
-	SHADER_RESOURCE               = 0, // HLSL type                                Compatible "DescriptorType"
-	SHADER_RESOURCE_ARRAY         = 1, // HLSL type                                Compatible "DescriptorType"
-	SHADER_RESOURCE_STORAGE       = 2, // HLSL type                                Compatible "DescriptorType"
-	SHADER_RESOURCE_STORAGE_ARRAY = 3, // HLSL type                                Compatible "DescriptorType"
-	COLOR_ATTACHMENT              = 4, // HLSL type                                Compatible "DescriptorType"
-	DEPTH_STENCIL_ATTACHMENT      = 5, // HLSL type                                Compatible "DescriptorType"
-	MAX_NUM                       = 6, // HLSL type                                Compatible "DescriptorType"
-} // HLSL type                                Compatible "DescriptorType"
+TextureView :: enum u8 {
+	TEXTURE                  = 0,
+	TEXTURE_ARRAY            = 1,
+	TEXTURE_CUBE             = 2,
+	TEXTURE_CUBE_ARRAY       = 3,
+	STORAGE_TEXTURE          = 4,
+	STORAGE_TEXTURE_ARRAY    = 5,
+	SUBPASS_INPUT            = 6,
+	COLOR_ATTACHMENT         = 7,
+	DEPTH_STENCIL_ATTACHMENT = 8,
+	SHADING_RATE_ATTACHMENT  = 9,
+	MAX_NUM                  = 10,
+}
 
-Texture2DViewType :: enum u8 {
-	SHADER_RESOURCE               = 0,  // HLSL type                                Compatible "DescriptorType"
-	SHADER_RESOURCE_ARRAY         = 1,  // HLSL type                                Compatible "DescriptorType"
-	SHADER_RESOURCE_CUBE          = 2,  // HLSL type                                Compatible "DescriptorType"
-	SHADER_RESOURCE_CUBE_ARRAY    = 3,  // HLSL type                                Compatible "DescriptorType"
-	SHADER_RESOURCE_STORAGE       = 4,  // HLSL type                                Compatible "DescriptorType"
-	SHADER_RESOURCE_STORAGE_ARRAY = 5,  // HLSL type                                Compatible "DescriptorType"
-	INPUT_ATTACHMENT              = 6,  // HLSL type                                Compatible "DescriptorType"
-	COLOR_ATTACHMENT              = 7,  // HLSL type                                Compatible "DescriptorType"
-	DEPTH_STENCIL_ATTACHMENT      = 8,  // HLSL type                                Compatible "DescriptorType"
-	SHADING_RATE_ATTACHMENT       = 9,  // HLSL type                                Compatible "DescriptorType"
-	MAX_NUM                       = 10, // HLSL type                                Compatible "DescriptorType"
-} // HLSL type                                Compatible "DescriptorType"
+BufferView :: enum u8 {
+	BUFFER                      = 0,
+	STRUCTURED_BUFFER           = 1,
+	BYTE_ADDRESS_BUFFER         = 2,
+	STORAGE_BUFFER              = 3,
+	STORAGE_STRUCTURED_BUFFER   = 4,
+	STORAGE_BYTE_ADDRESS_BUFFER = 5,
+	CONSTANT_BUFFER             = 6,
+	MAX_NUM                     = 7,
+}
 
-Texture3DViewType :: enum u8 {
-	SHADER_RESOURCE         = 0, // HLSL type                                Compatible "DescriptorType"
-	SHADER_RESOURCE_STORAGE = 1, // HLSL type                                Compatible "DescriptorType"
-	COLOR_ATTACHMENT        = 2, // HLSL type                                Compatible "DescriptorType"
-	MAX_NUM                 = 3, // HLSL type                                Compatible "DescriptorType"
-} // HLSL type                                Compatible "DescriptorType"
-
-BufferViewType :: enum u8 {
-	SHADER_RESOURCE         = 0, // HLSL type                                Compatible "DescriptorType"
-	SHADER_RESOURCE_STORAGE = 1, // HLSL type                                Compatible "DescriptorType"
-	CONSTANT                = 2, // HLSL type                                Compatible "DescriptorType"
-	MAX_NUM                 = 3, // HLSL type                                Compatible "DescriptorType"
-} // HLSL type                                Compatible "DescriptorType"
-
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkFilter.html
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkSamplerMipmapMode.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkFilter.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkSamplerMipmapMode.html
 // https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ne-d3d12-d3d12_filter
 Filter :: enum u8 {
 	NEAREST = 0,
@@ -2120,7 +2107,7 @@ Filter :: enum u8 {
 }
 
 // https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ne-d3d12-d3d12_filter_reduction_type
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkSamplerReductionMode.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkSamplerReductionMode.html
 FilterOp :: enum u8 {
 	AVERAGE = 0,
 	MIN     = 1,
@@ -2128,7 +2115,7 @@ FilterOp :: enum u8 {
 	MAX_NUM = 3,
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkSamplerAddressMode.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkSamplerAddressMode.html
 // https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ne-d3d12-d3d12_texture_address_mode
 AddressMode :: enum u8 {
 	REPEAT               = 0,
@@ -2139,7 +2126,7 @@ AddressMode :: enum u8 {
 	MAX_NUM              = 5,
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkCompareOp.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkCompareOp.html
 // https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ne-d3d12-d3d12_comparison_func
 // R - fragment depth, stencil reference or "SampleCmp" reference
 // D - depth or stencil buffer
@@ -2185,45 +2172,48 @@ CompareOp :: enum u8 {
 	MAX_NUM       = 9,
 }
 
-Texture1DViewDesc :: struct {
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkComponentSwizzle.html
+// https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ne-d3d12-d3d12_shader_component_mapping
+ComponentSwizzle :: enum u8 {
+	IDENTITY = 0,
+	ZERO     = 1,
+	ONE      = 2,
+	R        = 3,
+	G        = 4,
+	B        = 5,
+	A        = 6,
+	MAX_NUM  = 7,
+}
+
+ComponentMapping :: struct {
+	// Only for non-"STORAGE" views
+	r: ComponentSwizzle,
+	g: ComponentSwizzle,
+	b: ComponentSwizzle,
+	a: ComponentSwizzle,
+}
+
+TextureViewDesc :: struct {
 	texture:        ^Texture,
-	viewType:       Texture1DViewType,
+	type:           TextureView,
 	format:         Format,
 	mipOffset:      Dim_t,
 	mipNum:         Dim_t,     // can be "REMAINING"
 	layerOffset:    Dim_t,
 	layerNum:       Dim_t,     // can be "REMAINING"
+	sliceOffset:    Dim_t,
+	sliceNum:       Dim_t,     // can be "REMAINING"
 	readonlyPlanes: PlaneBits, // "DEPTH" and/or "STENCIL"
-}
-
-Texture2DViewDesc :: struct {
-	texture:        ^Texture,
-	viewType:       Texture2DViewType,
-	format:         Format,
-	mipOffset:      Dim_t,
-	mipNum:         Dim_t,     // can be "REMAINING"
-	layerOffset:    Dim_t,
-	layerNum:       Dim_t,     // can be "REMAINING"
-	readonlyPlanes: PlaneBits, // "DEPTH" and/or "STENCIL"
-}
-
-Texture3DViewDesc :: struct {
-	texture:     ^Texture,
-	viewType:    Texture3DViewType,
-	format:      Format,
-	mipOffset:   Dim_t,
-	mipNum:      Dim_t, // can be "REMAINING"
-	sliceOffset: Dim_t,
-	sliceNum:    Dim_t, // can be "REMAINING"
+	components:     ComponentMapping,
 }
 
 BufferViewDesc :: struct {
 	buffer:          ^Buffer,
-	viewType:        BufferViewType,
-	format:          Format,
-	offset:          u64, // expects "memoryAlignment.bufferShaderResourceOffset" for shader resources
-	size:            u64, // can be "WHOLE_SIZE"
-	structureStride: u32, // = "BufferDesc::structureStride", if not provided and "format" is "UNKNOWN"
+	type:            BufferView,
+	offset:          u64,    // expects "memoryAlignment.bufferShaderResourceOffset" for shader resources
+	size:            u64,    // can be "WHOLE_SIZE"
+	format:          Format, // needed for typed views, i.e. "BUFFER" and "BUFFER_STORAGE"
+	structureStride: u32,    // needed for structured views, i.e. "STRUCTURED_BUFFER" and "STRUCTURED_BUFFER_STORAGE" (= "BufferDesc::structureStride", if not provided)
 }
 
 AddressModes :: struct {
@@ -2235,7 +2225,7 @@ Filters :: struct {
 	op:            FilterOp,
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkSamplerCreateInfo.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkSamplerCreateInfo.html
 // https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ns-d3d12-d3d12_sampler_desc
 SamplerDesc :: struct {
 	filters:                 Filters,
@@ -2250,7 +2240,7 @@ SamplerDesc :: struct {
 	unnormalizedCoordinates: bool, // requires "shaderFeatures.unnormalizedCoordinates"
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineBindPoint.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkPipelineBindPoint.html
 BindPoint :: enum u8 {
 	INHERIT     = 0,
 	GRAPHICS    = 1,
@@ -2265,7 +2255,6 @@ PipelineLayoutBitsEnum :: enum u8 {
 	SAMPLER_HEAP_DIRECTLY_INDEXED          = 2,
 	RESOURCE_HEAP_DIRECTLY_INDEXED         = 3,
 }
-
 PipelineLayoutBits :: bit_set[PipelineLayoutBitsEnum; u8]
 
 DescriptorPoolBitsEnum :: enum u8 {
@@ -2276,6 +2265,7 @@ DescriptorPoolBits :: bit_set[DescriptorPoolBitsEnum; u8]
 DescriptorSetBitsEnum :: enum u8 {
 	ALLOW_UPDATE_AFTER_SET = 0,
 }
+
 DescriptorSetBits :: bit_set[DescriptorSetBitsEnum; u8]
 
 DescriptorRangeBitsEnum :: enum u8 {
@@ -2285,10 +2275,10 @@ DescriptorRangeBitsEnum :: enum u8 {
 	ALLOW_UPDATE_AFTER_SET = 3,
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkDescriptorBindingFlagBits.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkDescriptorBindingFlagBits.html
 DescriptorRangeBits :: bit_set[DescriptorRangeBitsEnum; u8]
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkDescriptorType.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkDescriptorType.html
 DescriptorType :: enum u8 {
 	SAMPLER                   = 0,
 	MUTABLE                   = 1,
@@ -2341,7 +2331,7 @@ RootSamplerDesc :: struct {
 	shaderStages:  StageBits,
 } // aka static (immutable) sampler
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineLayoutCreateInfo.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkPipelineLayoutCreateInfo.html
 // https://microsoft.github.io/DirectX-Specs/d3d/ResourceBinding.html#root-signature
 // https://microsoft.github.io/DirectX-Specs/d3d/ResourceBinding.html#root-signature-version-11
 /*
@@ -2378,7 +2368,7 @@ PipelineLayoutDesc :: struct {
 // Descriptor pool
 // https://learn.microsoft.com/en-us/windows/win32/direct3d12/descriptor-heaps
 // https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ns-d3d12-d3d12_descriptor_heap_desc
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkDescriptorPoolCreateInfo.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkDescriptorPoolCreateInfo.html
 DescriptorPoolDesc :: struct {
 	// Maximum number of descriptor sets that can be allocated from this pool
 	descriptorSetMaxNum: u32,
@@ -2469,14 +2459,14 @@ PrimitiveRestart :: enum u8 {
 	MAX_NUM        = 3,
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkVertexInputRate.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkVertexInputRate.html
 VertexStreamStepRate :: enum u8 {
 	PER_VERTEX   = 0,
 	PER_INSTANCE = 1,
 	MAX_NUM      = 2,
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkPrimitiveTopology.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkPrimitiveTopology.html
 // https://learn.microsoft.com/en-us/windows/win32/api/d3dcommon/ne-d3dcommon-d3d_primitive_topology
 // https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ne-d3d12-d3d12_primitive_topology_type
 Topology :: enum u8 {
@@ -2534,7 +2524,7 @@ VertexBufferDesc :: struct {
 	stride: u32,
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkPolygonMode.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkPolygonMode.html
 // https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ne-d3d12-d3d12_fill_mode
 FillMode :: enum u8 {
 	SOLID     = 0,
@@ -2542,7 +2532,7 @@ FillMode :: enum u8 {
 	MAX_NUM   = 2,
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkCullModeFlagBits.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkCullModeFlagBits.html
 // https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ne-d3d12-d3d12_cull_mode
 CullMode :: enum u8 {
 	NONE    = 0,
@@ -2564,7 +2554,7 @@ ShadingRate :: enum u8 {
 	MAX_NUM           = 7,
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkFragmentShadingRateCombinerOpKHR.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkFragmentShadingRateCombinerOpKHR.html
 // https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ne-d3d12-d3d12_shading_rate_combiner
 //    "primitiveCombiner"      "attachmentCombiner"
 // A   Pipeline shading rate    Result of Op1
@@ -2660,7 +2650,7 @@ Multiview :: enum u8 {
 	MAX_NUM        = 3,
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkLogicOp.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkLogicOp.html
 // https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ne-d3d12-d3d12_logic_op
 // S - source color 0
 // D - destination color
@@ -2734,7 +2724,7 @@ LogicOp :: enum u8 {
 	MAX_NUM       = 16,
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkStencilOp.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkStencilOp.html
 // https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ne-d3d12-d3d12_stencil_op
 // R - reference, set by "CmdSetStencilReference"
 // D - stencil buffer
@@ -2776,7 +2766,7 @@ StencilOp :: enum u8 {
 	MAX_NUM             = 8,
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkBlendFactor.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkBlendFactor.html
 // https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ne-d3d12-d3d12_blend
 // S0 - source color 0
 // S1 - source color 1
@@ -2904,7 +2894,7 @@ BlendFactor :: enum u8 {
 	MAX_NUM                  = 19, // RGB                               ALPHA
 } // RGB                               ALPHA
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkBlendOp.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkBlendOp.html
 // https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ne-d3d12-d3d12_blend_op
 // S - source color
 // D - destination color
@@ -2955,12 +2945,12 @@ ColorWriteBitsEnum :: enum u8 {
 	A = 3,
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkColorComponentFlagBits.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkColorComponentFlagBits.html
 ColorWriteBits :: bit_set[ColorWriteBitsEnum; u8]
 COLORWRITEBITS_RGBA :: ColorWriteBits {.R, .G, .B, .A}
 COLORWRITEBITS_RGB  :: ColorWriteBits {.R, .G, .B}
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkStencilOpState.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkStencilOpState.html
 // https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ns-d3d12-d3d12_depth_stencil_desc
 StencilDesc :: struct {
 	compareOp:   CompareOp, // "compareOp != NONE", expects "CmdSetStencilReference"
@@ -2971,7 +2961,7 @@ StencilDesc :: struct {
 	compareMask: u8,
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineDepthStencilStateCreateInfo.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkPipelineDepthStencilStateCreateInfo.html
 DepthAttachmentDesc :: struct {
 	compareOp:  CompareOp,
 	write:      bool,
@@ -2983,7 +2973,7 @@ StencilAttachmentDesc :: struct {
 	back:  StencilDesc, // requires "features.independentFrontAndBackStencilReferenceAndMasks" for "back.writeMask"
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineColorBlendAttachmentState.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkPipelineColorBlendAttachmentState.html
 // https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ns-d3d12-d3d12_render_target_blend_desc
 BlendDesc :: struct {
 	srcFactor: BlendFactor,
@@ -3089,7 +3079,7 @@ RenderingDesc :: struct {
 }
 
 // https://microsoft.github.io/DirectX-Specs/d3d/CountersAndQueries.html
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkQueryType.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkQueryType.html
 QueryType :: enum u8 {
 	TIMESTAMP                             = 0,
 	TIMESTAMP_COPY_QUEUE                  = 1,
@@ -3107,7 +3097,7 @@ QueryPoolDesc :: struct {
 }
 
 // Data layout for QueryType::PIPELINE_STATISTICS
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkQueryPipelineStatisticFlagBits.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkQueryPipelineStatisticFlagBits.html
 // https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ns-d3d12-d3d12_query_data_pipeline_statistics
 PipelineStatisticsDesc :: struct {
 	// Common part
@@ -3221,10 +3211,10 @@ ClearAttachmentDesc :: struct {
 // - variant 2: "CLEAR_STORAGE" access ("SHADER_RESOURCE_STORAGE" layout) and "CLEAR_STORAGE" stage
 ClearStorageDesc :: struct {
 	// For any buffers and textures with integer formats:
-	//  - Clears a storage view with bit-precise values, copying the lower "N" bits from "value.[f/ui/i].channel"
+	//  - Clears a storage descriptor with bit-precise values, copying the lower "N" bits from "value.[f/ui/i].channel"
 	//    to the corresponding channel, where "N" is the number of bits in the "channel" of the resource format
 	// For textures with non-integer formats:
-	//  - Clears a storage view with float values with format conversion from "FLOAT" to "UNORM/SNORM" where appropriate
+	//  - Clears a storage descriptor with float values with format conversion from "FLOAT" to "UNORM/SNORM" where appropriate
 	// For buffers:
 	//  - To avoid discrepancies in behavior between GAPIs use "R32f/ui/i" formats for views
 	//  - D3D: structured buffers are unsupported!
@@ -3253,7 +3243,7 @@ Vendor :: enum u8 {
 	MAX_NUM = 4,
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkPhysicalDeviceType.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkPhysicalDeviceType.html
 Architecture :: enum u8 {
 	UNKNOWN    = 0,
 	INTEGRATED = 1,
@@ -3261,7 +3251,7 @@ Architecture :: enum u8 {
 	MAX_NUM    = 3,
 }
 
-// https://registry.khronos.org/vulkan/specs/latest/man/html/VkQueueFlagBits.html
+// https://docs.vulkan.org/refpages/latest/refpages/source/VkQueueFlagBits.html
 // https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ne-d3d12-d3d12_command_list_type
 QueueType :: enum u8 {
 	GRAPHICS = 0,
@@ -3503,6 +3493,7 @@ DeviceDesc :: struct {
 		lowLatency:       u32, // NRILowLatency
 
 		// Smaller
+		componentSwizzle:                                u32, // see "ComponentSwizzle" (unsupported only in D3D11)
 		independentFrontAndBackStencilReferenceAndMasks: u32, // see "StencilAttachmentDesc::back"
 		filterOpMinMax:                                  u32, // see "FilterOp"
 		logicOp:                                         u32, // see "LogicOp"

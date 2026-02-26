@@ -11,6 +11,7 @@ Overview:
     - D3D11 spec: https://microsoft.github.io/DirectX-Specs/d3d/archive/D3D11_3_FunctionalSpec.htm
 
 Goals:
+ - a Graphics API, not RHI!
  - generalization and unification of D3D12 and VK
  - explicitness (providing access to low-level features of modern GAPIs)
  - quality-of-life and high-level extensions (e.g., streaming and upscaling)
@@ -60,8 +61,8 @@ when ODIN_OS == .Windows {
 	// } else do #panic("Unsupported architecture")
 } else do #panic("Unsupported OS")
 
-NRI_VERSION      :: 177
-NRI_VERSION_DATE :: "22 December 2025"
+NRI_VERSION      :: 178
+NRI_VERSION_DATE :: "25 February 2026"
 
 // Threadsafe: yes
 CoreInterface :: struct {
@@ -89,9 +90,7 @@ CoreInterface :: struct {
 	CreateQueryPool:        proc "c" (device: ^Device, queryPoolDesc: ^QueryPoolDesc, queryPool: ^^QueryPool) -> Result,
 	CreateSampler:          proc "c" (device: ^Device, samplerDesc: ^SamplerDesc, sampler: ^^Descriptor) -> Result,
 	CreateBufferView:       proc "c" (bufferViewDesc: ^BufferViewDesc, bufferView: ^^Descriptor) -> Result,
-	CreateTexture1DView:    proc "c" (textureViewDesc: ^Texture1DViewDesc, textureView: ^^Descriptor) -> Result,
-	CreateTexture2DView:    proc "c" (textureViewDesc: ^Texture2DViewDesc, textureView: ^^Descriptor) -> Result,
-	CreateTexture3DView:    proc "c" (textureViewDesc: ^Texture3DViewDesc, textureView: ^^Descriptor) -> Result,
+	CreateTextureView:      proc "c" (textureViewDesc: ^TextureViewDesc, textureView: ^^Descriptor) -> Result,
 
 	// Destroy
 	DestroyCommandAllocator: proc "c" (commandAllocator: ^CommandAllocator),
@@ -254,12 +253,16 @@ CoreInterface :: struct {
 	// Command allocator
 	ResetCommandAllocator: proc "c" (commandAllocator: ^CommandAllocator),
 
-	// Map / Unmap
+	// Host address
 	// D3D11: no persistent mapping
 	// D3D12: persistent mapping, "Map/Unmap" do nothing
 	// VK: persistent mapping, but "Unmap" can do a flush if underlying memory is not "HOST_COHERENT" (unlikely)
 	MapBuffer:   proc "c" (buffer: ^Buffer, offset: u64, size: u64) -> rawptr,
 	UnmapBuffer: proc "c" (buffer: ^Buffer),
+
+	// Device address (aka GPU virtual address)
+	// D3D11: returns "0"
+	GetBufferDeviceAddress: proc "c" (buffer: ^Buffer) -> u64,
 
 	// Debug name for any object declared as "NriForwardStruct" (skipped for buffers & textures in D3D if they are not bound to a memory)
 	SetDebugName: proc "c" (object: ^Object, name: cstring),

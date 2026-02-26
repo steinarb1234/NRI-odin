@@ -141,7 +141,7 @@ SwapChainDesc :: struct {
 	flags:          SwapChainBits,
 	queuedFrameNum: u8,              // aka "max frame latency", aka "number of frames in flight" (mostly for D3D11)
 
-	// Present scaling and positioning, silently ignored if "features.resizableSwapChain" is not supported
+	// Present scaling and positioning, silently ignored if "features.resizableSwapChain" is not supported or not supported by the implicitly choosen present mode
 	scaling:  Scaling, // VK: if scaling is not supported, "OUT_OF_DATE" error is triggered on resizing
 	gravityX: Gravity,
 	gravityY: Gravity,
