@@ -1,6 +1,10 @@
 # NRI-odin
 
+<<<<<<< HEAD
 Bindings for [Nvidia NRI](https://github.com/NVIDIA-RTX/NRI) version 179 in Odin.
+=======
+Bindings for [Nvidia NRI](https://github.com/NVIDIA-RTX/NRI) version 178 in Odin.
+>>>>>>> b7d7825ca9073c836d02b557ab8ce27e1ef2f0c8
 
 D3D11, D3D12 and Vulkan are enabled in the included binaries. The Imgui extension is also enabled.
 
