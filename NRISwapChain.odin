@@ -30,49 +30,31 @@ NRI_SWAP_CHAIN_H :: 1
 // Color space:
 //  - BT.709 - LDR https://en.wikipedia.org/wiki/Rec._709
 //  - BT.2020 - HDR https://en.wikipedia.org/wiki/Rec._2020
+//  - https://registry.khronos.org/DataFormat/specs/1.4/dataformat.1.4.html#PRIMARY_CONVERSION
 // Transfer function:
 //  - G10 - linear (gamma 1.0)
 //  - G22 - sRGB (gamma ~2.2)
 //  - G2084 - SMPTE ST.2084 (Perceptual Quantization)
+//  - https://registry.khronos.org/DataFormat/specs/1.4/dataformat.1.4.html#TRANSFER_CONVERSION
 // Bits per channel:
 //  - 8, 10, 16 (float)
 SwapChainFormat :: enum u8 {
-	// Transfer function:
-	//  - G10 - linear (gamma 1.0)
-	//  - G22 - sRGB (gamma ~2.2)
-	//  - G2084 - SMPTE ST.2084 (Perceptual Quantization)
 	// Bits per channel:
 	//  - 8, 10, 16 (float)
 	BT709_G10_16BIT    = 0,
 
-	// Transfer function:
-	//  - G10 - linear (gamma 1.0)
-	//  - G22 - sRGB (gamma ~2.2)
-	//  - G2084 - SMPTE ST.2084 (Perceptual Quantization)
 	// Bits per channel:
 	//  - 8, 10, 16 (float)
 	BT709_G22_8BIT     = 1,
 
-	// Transfer function:
-	//  - G10 - linear (gamma 1.0)
-	//  - G22 - sRGB (gamma ~2.2)
-	//  - G2084 - SMPTE ST.2084 (Perceptual Quantization)
 	// Bits per channel:
 	//  - 8, 10, 16 (float)
 	BT709_G22_10BIT    = 2,
 
-	// Transfer function:
-	//  - G10 - linear (gamma 1.0)
-	//  - G22 - sRGB (gamma ~2.2)
-	//  - G2084 - SMPTE ST.2084 (Perceptual Quantization)
 	// Bits per channel:
 	//  - 8, 10, 16 (float)
 	BT2020_G2084_10BIT = 3,
 
-	// Transfer function:
-	//  - G10 - linear (gamma 1.0)
-	//  - G22 - sRGB (gamma ~2.2)
-	//  - G2084 - SMPTE ST.2084 (Perceptual Quantization)
 	// Bits per channel:
 	//  - 8, 10, 16 (float)
 	MAX_NUM            = 4,

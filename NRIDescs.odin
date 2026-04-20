@@ -183,7 +183,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	UNKNOWN                = 0,  // |      FormatSupportBits      |
+	UNKNOWN                = 0,   // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -205,7 +205,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R8_UNORM               = 1,  // |      FormatSupportBits      |
+	R8_UNORM               = 1,   // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -227,7 +227,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R8_SNORM               = 2,  // |      FormatSupportBits      |
+	R8_SNORM               = 2,   // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -249,7 +249,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R8_UINT                = 3,  // |      FormatSupportBits      |
+	R8_UINT                = 3,   // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -271,7 +271,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R8_SINT                = 4,  // |      FormatSupportBits      |
+	R8_SINT                = 4,   // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -293,7 +293,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG8_UNORM              = 5,  // |      FormatSupportBits      |
+	RG8_UNORM              = 5,   // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -315,7 +315,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG8_SNORM              = 6,  // |      FormatSupportBits      |
+	RG8_SNORM              = 6,   // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -337,7 +337,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG8_UINT               = 7,  // |      FormatSupportBits      |
+	RG8_UINT               = 7,   // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -359,7 +359,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG8_SINT               = 8,  // |      FormatSupportBits      |
+	RG8_SINT               = 8,   // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -381,7 +381,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BGRA8_UNORM            = 9,  // |      FormatSupportBits      |
+	BGRA8_UNORM            = 9,   // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -403,7 +403,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BGRA8_SRGB             = 10, // |      FormatSupportBits      |
+	BGRA8_SRGB             = 10,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -425,7 +425,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA8_UNORM            = 11, // |      FormatSupportBits      |
+	RGBA8_UNORM            = 11,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -447,7 +447,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA8_SRGB             = 12, // |      FormatSupportBits      |
+	RGBA8_SRGB             = 12,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -469,7 +469,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA8_SNORM            = 13, // |      FormatSupportBits      |
+	RGBA8_SNORM            = 13,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -491,7 +491,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA8_UINT             = 14, // |      FormatSupportBits      |
+	RGBA8_UINT             = 14,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -513,7 +513,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA8_SINT             = 15, // |      FormatSupportBits      |
+	RGBA8_SINT             = 15,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -535,7 +535,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R16_UNORM              = 16, // |      FormatSupportBits      |
+	R16_UNORM              = 16,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -557,7 +557,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R16_SNORM              = 17, // |      FormatSupportBits      |
+	R16_SNORM              = 17,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -579,7 +579,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R16_UINT               = 18, // |      FormatSupportBits      |
+	R16_UINT               = 18,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -601,7 +601,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R16_SINT               = 19, // |      FormatSupportBits      |
+	R16_SINT               = 19,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -623,7 +623,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R16_SFLOAT             = 20, // |      FormatSupportBits      |
+	R16_SFLOAT             = 20,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -645,7 +645,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG16_UNORM             = 21, // |      FormatSupportBits      |
+	RG16_UNORM             = 21,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -667,7 +667,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG16_SNORM             = 22, // |      FormatSupportBits      |
+	RG16_SNORM             = 22,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -689,7 +689,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG16_UINT              = 23, // |      FormatSupportBits      |
+	RG16_UINT              = 23,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -711,7 +711,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG16_SINT              = 24, // |      FormatSupportBits      |
+	RG16_SINT              = 24,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -733,7 +733,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG16_SFLOAT            = 25, // |      FormatSupportBits      |
+	RG16_SFLOAT            = 25,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -755,7 +755,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA16_UNORM           = 26, // |      FormatSupportBits      |
+	RGBA16_UNORM           = 26,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -777,7 +777,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA16_SNORM           = 27, // |      FormatSupportBits      |
+	RGBA16_SNORM           = 27,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -799,7 +799,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA16_UINT            = 28, // |      FormatSupportBits      |
+	RGBA16_UINT            = 28,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -821,7 +821,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA16_SINT            = 29, // |      FormatSupportBits      |
+	RGBA16_SINT            = 29,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -843,7 +843,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA16_SFLOAT          = 30, // |      FormatSupportBits      |
+	RGBA16_SFLOAT          = 30,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -865,7 +865,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R32_UINT               = 31, // |      FormatSupportBits      |
+	R32_UINT               = 31,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -887,7 +887,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R32_SINT               = 32, // |      FormatSupportBits      |
+	R32_SINT               = 32,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -909,7 +909,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R32_SFLOAT             = 33, // |      FormatSupportBits      |
+	R32_SFLOAT             = 33,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -931,7 +931,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG32_UINT              = 34, // |      FormatSupportBits      |
+	RG32_UINT              = 34,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -953,7 +953,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG32_SINT              = 35, // |      FormatSupportBits      |
+	RG32_SINT              = 35,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -975,7 +975,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG32_SFLOAT            = 36, // |      FormatSupportBits      |
+	RG32_SFLOAT            = 36,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -997,7 +997,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGB32_UINT             = 37, // |      FormatSupportBits      |
+	RGB32_UINT             = 37,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1019,7 +1019,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGB32_SINT             = 38, // |      FormatSupportBits      |
+	RGB32_SINT             = 38,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1041,7 +1041,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGB32_SFLOAT           = 39, // |      FormatSupportBits      |
+	RGB32_SFLOAT           = 39,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1063,7 +1063,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA32_UINT            = 40, // |      FormatSupportBits      |
+	RGBA32_UINT            = 40,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1085,7 +1085,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA32_SINT            = 41, // |      FormatSupportBits      |
+	RGBA32_SINT            = 41,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1107,7 +1107,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA32_SFLOAT          = 42, // |      FormatSupportBits      |
+	RGBA32_SFLOAT          = 42,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1129,7 +1129,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	B5_G6_R5_UNORM         = 43, // |      FormatSupportBits      |
+	B5_G6_R5_UNORM         = 43,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1151,7 +1151,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	B5_G5_R5_A1_UNORM      = 44, // |      FormatSupportBits      |
+	B5_G5_R5_A1_UNORM      = 44,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1173,7 +1173,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	B4_G4_R4_A4_UNORM      = 45, // |      FormatSupportBits      |
+	B4_G4_R4_A4_UNORM      = 45,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1195,7 +1195,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R10_G10_B10_A2_UNORM   = 46, // |      FormatSupportBits      |
+	R10_G10_B10_A2_UNORM   = 46,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1217,7 +1217,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R10_G10_B10_A2_UINT    = 47, // |      FormatSupportBits      |
+	R10_G10_B10_A2_UINT    = 47,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1239,7 +1239,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R11_G11_B10_UFLOAT     = 48, // |      FormatSupportBits      |
+	R11_G11_B10_UFLOAT     = 48,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1261,7 +1261,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R9_G9_B9_E5_UFLOAT     = 49, // |      FormatSupportBits      |
+	R9_G9_B9_E5_UFLOAT     = 49,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1283,7 +1283,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC1_RGBA_UNORM         = 50, // |      FormatSupportBits      |
+	BC1_RGBA_UNORM         = 50,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1305,7 +1305,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC1_RGBA_SRGB          = 51, // |      FormatSupportBits      |
+	BC1_RGBA_SRGB          = 51,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1327,7 +1327,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC2_RGBA_UNORM         = 52, // |      FormatSupportBits      |
+	BC2_RGBA_UNORM         = 52,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1349,7 +1349,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC2_RGBA_SRGB          = 53, // |      FormatSupportBits      |
+	BC2_RGBA_SRGB          = 53,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1371,7 +1371,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC3_RGBA_UNORM         = 54, // |      FormatSupportBits      |
+	BC3_RGBA_UNORM         = 54,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1393,7 +1393,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC3_RGBA_SRGB          = 55, // |      FormatSupportBits      |
+	BC3_RGBA_SRGB          = 55,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1415,7 +1415,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC4_R_UNORM            = 56, // |      FormatSupportBits      |
+	BC4_R_UNORM            = 56,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1437,7 +1437,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC4_R_SNORM            = 57, // |      FormatSupportBits      |
+	BC4_R_SNORM            = 57,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1459,7 +1459,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC5_RG_UNORM           = 58, // |      FormatSupportBits      |
+	BC5_RG_UNORM           = 58,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1481,7 +1481,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC5_RG_SNORM           = 59, // |      FormatSupportBits      |
+	BC5_RG_SNORM           = 59,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1503,7 +1503,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC6H_RGB_UFLOAT        = 60, // |      FormatSupportBits      |
+	BC6H_RGB_UFLOAT        = 60,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1525,7 +1525,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC6H_RGB_SFLOAT        = 61, // |      FormatSupportBits      |
+	BC6H_RGB_SFLOAT        = 61,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1547,7 +1547,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC7_RGBA_UNORM         = 62, // |      FormatSupportBits      |
+	BC7_RGBA_UNORM         = 62,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1569,7 +1569,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC7_RGBA_SRGB          = 63, // |      FormatSupportBits      |
+	BC7_RGBA_SRGB          = 63,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1591,7 +1591,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	D16_UNORM              = 64, // |      FormatSupportBits      |
+	ETC2_RGB8_UNORM        = 64,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1613,7 +1613,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	D24_UNORM_S8_UINT      = 65, // |      FormatSupportBits      |
+	ETC2_RGB8_SRGB         = 65,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1635,7 +1635,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	D32_SFLOAT             = 66, // |      FormatSupportBits      |
+	ETC2_RGB8_A1_UNORM     = 66,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1657,7 +1657,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	D32_SFLOAT_S8_UINT_X24 = 67, // |      FormatSupportBits      |
+	ETC2_RGB8_A1_SRGB      = 67,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1679,7 +1679,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R24_UNORM_X8           = 68, // |      FormatSupportBits      |
+	ETC2_RGB8_A8_UNORM     = 68,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1701,7 +1701,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	X24_G8_UINT            = 69, // |      FormatSupportBits      |
+	ETC2_RGB8_A8_SRGB      = 69,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1723,7 +1723,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R32_SFLOAT_X8_X24      = 70, // |      FormatSupportBits      |
+	ETC2_R11_UNORM         = 70,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1745,7 +1745,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	X32_G8_UINT_X24        = 71, // |      FormatSupportBits      |
+	ETC2_R11_SNORM         = 71,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1767,7 +1767,843 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	MAX_NUM                = 72, // |      FormatSupportBits      |
+	ETC2_R11_G11_UNORM     = 72,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ETC2_R11_G11_SNORM     = 73,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_4X4_UNORM         = 74,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_4X4_SRGB          = 75,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_5X4_UNORM         = 76,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_5X4_SRGB          = 77,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_5X5_UNORM         = 78,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_5X5_SRGB          = 79,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_6X5_UNORM         = 80,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_6X5_SRGB          = 81,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_6X6_UNORM         = 82,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_6X6_SRGB          = 83,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_8X5_UNORM         = 84,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_8X5_SRGB          = 85,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_8X6_UNORM         = 86,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_8X6_SRGB          = 87,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_8X8_UNORM         = 88,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_8X8_SRGB          = 89,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_10X5_UNORM        = 90,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_10X5_SRGB         = 91,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_10X6_UNORM        = 92,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_10X6_SRGB         = 93,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_10X8_UNORM        = 94,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_10X8_SRGB         = 95,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_10X10_UNORM       = 96,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_10X10_SRGB        = 97,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_12X10_UNORM       = 98,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_12X10_SRGB        = 99,  // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_12X12_UNORM       = 100, // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	ASTC_12X12_SRGB        = 101, // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	D16_UNORM              = 102, // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	D24_UNORM_S8_UINT      = 103, // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	D32_SFLOAT             = 104, // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	D32_SFLOAT_S8_UINT_X24 = 105, // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	R24_UNORM_X8           = 106, // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	X24_G8_UINT            = 107, // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	R32_SFLOAT_X8_X24      = 108, // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	X32_G8_UINT_X24        = 109, // |      FormatSupportBits      |
+
+	// left -> right : low -> high bits
+	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
+	// To demote sRGB use the previous format, i.e. "format - 1"
+	//                                            STORAGE_WRITE_WITHOUT_FORMAT
+	//                                           STORAGE_READ_WITHOUT_FORMAT |
+	//                                                       VERTEX_BUFFER | |
+	//                                            STORAGE_BUFFER_ATOMICS | | |
+	//                                                  STORAGE_BUFFER | | | |
+	//                                                        BUFFER | | | | |
+	//                                         MULTISAMPLE_RESOLVE | | | | | |
+	//                                            MULTISAMPLE_8X | | | | | | |
+	//                                          MULTISAMPLE_4X | | | | | | | |
+	//                                        MULTISAMPLE_2X | | | | | | | | |
+	//                                               BLEND | | | | | | | | | |
+	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
+	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
+	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
+	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
+	//                                   TEXTURE | | | | | | | | | | | | | | |
+	//                                         | | | | | | | | | | | | | | | |
+	MAX_NUM                = 110, // |      FormatSupportBits      |
 } // |      FormatSupportBits      |
 
 PlaneBitsEnum :: enum u8 {
@@ -2250,10 +3086,10 @@ BindPoint :: enum u8 {
 }
 
 PipelineLayoutBitsEnum :: enum u8 {
-	IGNORE_GLOBAL_SPIRV_OFFSETS            = 0,
-	ENABLE_D3D12_DRAW_PARAMETERS_EMULATION = 1,
-	SAMPLER_HEAP_DIRECTLY_INDEXED          = 2,
-	RESOURCE_HEAP_DIRECTLY_INDEXED         = 3,
+	IGNORE_GLOBAL_SPIRV_OFFSETS      = 0,
+	ENABLE_DRAW_PARAMETERS_EMULATION = 1,
+	SAMPLER_HEAP_DIRECTLY_INDEXED    = 2,
+	RESOURCE_HEAP_DIRECTLY_INDEXED   = 3,
 }
 PipelineLayoutBits :: bit_set[PipelineLayoutBitsEnum; u8]
 
@@ -3012,7 +3848,7 @@ Robustness :: enum u8 {
 // It's recommended to use "NRI.hlsl" in the shader code
 ShaderDesc :: struct {
 	stage:          StageBits,
-	bytecode:       rawptr,
+	bytecode:       rawptr, // see "features.shaderBytecodeXXX"
 	size:           u64,
 	entryPointName: cstring,
 }
@@ -3114,11 +3950,11 @@ PipelineStatisticsDesc :: struct {
 	computeShaderInvocationNum:        u64,
 
 	// If "features.meshShaderPipelineStats"
-	meshControlShaderInvocationNum:    u64,
-	meshEvaluationShaderInvocationNum: u64,
+	taskShaderInvocationNum: u64,
+	meshShaderInvocationNum: u64,
 
 	// D3D12: if "features.meshShaderPipelineStats"
-	meshEvaluationShaderPrimitiveNum: u64,
+	meshShaderPrimitiveNum: u64,
 }
 
 // Command signatures (default)
@@ -3141,9 +3977,7 @@ DispatchDesc :: struct {
 	x, y, z: u32,
 }
 
-// D3D12: modified draw command signatures, if the bound pipeline layout has "PipelineLayoutBits::ENABLE_D3D12_DRAW_PARAMETERS_EMULATION"
-//  - the following structs must be used instead
-// - "NRI_ENABLE_DRAW_PARAMETERS_EMULATION" must be defined prior inclusion of "NRI.hlsl"
+// Modified draw command signatures, if the bound pipeline layout has "PipelineLayoutBits::ENABLE_DRAW_PARAMETERS_EMULATION"
 DrawBaseDesc :: struct {
 	shaderEmulatedBaseVertex:   u32, // root constant
 	shaderEmulatedBaseInstance: u32, // root constant
@@ -3401,31 +4235,44 @@ DeviceDesc :: struct {
 		},
 
 		compute: struct {
-			workGroupMaxNum:           [3]u32,
+			dispatchMaxDim:            [3]u32,
+			workGroupInvocationMaxNum: u32,
 			workGroupMaxDim:           [3]u32,
-			workGroupInvocationMaxNum: u32,
 			sharedMemoryMaxSize:       u32,
 		},
 
-		rayTracing: struct {
-			shaderGroupIdentifierSize: u32,
-			tableMaxStride:            u32,
-			recursionMaxDepth:         u32,
-		},
-
-		meshControl: struct {
-			sharedMemoryMaxSize:       u32,
+		task: struct {
+			dispatchWorkGroupMaxNum:   u32,
+			dispatchMaxDim:            [3]u32,
 			workGroupInvocationMaxNum: u32,
+			workGroupMaxDim:           [3]u32,
+			sharedMemoryMaxSize:       u32,
 			payloadMaxSize:            u32,
 		},
 
-		meshEvaluation: struct {
+		mesh: struct {
+			dispatchWorkGroupMaxNum:   u32,
+			dispatchMaxDim:            [3]u32,
+			workGroupInvocationMaxNum: u32,
+			workGroupMaxDim:           [3]u32,
+			sharedMemoryMaxSize:       u32,
 			outputVerticesMaxNum:      u32,
 			outputPrimitiveMaxNum:     u32,
 			outputComponentMaxNum:     u32,
-			sharedMemoryMaxSize:       u32,
-			workGroupInvocationMaxNum: u32,
 		},
+
+		rayTracing: struct {
+			shaderGroupIdentifierSize:   u32,
+			shaderBindingTableMaxStride: u32,
+			recursionMaxDepth:           u32,
+		},
+	},
+
+	accelerationStructure: struct {
+		primitiveMaxNum:             u64, // per BLAS
+		geometryMaxNum:              u64, // per BLAS
+		instanceMaxNum:              u64, // per TLAS
+		micromapSubdivisionMaxLevel: u32,
 	},
 
 	wave: struct {
@@ -3438,7 +4285,6 @@ DeviceDesc :: struct {
 
 	other: struct {
 		timestampFrequencyHz:              u64,
-		micromapSubdivisionMaxLevel:       u32,
 		drawIndirectMaxNum:                u32,
 		samplerLodBiasMax:                 f32,
 		samplerAnisotropyMax:              f32,
@@ -3518,6 +4364,12 @@ DeviceDesc :: struct {
 		nonConstantBufferRootDescriptorOffset:           u32, // see "SetRootDescriptorDesc" (unsupported only in D3D11)
 		mutableDescriptorType:                           u32, // see "DescriptorType::MUTABLE"
 		unifiedTextureLayouts:                           u32, // allows to use "GENERAL" everywhere: https://docs.vulkan.org/refpages/latest/refpages/source/VK_KHR_unified_image_layouts.html
+		textureCompressionBC:                            u32, // all "BC" texture formats are supported
+		textureCompressionETC2:                          u32, // all "ETC2" texture formats are supported
+		textureCompressionASTC:                          u32, // all "ASTC" texture formats are supported
+		shaderBytecodeDXBC:                              u32, // DXBC can be passed to "ShaderDesc::bytecode"
+		shaderBytecodeDXIL:                              u32, // DXIL can be passed to "ShaderDesc::bytecode"
+		shaderBytecodeSPIRV:                             u32, // SPIRV can be passed to "ShaderDesc::bytecode"
 	},
 
 	shaderFeatures: struct {
@@ -3550,6 +4402,12 @@ DeviceDesc :: struct {
 		rayTracingPositionFetch: u32, // https://docs.vulkan.org/features/latest/features/proposals/VK_KHR_ray_tracing_position_fetch.html
 		integerDotProduct:       u32, // https://github.com/microsoft/DirectXShaderCompiler/wiki/Shader-Model-6.4
 		inputAttachments:        u32, // https://github.com/Microsoft/DirectXShaderCompiler/blob/main/docs/SPIR-V.rst#subpass-inputs
+		drawParameters:          u32, // SV_StartVertexLocation, SV_StartInstanceLocation (native support)
+
+		// For shaders using "draw parameters":
+		//   - "ENABLE_DRAW_PARAMETERS_EMULATION" must be set for a corresponding "PipelineLayout"
+		//   - "NRI_ENABLE_DRAW_PARAMETERS_EMULATION" must be defined prior inclusion of "NRI.hlsl" for such shaders
+		drawParametersEmulation: u32, // emulation of "drawParameters"
 	},
 }
 

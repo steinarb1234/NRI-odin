@@ -59,6 +59,7 @@ ResourceGroupDesc :: struct {
 	buffers:             [^]^Buffer,
 	bufferNum:           u32,
 	preferredMemorySize: u64, // desired chunk size (but can be greater if a resource doesn't fit), 256 Mb if 0
+	residencyPriority:   f32, // [-1; 1]: low < 0, normal = 0, high > 0
 }
 
 FormatProps :: struct {

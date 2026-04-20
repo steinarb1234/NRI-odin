@@ -61,8 +61,8 @@ when ODIN_OS == .Windows {
 	// } else do #panic("Unsupported architecture")
 } else do #panic("Unsupported OS")
 
-NRI_VERSION      :: 178
-NRI_VERSION_DATE :: "25 February 2026"
+NRI_VERSION      :: 179
+NRI_VERSION_DATE :: "6 April 2026"
 
 // Threadsafe: yes
 CoreInterface :: struct {
