@@ -69,21 +69,20 @@ FormatProps :: struct {
 	greenBits:    u8,      // G (or stencil) bits (0 if channels < 2)
 	blueBits:     u8,      // B bits (0 if channels < 3)
 	alphaBits:    u8,      // A (or shared exponent) bits (0 if channels < 4)
-	stride:       u32,     // block size in bytes
-	blockWidth:   u32,     // 1 for plain formats, >1 for compressed
-	blockHeight:  u32,     // 1 for plain formats, >1 for compressed
-	isBgr:        u32,     // reversed channels (RGBA => BGRA)
-	isCompressed: u32,     // block-compressed format
-	isDepth:      u32,     // has depth component
-	isExpShared:  u32,     // shared exponent in alpha channel
-	isFloat:      u32,     // floating point
-	isPacked:     u32,     // 16- or 32- bit packed
-	isInteger:    u32,     // integer
-	isNorm:       u32,     // [0; 1] normalized
-	isSigned:     u32,     // signed
-	isSrgb:       u32,     // sRGB
-	isStencil:    u32,     // has stencil component
-	unused:       u32,
+	stride:       u8,      // block size in bytes
+	blockWidth:   u8,      // 1 for plain formats, >1 for compressed
+	blockHeight:  u8,      // 1 for plain formats, >1 for compressed
+	isBgr:        bool,    // reversed channels (RGBA => BGRA)
+	isCompressed: bool,    // block-compressed format
+	isDepth:      bool,    // has depth component
+	isExpShared:  bool,    // shared exponent in alpha channel
+	isFloat:      bool,    // floating point
+	isPacked:     bool,    // 16- or 32- bit packed
+	isInteger:    bool,    // integer
+	isNorm:       bool,    // [0; 1] normalized
+	isSigned:     bool,    // signed
+	isSrgb:       bool,    // sRGB
+	isStencil:    bool,    // has stencil component
 }
 
 // Threadsafe: yes
@@ -106,7 +105,10 @@ PipelineLayoutSettingsDesc :: struct {
 	rootConstantSize:                   u32,
 	rootDescriptorNum:                  u32,
 	preferRootDescriptorsOverConstants: bool,
-	enableD3D12DrawParametersEmulation: bool, // not needed for VK, unsupported in D3D11
+
+	// D3D12 only (see "NRI.hlsl" for more details)
+	enableD3D12DrawParametersEmulation: bool,
+	enableD3D12DrawIndexEmulation:      bool,
 }
 
 @(default_calling_convention="c", link_prefix="nri")

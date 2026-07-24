@@ -61,8 +61,8 @@ when ODIN_OS == .Windows {
 	// } else do #panic("Unsupported architecture")
 } else do #panic("Unsupported OS")
 
-NRI_VERSION      :: 179
-NRI_VERSION_DATE :: "6 April 2026"
+NRI_VERSION      :: 180
+NRI_VERSION_DATE :: "23 June 2026"
 
 // Threadsafe: yes
 CoreInterface :: struct {
@@ -87,6 +87,7 @@ CoreInterface :: struct {
 	CreatePipelineLayout:   proc "c" (device: ^Device, pipelineLayoutDesc: ^PipelineLayoutDesc, pipelineLayout: ^^PipelineLayout) -> Result,
 	CreateGraphicsPipeline: proc "c" (device: ^Device, graphicsPipelineDesc: ^GraphicsPipelineDesc, pipeline: ^^Pipeline) -> Result,
 	CreateComputePipeline:  proc "c" (device: ^Device, computePipelineDesc: ^ComputePipelineDesc, pipeline: ^^Pipeline) -> Result,
+	CreatePipelineCache:    proc "c" (device: ^Device, pipelineCacheDesc: ^PipelineCacheDesc, pipelineCache: ^^PipelineCache) -> Result, // "OUT_OF_DATE" is returned on stale data, try to start over with an empty cache
 	CreateQueryPool:        proc "c" (device: ^Device, queryPoolDesc: ^QueryPoolDesc, queryPool: ^^QueryPool) -> Result,
 	CreateSampler:          proc "c" (device: ^Device, samplerDesc: ^SamplerDesc, sampler: ^^Descriptor) -> Result,
 	CreateBufferView:       proc "c" (bufferViewDesc: ^BufferViewDesc, bufferView: ^^Descriptor) -> Result,
@@ -101,6 +102,7 @@ CoreInterface :: struct {
 	DestroyDescriptor:       proc "c" (descriptor: ^Descriptor),
 	DestroyPipelineLayout:   proc "c" (pipelineLayout: ^PipelineLayout),
 	DestroyPipeline:         proc "c" (pipeline: ^Pipeline),
+	DestroyPipelineCache:    proc "c" (pipelineCache: ^PipelineCache),
 	DestroyQueryPool:        proc "c" (queryPool: ^QueryPool),
 	DestroyFence:            proc "c" (fence: ^Fence),
 
@@ -109,13 +111,13 @@ CoreInterface :: struct {
 	FreeMemory:     proc "c" (memory: ^Memory),
 
 	// Resources and memory (VK style)
-	//  - create a resource (buffer or texture)
-	//  - use "Get[Resource]MemoryDesc" to get "MemoryDesc" ("usageBits" and "MemoryLocation" affect returned "MemoryType")
-	//  - (optional) group returned "MemoryDesc"s by "MemoryType", but don't group if "mustBeDedicated = true"
-	//  - (optional) sort returned "MemoryDesc"s by alignment
-	//  - call "AllocateMemory" (even if "mustBeDedicated = true")
-	//  - call "Bind[Resource]Memory" to bind resources to "Memory" objects
-	//  - (optional) "CalculateAllocationNumber" and "AllocateAndBindMemory" from "NRIHelper" interface simplify this process for buffers and textures
+	// - create a resource (buffer or texture)
+	// - use "Get[Resource]MemoryDesc" to get "MemoryDesc" ("usageBits" and "MemoryLocation" affect returned "MemoryType")
+	// - (optional) group returned "MemoryDesc"s by "MemoryType", but don't group if "mustBeDedicated = true"
+	// - (optional) sort returned "MemoryDesc"s by alignment
+	// - call "AllocateMemory" (even if "mustBeDedicated = true")
+	// - call "Bind[Resource]Memory" to bind resources to "Memory" objects
+	// - (optional) "CalculateAllocationNumber" and "AllocateAndBindMemory" from "NRIHelper" interface simplify this process for buffers and textures
 	CreateBuffer:         proc "c" (device: ^Device, bufferDesc: ^BufferDesc, buffer: ^^Buffer) -> Result,
 	CreateTexture:        proc "c" (device: ^Device, textureDesc: ^TextureDesc, texture: ^^Texture) -> Result,
 	GetBufferMemoryDesc:  proc "c" (buffer: ^Buffer, memoryLocation: MemoryLocation, memoryDesc: ^MemoryDesc),
@@ -138,10 +140,10 @@ CoreInterface :: struct {
 	// - "ResetDescriptorPool" resets the entire pool and wipes out all allocated descriptor sets. "DescriptorSet" is a tiny struct (<= 48 bytes),
 	//   so lots of descriptor sets can be created in advance and reused without calling "ResetDescriptorPool"
 	// - if there is a directly indexed descriptor heap:
-	//    - D3D12: "GetDescriptorSetOffsets" returns offsets in resource and sampler descriptor heaps
-	//       - these offsets are needed in shaders, if the corresponding descriptor set is not the first allocated from the descriptor pool
-	//    - VK: "GetDescriptorSetOffsets" returns "0"
-	//       - use "-fvk-bind-resource-heap" and "-fvk-bind-sampler-heap" DXC options to define bindings mimicking corresponding heaps
+	//   - D3D12: "GetDescriptorSetOffsets" returns offsets in resource and sampler descriptor heaps
+	//     - these offsets are needed in shaders, if the corresponding descriptor set is not the first allocated from the descriptor pool
+	//   - VK: "GetDescriptorSetOffsets" returns "0"
+	//     - use "-fvk-bind-resource-heap" and "-fvk-bind-sampler-heap" DXC options to define bindings mimicking corresponding heaps
 	AllocateDescriptorSets:  proc "c" (descriptorPool: ^DescriptorPool, pipelineLayout: ^PipelineLayout, setIndex: u32, descriptorSets: [^]^DescriptorSet, instanceNum: u32, variableDescriptorNum: u32) -> Result,
 	UpdateDescriptorRanges:  proc "c" (updateDescriptorRangeDescs: [^]UpdateDescriptorRangeDesc, updateDescriptorRangeDescNum: u32),
 	CopyDescriptorRanges:    proc "c" (copyDescriptorRangeDescs: [^]CopyDescriptorRangeDesc, copyDescriptorRangeDescNum: u32),
@@ -195,8 +197,8 @@ CoreInterface :: struct {
 	CmdDrawIndexed: proc "c" (commandBuffer: ^CommandBuffer, drawIndexedDesc: ^DrawIndexedDesc),
 
 	// Draw indirect:
-	//  - drawNum = min(drawNum, countBuffer ? countBuffer[countBufferOffset] : INF)
-	//  - see "Modified draw command signatures"
+	// - drawNum = min(drawNum, countBuffer ? countBuffer[countBufferOffset] : INF)
+	// - see "Modified draw command signatures"
 	CmdDrawIndirect:        proc "c" (commandBuffer: ^CommandBuffer, buffer: ^Buffer, offset: u64, drawNum: u32, stride: u32, countBuffer: ^Buffer, countBufferOffset: u64), // "buffer" contains "Draw(Base)Desc" commands
 	CmdDrawIndexedIndirect: proc "c" (commandBuffer: ^CommandBuffer, buffer: ^Buffer, offset: u64, drawNum: u32, stride: u32, countBuffer: ^Buffer, countBufferOffset: u64), // "buffer" contains "DrawIndexed(Base)Desc" commands
 
@@ -239,9 +241,10 @@ CoreInterface :: struct {
 	QueueEndAnnotation:   proc "c" (queue: ^Queue),
 	QueueAnnotation:      proc "c" (queue: ^Queue, name: cstring, bgra: u32),
 
-	// Query
-	ResetQueries: proc "c" (queryPool: ^QueryPool, offset: u32, num: u32), // on host
-	GetQuerySize: proc "c" (queryPool: ^QueryPool) -> u32,
+	// Queries and timestamps
+	ResetQueries:            proc "c" (queryPool: ^QueryPool, offset: u32, num: u32), // on host
+	GetQuerySize:            proc "c" (queryPool: ^QueryPool) -> u32,
+	GetCalibratedTimestamps: proc "c" (queue: ^Queue, timestampGPU: ^u64, timestampCPU: ^u64),
 
 	// Work submission and synchronization
 	QueueSubmit:    proc "c" (queue: ^Queue, queueSubmitDesc: ^QueueSubmitDesc) -> Result, // to device
@@ -264,16 +267,21 @@ CoreInterface :: struct {
 	// D3D11: returns "0"
 	GetBufferDeviceAddress: proc "c" (buffer: ^Buffer) -> u64,
 
+	// Pipeline cache (PSO blob storage, persisted across runs)
+	// - Threadsafe: no, external synchronization required, call after all pipeline creations using this cache have completed
+	// - 2-call pattern: pass "dst = NULL" to query required "size", then call again with allocated "dst"
+	GetPipelineCacheData: proc "c" (pipelineCache: ^PipelineCache, dst: rawptr, size: ^u64) -> Result,
+
 	// Debug name for any object declared as "NriForwardStruct" (skipped for buffers & textures in D3D if they are not bound to a memory)
 	SetDebugName: proc "c" (object: ^Object, name: cstring),
 
-	// Native objects                                                                                            ___D3D11 (latest interface)________|_D3D12 (latest interface)____|_VK_________________________________
-	GetDeviceNativeObject:        proc "c" (device: ^Device) -> rawptr,               // ID3D11Device*                   | ID3D12Device*               | VkDevice
-	GetQueueNativeObject:         proc "c" (queue: ^Queue) -> rawptr,                 // -                               | ID3D12CommandQueue*         | VkQueue
-	GetCommandBufferNativeObject: proc "c" (commandBuffer: ^CommandBuffer) -> rawptr, // ID3D11DeviceContext*            | ID3D12GraphicsCommandList*  | VkCommandBuffer
-	GetBufferNativeObject:        proc "c" (buffer: ^Buffer) -> u64,                  // ID3D11Buffer*                   | ID3D12Resource*             | VkBuffer
-	GetTextureNativeObject:       proc "c" (texture: ^Texture) -> u64,                // ID3D11Resource*                 | ID3D12Resource*             | VkImage
-	GetDescriptorNativeObject:    proc "c" (descriptor: ^Descriptor) -> u64,          // ID3D11View/ID3D11SamplerState*  | D3D12_CPU_DESCRIPTOR_HANDLE | VkImageView/VkBufferView/VkSampler
+	// Native objects                                                                                            ___D3D11 (latest interface)________|_D3D12 (latest interface)____|_VK_________________________________|_WGPU__________________________________
+	GetDeviceNativeObject:        proc "c" (device: ^Device) -> rawptr,               // ID3D11Device*                   | ID3D12Device*               | VkDevice                           | WGPUDevice
+	GetQueueNativeObject:         proc "c" (queue: ^Queue) -> rawptr,                 // -                               | ID3D12CommandQueue*         | VkQueue                            | WGPUQueue
+	GetCommandBufferNativeObject: proc "c" (commandBuffer: ^CommandBuffer) -> rawptr, // ID3D11DeviceContext*            | ID3D12GraphicsCommandList*  | VkCommandBuffer                    | WGPUCommandBuffer
+	GetBufferNativeObject:        proc "c" (buffer: ^Buffer) -> u64,                  // ID3D11Buffer*                   | ID3D12Resource*             | VkBuffer                           | WGPUBuffer
+	GetTextureNativeObject:       proc "c" (texture: ^Texture) -> u64,                // ID3D11Resource*                 | ID3D12Resource*             | VkImage                            | WGPUTexture
+	GetDescriptorNativeObject:    proc "c" (descriptor: ^Descriptor) -> u64,          // ID3D11View/ID3D11SamplerState*  | D3D12_CPU_DESCRIPTOR_HANDLE | VkImageView/VkBufferView/VkSampler | WGPUTextureView/WGPUBuffer/WGPUSampler
 }
 
 @(default_calling_convention="c", link_prefix="nri")

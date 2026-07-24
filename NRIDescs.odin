@@ -1,4 +1,4 @@
-﻿// © 2021 NVIDIA Corporation
+// © 2021 NVIDIA Corporation
 package NRI
 
 when ODIN_DEBUG {
@@ -37,6 +37,7 @@ CommandBuffer    :: struct {} // used to record commands which can be subsequent
 DescriptorSet    :: struct {} // a continuous set of descriptors
 DescriptorPool   :: struct {} // maintains a pool of descriptors, descriptor sets are allocated from (aka descriptor heap)
 PipelineLayout   :: struct {} // determines the interface between shader stages and shader resources (aka root signature)
+PipelineCache    :: struct {} // a persistent cache of compiled pipeline state objects (PSOs) to accelerate subsequent PSO creations
 CommandAllocator :: struct {} // an object that command buffer memory is allocated from
 
 // Basic types
@@ -57,22 +58,32 @@ Float2_t :: struct {
 	x, y: f32,
 }
 
-//============================================================================================================================================================================================
+// "AdapterDesc::supportedGraphicsAPIs" is a mask of supported graphics APIs
 GraphicsAPI :: enum u8 {
 	//============================================================================================================================================================================================
-	NONE    = 0,
+	
+	// "AdapterDesc::supportedGraphicsAPIs" is a mask of supported graphics APIs
+	NONE  = 1,
 
 	//============================================================================================================================================================================================
-	D3D11   = 1,
+	
+	// "AdapterDesc::supportedGraphicsAPIs" is a mask of supported graphics APIs
+	D3D11 = 2,
 
 	//============================================================================================================================================================================================
-	D3D12   = 2,
+	
+	// "AdapterDesc::supportedGraphicsAPIs" is a mask of supported graphics APIs
+	D3D12 = 4,
 
 	//============================================================================================================================================================================================
-	VK      = 3,
+	
+	// "AdapterDesc::supportedGraphicsAPIs" is a mask of supported graphics APIs
+	VK    = 8,
 
 	//============================================================================================================================================================================================
-	MAX_NUM = 4,
+	
+	// "AdapterDesc::supportedGraphicsAPIs" is a mask of supported graphics APIs
+	WGPU  = 16,
 }
 
 Result :: enum i8 {
@@ -183,7 +194,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	UNKNOWN                = 0,   // |      FormatSupportBits      |
+	UNKNOWN              = 0,   // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -205,7 +216,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R8_UNORM               = 1,   // |      FormatSupportBits      |
+	R8_UNORM             = 1,   // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -227,7 +238,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R8_SNORM               = 2,   // |      FormatSupportBits      |
+	R8_SNORM             = 2,   // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -249,7 +260,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R8_UINT                = 3,   // |      FormatSupportBits      |
+	R8_UINT              = 3,   // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -271,7 +282,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R8_SINT                = 4,   // |      FormatSupportBits      |
+	R8_SINT              = 4,   // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -293,7 +304,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG8_UNORM              = 5,   // |      FormatSupportBits      |
+	RG8_UNORM            = 5,   // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -315,7 +326,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG8_SNORM              = 6,   // |      FormatSupportBits      |
+	RG8_SNORM            = 6,   // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -337,7 +348,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG8_UINT               = 7,   // |      FormatSupportBits      |
+	RG8_UINT             = 7,   // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -359,7 +370,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG8_SINT               = 8,   // |      FormatSupportBits      |
+	RG8_SINT             = 8,   // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -381,7 +392,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BGRA8_UNORM            = 9,   // |      FormatSupportBits      |
+	BGRA8_UNORM          = 9,   // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -403,7 +414,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BGRA8_SRGB             = 10,  // |      FormatSupportBits      |
+	BGRA8_SRGB           = 10,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -425,7 +436,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA8_UNORM            = 11,  // |      FormatSupportBits      |
+	RGBA8_UNORM          = 11,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -447,7 +458,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA8_SRGB             = 12,  // |      FormatSupportBits      |
+	RGBA8_SRGB           = 12,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -469,7 +480,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA8_SNORM            = 13,  // |      FormatSupportBits      |
+	RGBA8_SNORM          = 13,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -491,7 +502,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA8_UINT             = 14,  // |      FormatSupportBits      |
+	RGBA8_UINT           = 14,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -513,7 +524,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA8_SINT             = 15,  // |      FormatSupportBits      |
+	RGBA8_SINT           = 15,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -535,7 +546,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R16_UNORM              = 16,  // |      FormatSupportBits      |
+	R16_UNORM            = 16,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -557,7 +568,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R16_SNORM              = 17,  // |      FormatSupportBits      |
+	R16_SNORM            = 17,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -579,7 +590,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R16_UINT               = 18,  // |      FormatSupportBits      |
+	R16_UINT             = 18,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -601,7 +612,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R16_SINT               = 19,  // |      FormatSupportBits      |
+	R16_SINT             = 19,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -623,7 +634,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R16_SFLOAT             = 20,  // |      FormatSupportBits      |
+	R16_SFLOAT           = 20,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -645,7 +656,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG16_UNORM             = 21,  // |      FormatSupportBits      |
+	RG16_UNORM           = 21,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -667,7 +678,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG16_SNORM             = 22,  // |      FormatSupportBits      |
+	RG16_SNORM           = 22,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -689,7 +700,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG16_UINT              = 23,  // |      FormatSupportBits      |
+	RG16_UINT            = 23,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -711,7 +722,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG16_SINT              = 24,  // |      FormatSupportBits      |
+	RG16_SINT            = 24,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -733,7 +744,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG16_SFLOAT            = 25,  // |      FormatSupportBits      |
+	RG16_SFLOAT          = 25,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -755,7 +766,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA16_UNORM           = 26,  // |      FormatSupportBits      |
+	RGBA16_UNORM         = 26,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -777,7 +788,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA16_SNORM           = 27,  // |      FormatSupportBits      |
+	RGBA16_SNORM         = 27,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -799,7 +810,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA16_UINT            = 28,  // |      FormatSupportBits      |
+	RGBA16_UINT          = 28,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -821,7 +832,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA16_SINT            = 29,  // |      FormatSupportBits      |
+	RGBA16_SINT          = 29,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -843,7 +854,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA16_SFLOAT          = 30,  // |      FormatSupportBits      |
+	RGBA16_SFLOAT        = 30,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -865,7 +876,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R32_UINT               = 31,  // |      FormatSupportBits      |
+	R32_UINT             = 31,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -887,7 +898,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R32_SINT               = 32,  // |      FormatSupportBits      |
+	R32_SINT             = 32,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -909,7 +920,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R32_SFLOAT             = 33,  // |      FormatSupportBits      |
+	R32_SFLOAT           = 33,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -931,7 +942,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG32_UINT              = 34,  // |      FormatSupportBits      |
+	RG32_UINT            = 34,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -953,7 +964,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG32_SINT              = 35,  // |      FormatSupportBits      |
+	RG32_SINT            = 35,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -975,7 +986,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RG32_SFLOAT            = 36,  // |      FormatSupportBits      |
+	RG32_SFLOAT          = 36,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -997,7 +1008,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGB32_UINT             = 37,  // |      FormatSupportBits      |
+	RGB32_UINT           = 37,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1019,7 +1030,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGB32_SINT             = 38,  // |      FormatSupportBits      |
+	RGB32_SINT           = 38,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1041,7 +1052,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGB32_SFLOAT           = 39,  // |      FormatSupportBits      |
+	RGB32_SFLOAT         = 39,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1063,7 +1074,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA32_UINT            = 40,  // |      FormatSupportBits      |
+	RGBA32_UINT          = 40,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1085,7 +1096,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA32_SINT            = 41,  // |      FormatSupportBits      |
+	RGBA32_SINT          = 41,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1107,7 +1118,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	RGBA32_SFLOAT          = 42,  // |      FormatSupportBits      |
+	RGBA32_SFLOAT        = 42,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1129,7 +1140,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	B5_G6_R5_UNORM         = 43,  // |      FormatSupportBits      |
+	B5_G6_R5_UNORM       = 43,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1151,7 +1162,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	B5_G5_R5_A1_UNORM      = 44,  // |      FormatSupportBits      |
+	B5_G5_R5_A1_UNORM    = 44,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1173,7 +1184,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	B4_G4_R4_A4_UNORM      = 45,  // |      FormatSupportBits      |
+	B4_G4_R4_A4_UNORM    = 45,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1195,7 +1206,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R10_G10_B10_A2_UNORM   = 46,  // |      FormatSupportBits      |
+	R10_G10_B10_A2_UNORM = 46,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1217,7 +1228,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R10_G10_B10_A2_UINT    = 47,  // |      FormatSupportBits      |
+	R10_G10_B10_A2_UINT  = 47,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1239,7 +1250,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R11_G11_B10_UFLOAT     = 48,  // |      FormatSupportBits      |
+	R11_G11_B10_UFLOAT   = 48,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1261,7 +1272,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R9_G9_B9_E5_UFLOAT     = 49,  // |      FormatSupportBits      |
+	R9_G9_B9_E5_UFLOAT   = 49,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1283,7 +1294,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC1_RGBA_UNORM         = 50,  // |      FormatSupportBits      |
+	BC1_RGBA_UNORM       = 50,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1305,7 +1316,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC1_RGBA_SRGB          = 51,  // |      FormatSupportBits      |
+	BC1_RGBA_SRGB        = 51,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1327,7 +1338,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC2_RGBA_UNORM         = 52,  // |      FormatSupportBits      |
+	BC2_RGBA_UNORM       = 52,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1349,7 +1360,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC2_RGBA_SRGB          = 53,  // |      FormatSupportBits      |
+	BC2_RGBA_SRGB        = 53,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1371,7 +1382,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC3_RGBA_UNORM         = 54,  // |      FormatSupportBits      |
+	BC3_RGBA_UNORM       = 54,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1393,7 +1404,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC3_RGBA_SRGB          = 55,  // |      FormatSupportBits      |
+	BC3_RGBA_SRGB        = 55,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1415,7 +1426,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC4_R_UNORM            = 56,  // |      FormatSupportBits      |
+	BC4_R_UNORM          = 56,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1437,7 +1448,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC4_R_SNORM            = 57,  // |      FormatSupportBits      |
+	BC4_R_SNORM          = 57,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1459,7 +1470,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC5_RG_UNORM           = 58,  // |      FormatSupportBits      |
+	BC5_RG_UNORM         = 58,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1481,7 +1492,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC5_RG_SNORM           = 59,  // |      FormatSupportBits      |
+	BC5_RG_SNORM         = 59,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1503,7 +1514,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC6H_RGB_UFLOAT        = 60,  // |      FormatSupportBits      |
+	BC6H_RGB_UFLOAT      = 60,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1525,7 +1536,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC6H_RGB_SFLOAT        = 61,  // |      FormatSupportBits      |
+	BC6H_RGB_SFLOAT      = 61,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1547,7 +1558,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC7_RGBA_UNORM         = 62,  // |      FormatSupportBits      |
+	BC7_RGBA_UNORM       = 62,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1569,7 +1580,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	BC7_RGBA_SRGB          = 63,  // |      FormatSupportBits      |
+	BC7_RGBA_SRGB        = 63,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1591,7 +1602,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ETC2_RGB8_UNORM        = 64,  // |      FormatSupportBits      |
+	ETC2_RGB8_UNORM      = 64,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1613,7 +1624,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ETC2_RGB8_SRGB         = 65,  // |      FormatSupportBits      |
+	ETC2_RGB8_SRGB       = 65,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1635,7 +1646,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ETC2_RGB8_A1_UNORM     = 66,  // |      FormatSupportBits      |
+	ETC2_RGB8_A1_UNORM   = 66,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1657,7 +1668,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ETC2_RGB8_A1_SRGB      = 67,  // |      FormatSupportBits      |
+	ETC2_RGB8_A1_SRGB    = 67,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1679,7 +1690,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ETC2_RGB8_A8_UNORM     = 68,  // |      FormatSupportBits      |
+	ETC2_RGB8_A8_UNORM   = 68,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1701,7 +1712,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ETC2_RGB8_A8_SRGB      = 69,  // |      FormatSupportBits      |
+	ETC2_RGB8_A8_SRGB    = 69,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1723,7 +1734,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ETC2_R11_UNORM         = 70,  // |      FormatSupportBits      |
+	ETC2_R11_UNORM       = 70,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1745,7 +1756,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ETC2_R11_SNORM         = 71,  // |      FormatSupportBits      |
+	ETC2_R11_SNORM       = 71,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1767,7 +1778,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ETC2_R11_G11_UNORM     = 72,  // |      FormatSupportBits      |
+	ETC2_R11_G11_UNORM   = 72,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1789,7 +1800,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ETC2_R11_G11_SNORM     = 73,  // |      FormatSupportBits      |
+	ETC2_R11_G11_SNORM   = 73,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1811,7 +1822,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_4X4_UNORM         = 74,  // |      FormatSupportBits      |
+	ASTC_4X4_UNORM       = 74,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1833,7 +1844,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_4X4_SRGB          = 75,  // |      FormatSupportBits      |
+	ASTC_4X4_SRGB        = 75,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1855,7 +1866,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_5X4_UNORM         = 76,  // |      FormatSupportBits      |
+	ASTC_5X4_UNORM       = 76,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1877,7 +1888,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_5X4_SRGB          = 77,  // |      FormatSupportBits      |
+	ASTC_5X4_SRGB        = 77,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1899,7 +1910,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_5X5_UNORM         = 78,  // |      FormatSupportBits      |
+	ASTC_5X5_UNORM       = 78,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1921,7 +1932,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_5X5_SRGB          = 79,  // |      FormatSupportBits      |
+	ASTC_5X5_SRGB        = 79,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1943,7 +1954,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_6X5_UNORM         = 80,  // |      FormatSupportBits      |
+	ASTC_6X5_UNORM       = 80,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1965,7 +1976,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_6X5_SRGB          = 81,  // |      FormatSupportBits      |
+	ASTC_6X5_SRGB        = 81,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -1987,7 +1998,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_6X6_UNORM         = 82,  // |      FormatSupportBits      |
+	ASTC_6X6_UNORM       = 82,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2009,7 +2020,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_6X6_SRGB          = 83,  // |      FormatSupportBits      |
+	ASTC_6X6_SRGB        = 83,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2031,7 +2042,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_8X5_UNORM         = 84,  // |      FormatSupportBits      |
+	ASTC_8X5_UNORM       = 84,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2053,7 +2064,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_8X5_SRGB          = 85,  // |      FormatSupportBits      |
+	ASTC_8X5_SRGB        = 85,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2075,7 +2086,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_8X6_UNORM         = 86,  // |      FormatSupportBits      |
+	ASTC_8X6_UNORM       = 86,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2097,7 +2108,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_8X6_SRGB          = 87,  // |      FormatSupportBits      |
+	ASTC_8X6_SRGB        = 87,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2119,7 +2130,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_8X8_UNORM         = 88,  // |      FormatSupportBits      |
+	ASTC_8X8_UNORM       = 88,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2141,7 +2152,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_8X8_SRGB          = 89,  // |      FormatSupportBits      |
+	ASTC_8X8_SRGB        = 89,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2163,7 +2174,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_10X5_UNORM        = 90,  // |      FormatSupportBits      |
+	ASTC_10X5_UNORM      = 90,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2185,7 +2196,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_10X5_SRGB         = 91,  // |      FormatSupportBits      |
+	ASTC_10X5_SRGB       = 91,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2207,7 +2218,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_10X6_UNORM        = 92,  // |      FormatSupportBits      |
+	ASTC_10X6_UNORM      = 92,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2229,7 +2240,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_10X6_SRGB         = 93,  // |      FormatSupportBits      |
+	ASTC_10X6_SRGB       = 93,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2251,7 +2262,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_10X8_UNORM        = 94,  // |      FormatSupportBits      |
+	ASTC_10X8_UNORM      = 94,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2273,7 +2284,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_10X8_SRGB         = 95,  // |      FormatSupportBits      |
+	ASTC_10X8_SRGB       = 95,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2295,7 +2306,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_10X10_UNORM       = 96,  // |      FormatSupportBits      |
+	ASTC_10X10_UNORM     = 96,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2317,7 +2328,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_10X10_SRGB        = 97,  // |      FormatSupportBits      |
+	ASTC_10X10_SRGB      = 97,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2339,7 +2350,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_12X10_UNORM       = 98,  // |      FormatSupportBits      |
+	ASTC_12X10_UNORM     = 98,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2361,7 +2372,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_12X10_SRGB        = 99,  // |      FormatSupportBits      |
+	ASTC_12X10_SRGB      = 99,  // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2383,7 +2394,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_12X12_UNORM       = 100, // |      FormatSupportBits      |
+	ASTC_12X12_UNORM     = 100, // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2405,7 +2416,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	ASTC_12X12_SRGB        = 101, // |      FormatSupportBits      |
+	ASTC_12X12_SRGB      = 101, // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2427,7 +2438,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	D16_UNORM              = 102, // |      FormatSupportBits      |
+	D16_UNORM            = 102, // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2449,7 +2460,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	D24_UNORM_S8_UINT      = 103, // |      FormatSupportBits      |
+	D32_SFLOAT           = 103, // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2471,7 +2482,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	D32_SFLOAT             = 104, // |      FormatSupportBits      |
+	D24_UNORM_S8_UINT    = 104, // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2493,7 +2504,7 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	D32_SFLOAT_S8_UINT_X24 = 105, // |      FormatSupportBits      |
+	D32_SFLOAT_S8_UINT   = 105, // |      FormatSupportBits      |
 
 	// left -> right : low -> high bits
 	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
@@ -2515,98 +2526,11 @@ Format :: enum u8 {
 	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
 	//                                   TEXTURE | | | | | | | | | | | | | | |
 	//                                         | | | | | | | | | | | | | | | |
-	R24_UNORM_X8           = 106, // |      FormatSupportBits      |
-
-	// left -> right : low -> high bits
-	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
-	// To demote sRGB use the previous format, i.e. "format - 1"
-	//                                            STORAGE_WRITE_WITHOUT_FORMAT
-	//                                           STORAGE_READ_WITHOUT_FORMAT |
-	//                                                       VERTEX_BUFFER | |
-	//                                            STORAGE_BUFFER_ATOMICS | | |
-	//                                                  STORAGE_BUFFER | | | |
-	//                                                        BUFFER | | | | |
-	//                                         MULTISAMPLE_RESOLVE | | | | | |
-	//                                            MULTISAMPLE_8X | | | | | | |
-	//                                          MULTISAMPLE_4X | | | | | | | |
-	//                                        MULTISAMPLE_2X | | | | | | | | |
-	//                                               BLEND | | | | | | | | | |
-	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
-	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
-	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
-	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
-	//                                   TEXTURE | | | | | | | | | | | | | | |
-	//                                         | | | | | | | | | | | | | | | |
-	X24_G8_UINT            = 107, // |      FormatSupportBits      |
-
-	// left -> right : low -> high bits
-	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
-	// To demote sRGB use the previous format, i.e. "format - 1"
-	//                                            STORAGE_WRITE_WITHOUT_FORMAT
-	//                                           STORAGE_READ_WITHOUT_FORMAT |
-	//                                                       VERTEX_BUFFER | |
-	//                                            STORAGE_BUFFER_ATOMICS | | |
-	//                                                  STORAGE_BUFFER | | | |
-	//                                                        BUFFER | | | | |
-	//                                         MULTISAMPLE_RESOLVE | | | | | |
-	//                                            MULTISAMPLE_8X | | | | | | |
-	//                                          MULTISAMPLE_4X | | | | | | | |
-	//                                        MULTISAMPLE_2X | | | | | | | | |
-	//                                               BLEND | | | | | | | | | |
-	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
-	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
-	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
-	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
-	//                                   TEXTURE | | | | | | | | | | | | | | |
-	//                                         | | | | | | | | | | | | | | | |
-	R32_SFLOAT_X8_X24      = 108, // |      FormatSupportBits      |
-
-	// left -> right : low -> high bits
-	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
-	// To demote sRGB use the previous format, i.e. "format - 1"
-	//                                            STORAGE_WRITE_WITHOUT_FORMAT
-	//                                           STORAGE_READ_WITHOUT_FORMAT |
-	//                                                       VERTEX_BUFFER | |
-	//                                            STORAGE_BUFFER_ATOMICS | | |
-	//                                                  STORAGE_BUFFER | | | |
-	//                                                        BUFFER | | | | |
-	//                                         MULTISAMPLE_RESOLVE | | | | | |
-	//                                            MULTISAMPLE_8X | | | | | | |
-	//                                          MULTISAMPLE_4X | | | | | | | |
-	//                                        MULTISAMPLE_2X | | | | | | | | |
-	//                                               BLEND | | | | | | | | | |
-	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
-	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
-	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
-	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
-	//                                   TEXTURE | | | | | | | | | | | | | | |
-	//                                         | | | | | | | | | | | | | | | |
-	X32_G8_UINT_X24        = 109, // |      FormatSupportBits      |
-
-	// left -> right : low -> high bits
-	// Expected (but not guaranteed) "FormatSupportBits" are provided, but "GetFormatSupport" should be used for querying real HW support
-	// To demote sRGB use the previous format, i.e. "format - 1"
-	//                                            STORAGE_WRITE_WITHOUT_FORMAT
-	//                                           STORAGE_READ_WITHOUT_FORMAT |
-	//                                                       VERTEX_BUFFER | |
-	//                                            STORAGE_BUFFER_ATOMICS | | |
-	//                                                  STORAGE_BUFFER | | | |
-	//                                                        BUFFER | | | | |
-	//                                         MULTISAMPLE_RESOLVE | | | | | |
-	//                                            MULTISAMPLE_8X | | | | | | |
-	//                                          MULTISAMPLE_4X | | | | | | | |
-	//                                        MULTISAMPLE_2X | | | | | | | | |
-	//                                               BLEND | | | | | | | | | |
-	//                          DEPTH_STENCIL_ATTACHMENT | | | | | | | | | | |
-	//                                COLOR_ATTACHMENT | | | | | | | | | | | |
-	//                       STORAGE_TEXTURE_ATOMICS | | | | | | | | | | | | |
-	//                             STORAGE_TEXTURE | | | | | | | | | | | | | |
-	//                                   TEXTURE | | | | | | | | | | | | | | |
-	//                                         | | | | | | | | | | | | | | | |
-	MAX_NUM                = 110, // |      FormatSupportBits      |
+	MAX_NUM              = 106, // |      FormatSupportBits      |
 } // |      FormatSupportBits      |
 
 PlaneBitsEnum :: enum u8 {
+	NONE    = 7,
 	COLOR   = 0,
 	DEPTH   = 1,
 	STENCIL = 2,
@@ -2617,27 +2541,59 @@ PlaneBitsEnum :: enum u8 {
 PlaneBits :: bit_set[PlaneBitsEnum; u8]
 
 FormatSupportBitsEnum :: enum u16 {
+	// WGPU: typed buffer views are unsupported; storage textures cannot be multisampled
 	TEXTURE                      = 0,
+
+	// WGPU: typed buffer views are unsupported; storage textures cannot be multisampled
 	STORAGE_TEXTURE              = 1,
+
+	// WGPU: typed buffer views are unsupported; storage textures cannot be multisampled
 	STORAGE_TEXTURE_ATOMICS      = 2,
+
+	// WGPU: typed buffer views are unsupported; storage textures cannot be multisampled
 	COLOR_ATTACHMENT             = 3,
+
+	// WGPU: typed buffer views are unsupported; storage textures cannot be multisampled
 	DEPTH_STENCIL_ATTACHMENT     = 4,
+
+	// WGPU: typed buffer views are unsupported; storage textures cannot be multisampled
 	BLEND                        = 5,
+
+	// WGPU: typed buffer views are unsupported; storage textures cannot be multisampled
 	MULTISAMPLE_2X               = 6,
+
+	// WGPU: typed buffer views are unsupported; storage textures cannot be multisampled
 	MULTISAMPLE_4X               = 7,
+
+	// WGPU: typed buffer views are unsupported; storage textures cannot be multisampled
 	MULTISAMPLE_8X               = 8,
+
+	// WGPU: typed buffer views are unsupported; storage textures cannot be multisampled
 	MULTISAMPLE_RESOLVE          = 9,
+
+	// WGPU: typed buffer views are unsupported; storage textures cannot be multisampled
 	BUFFER                       = 10,
+
+	// WGPU: typed buffer views are unsupported; storage textures cannot be multisampled
 	STORAGE_BUFFER               = 11,
+
+	// WGPU: typed buffer views are unsupported; storage textures cannot be multisampled
 	STORAGE_BUFFER_ATOMICS       = 12,
+
+	// WGPU: typed buffer views are unsupported; storage textures cannot be multisampled
 	VERTEX_BUFFER                = 13,
+
+	// WGPU: typed buffer views are unsupported; storage textures cannot be multisampled
 	STORAGE_READ_WITHOUT_FORMAT  = 14,
+
+	// WGPU: typed buffer views are unsupported; storage textures cannot be multisampled
 	STORAGE_WRITE_WITHOUT_FORMAT = 15,
 }
 
 // A bit represents a feature, supported by a format
 // https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ns-d3d12-d3d12_feature_data_format_support
 // https://docs.vulkan.org/refpages/latest/refpages/source/VkFormatFeatureFlagBits2.html
+// WGPU: typed buffer views are unsupported; storage textures cannot be multisampled
 FormatSupportBits :: bit_set[FormatSupportBitsEnum; u16]
 
 StageBitsEnum :: enum u32 {
@@ -2651,30 +2607,31 @@ StageBitsEnum :: enum u32 {
 	FRAGMENT_SHADER          = 7,
 	DEPTH_STENCIL_ATTACHMENT = 8,
 	COLOR_ATTACHMENT         = 9,
-	COMPUTE_SHADER           = 10,
-	RAYGEN_SHADER            = 11,
-	MISS_SHADER              = 12,
-	INTERSECTION_SHADER      = 13,
-	CLOSEST_HIT_SHADER       = 14,
-	ANY_HIT_SHADER           = 15,
-	CALLABLE_SHADER          = 16,
-	ACCELERATION_STRUCTURE   = 17,
-	MICROMAP                 = 18,
-	COPY                     = 19,
-	RESOLVE                  = 20,
-	CLEAR_STORAGE            = 21,
-	INDIRECT                 = 22,
+	SHADING_RATE_ATTACHMENT  = 10,
+	COMPUTE_SHADER           = 11,
+	RAYGEN_SHADER            = 12,
+	MISS_SHADER              = 13,
+	INTERSECTION_SHADER      = 14,
+	CLOSEST_HIT_SHADER       = 15,
+	ANY_HIT_SHADER           = 16,
+	CALLABLE_SHADER          = 17,
+	ACCELERATION_STRUCTURE   = 18,
+	MICROMAP                 = 19,
+	COPY                     = 20,
+	RESOLVE                  = 21,
+	CLEAR_STORAGE            = 22,
+	INDIRECT                 = 23,
 }
 
 // https://docs.vulkan.org/refpages/latest/refpages/source/VkPipelineStageFlagBits2.html
 // https://microsoft.github.io/DirectX-Specs/d3d/D3D12EnhancedBarriers.html#d3d12_barrier_sync
 StageBits :: bit_set[StageBitsEnum; u32]
-STAGEBITS_MESH_SHADERS         :: StageBits {.TASK_SHADER, .MESH_SHADER}
-STAGEBITS_ALL_SHADERS          :: StageBits {.VERTEX_SHADER, .TESS_CONTROL_SHADER, .TESS_EVALUATION_SHADER, .GEOMETRY_SHADER, .TASK_SHADER, .MESH_SHADER, .FRAGMENT_SHADER, .COMPUTE_SHADER, .RAYGEN_SHADER, .MISS_SHADER, .INTERSECTION_SHADER, .CLOSEST_HIT_SHADER, .ANY_HIT_SHADER, .CALLABLE_SHADER}
 STAGEBITS_ALL                  :: StageBits {}
 STAGEBITS_NONE                 :: transmute(StageBits)(u32(0x7FFFFFFF))
+STAGEBITS_MESH_SHADERS         :: StageBits {.TASK_SHADER, .MESH_SHADER}
+STAGEBITS_GRAPHICS             :: StageBits {.INDEX_INPUT, .VERTEX_SHADER, .TESS_CONTROL_SHADER, .TESS_EVALUATION_SHADER, .GEOMETRY_SHADER, .TASK_SHADER, .MESH_SHADER, .FRAGMENT_SHADER, .DEPTH_STENCIL_ATTACHMENT, .COLOR_ATTACHMENT, .SHADING_RATE_ATTACHMENT}
 STAGEBITS_TESSELLATION_SHADERS :: StageBits {.TESS_CONTROL_SHADER, .TESS_EVALUATION_SHADER}
-STAGEBITS_GRAPHICS             :: StageBits {.INDEX_INPUT, .VERTEX_SHADER, .TESS_CONTROL_SHADER, .TESS_EVALUATION_SHADER, .GEOMETRY_SHADER, .TASK_SHADER, .MESH_SHADER, .FRAGMENT_SHADER, .DEPTH_STENCIL_ATTACHMENT, .COLOR_ATTACHMENT}
+STAGEBITS_ALL_SHADERS          :: StageBits {.VERTEX_SHADER, .TESS_CONTROL_SHADER, .TESS_EVALUATION_SHADER, .GEOMETRY_SHADER, .TASK_SHADER, .MESH_SHADER, .FRAGMENT_SHADER, .COMPUTE_SHADER, .RAYGEN_SHADER, .MISS_SHADER, .INTERSECTION_SHADER, .CLOSEST_HIT_SHADER, .ANY_HIT_SHADER, .CALLABLE_SHADER}
 STAGEBITS_RAY_TRACING_SHADERS  :: StageBits {.RAYGEN_SHADER, .MISS_SHADER, .INTERSECTION_SHADER, .CLOSEST_HIT_SHADER, .ANY_HIT_SHADER, .CALLABLE_SHADER}
 STAGEBITS_GRAPHICS_SHADERS     :: StageBits {.VERTEX_SHADER, .TESS_CONTROL_SHADER, .TESS_EVALUATION_SHADER, .GEOMETRY_SHADER, .TASK_SHADER, .MESH_SHADER, .FRAGMENT_SHADER}
 
@@ -2708,8 +2665,8 @@ AccessBitsEnum :: enum u32 {
 // https://microsoft.github.io/DirectX-Specs/d3d/D3D12EnhancedBarriers.html#d3d12_barrier_access
 AccessBits :: bit_set[AccessBitsEnum; u32]
 ACCESSBITS_ACCELERATION_STRUCTURE   :: AccessBits {.ACCELERATION_STRUCTURE_READ, .ACCELERATION_STRUCTURE_WRITE}
-ACCESSBITS_MICROMAP                 :: AccessBits {.MICROMAP_READ, .MICROMAP_WRITE}
 ACCESSBITS_DEPTH_STENCIL_ATTACHMENT :: AccessBits {.DEPTH_STENCIL_ATTACHMENT_READ, .DEPTH_STENCIL_ATTACHMENT_WRITE}
+ACCESSBITS_MICROMAP                 :: AccessBits {.MICROMAP_READ, .MICROMAP_WRITE}
 ACCESSBITS_COLOR_ATTACHMENT         :: AccessBits {.COLOR_ATTACHMENT_READ, .COLOR_ATTACHMENT_WRITE}
 
 // "Layout" is ignored if "features.enhancedBarriers" is not supported
@@ -2771,6 +2728,7 @@ TextureBarrierDesc :: struct {
 }
 
 // Using "CmdBarrier" inside a rendering pass is allowed, but only for "Layout::INPUT_ATTACHMENT" access transitions
+// D3D12 filters out "transitioning to the same state" barriers if "features.enhancedBarriers" is not supported
 BarrierDesc :: struct {
 	globals:    [^]GlobalBarrierDesc,
 	globalNum:  u32,
@@ -2849,6 +2807,7 @@ TextureDesc :: struct {
 // - VK: buffers are always created with sharing mode "CONCURRENT" to match D3D12 spec
 // - "structureStride" values:
 //   - 0  - allows only "typed" views
+//          WGPU: typed buffer views are unsupported
 //   - 4  - allows "typed", "byte address" and "structured" views
 //          D3D11: allows to create multiple "structured" views for a single resource, disobeying the spec
 //   - >4 - allows only "structured" views
@@ -3030,17 +2989,17 @@ ComponentMapping :: struct {
 }
 
 TextureViewDesc :: struct {
-	texture:        ^Texture,
-	type:           TextureView,
-	format:         Format,
-	mipOffset:      Dim_t,
-	mipNum:         Dim_t,     // can be "REMAINING"
-	layerOffset:    Dim_t,
-	layerNum:       Dim_t,     // can be "REMAINING"
-	sliceOffset:    Dim_t,
-	sliceNum:       Dim_t,     // can be "REMAINING"
-	readonlyPlanes: PlaneBits, // "DEPTH" and/or "STENCIL"
-	components:     ComponentMapping,
+	texture:     ^Texture,
+	type:        TextureView,
+	format:      Format,
+	mipOffset:   Dim_t,
+	mipNum:      Dim_t,     // can be "REMAINING"
+	layerOffset: Dim_t,
+	layerNum:    Dim_t,     // can be "REMAINING"
+	sliceOffset: Dim_t,
+	sliceNum:    Dim_t,     // can be "REMAINING"
+	planes:      PlaneBits, // accessible planes (missing planes for a "DEPTH_STENCIL_ATTACHMENT" are considered read-only)
+	components:  ComponentMapping,
 }
 
 BufferViewDesc :: struct {
@@ -3048,8 +3007,8 @@ BufferViewDesc :: struct {
 	type:            BufferView,
 	offset:          u64,    // expects "memoryAlignment.bufferShaderResourceOffset" for shader resources
 	size:            u64,    // can be "WHOLE_SIZE"
-	format:          Format, // needed for typed views, i.e. "BUFFER" and "BUFFER_STORAGE"
-	structureStride: u32,    // needed for structured views, i.e. "STRUCTURED_BUFFER" and "STRUCTURED_BUFFER_STORAGE" (= "BufferDesc::structureStride", if not provided)
+	format:          Format, // needed for typed views, i.e. "BUFFER" and "STORAGE_BUFFER"
+	structureStride: u32,    // needed for structured views, i.e. "STRUCTURED_BUFFER" and "STORAGE_STRUCTURED_BUFFER" (= "BufferDesc::structureStride", if not provided)
 }
 
 AddressModes :: struct {
@@ -3071,9 +3030,9 @@ SamplerDesc :: struct {
 	mipMax:                  f32,
 	addressModes:            AddressModes,
 	compareOp:               CompareOp,
-	borderColor:             Color,
+	borderColor:             Color, // used only with "AddressMode::CLAMP_TO_BORDER"
 	isInteger:               bool,
-	unnormalizedCoordinates: bool, // requires "shaderFeatures.unnormalizedCoordinates"
+	unnormalizedCoordinates: bool,  // requires "shaderFeatures.unnormalizedCoordinates"
 }
 
 // https://docs.vulkan.org/refpages/latest/refpages/source/VkPipelineBindPoint.html
@@ -3088,20 +3047,22 @@ BindPoint :: enum u8 {
 PipelineLayoutBitsEnum :: enum u8 {
 	IGNORE_GLOBAL_SPIRV_OFFSETS      = 0,
 	ENABLE_DRAW_PARAMETERS_EMULATION = 1,
-	SAMPLER_HEAP_DIRECTLY_INDEXED    = 2,
-	RESOURCE_HEAP_DIRECTLY_INDEXED   = 3,
+	ENABLE_DRAW_INDEX_EMULATION      = 2,
+	SAMPLER_HEAP_DIRECTLY_INDEXED    = 3,
+	RESOURCE_HEAP_DIRECTLY_INDEXED   = 4,
 }
+
 PipelineLayoutBits :: bit_set[PipelineLayoutBitsEnum; u8]
 
 DescriptorPoolBitsEnum :: enum u8 {
 	ALLOW_UPDATE_AFTER_SET = 0,
 }
+
 DescriptorPoolBits :: bit_set[DescriptorPoolBitsEnum; u8]
 
 DescriptorSetBitsEnum :: enum u8 {
 	ALLOW_UPDATE_AFTER_SET = 0,
 }
-
 DescriptorSetBits :: bit_set[DescriptorSetBitsEnum; u8]
 
 DescriptorRangeBitsEnum :: enum u8 {
@@ -3345,6 +3306,7 @@ VertexAttributeDesc :: struct {
 VertexStreamDesc :: struct {
 	bindingSlot: u16,
 	stepRate:    VertexStreamStepRate,
+	stride:      u16, // fallback if "features.extendedDynamicState" is not supported
 }
 
 VertexInputDesc :: struct {
@@ -3357,7 +3319,7 @@ VertexInputDesc :: struct {
 VertexBufferDesc :: struct {
 	buffer: ^Buffer,
 	offset: u64,
-	stride: u32,
+	stride: u32, // requires "features.extendedDynamicState", ignored otherwise, use "VertexStreamDesc::stride" instead
 }
 
 // https://docs.vulkan.org/refpages/latest/refpages/source/VkPolygonMode.html
@@ -3467,8 +3429,8 @@ MultisampleDesc :: struct {
 
 ShadingRateDesc :: struct {
 	shadingRate:        ShadingRate,
-	primitiveCombiner:  ShadingRateCombiner, // requires "tiers.sampleLocations >= 2"
-	attachmentCombiner: ShadingRateCombiner, // requires "tiers.sampleLocations >= 2"
+	primitiveCombiner:  ShadingRateCombiner,
+	attachmentCombiner: ShadingRateCombiner,
 }
 
 //============================================================================================================================================================================================
@@ -3845,6 +3807,21 @@ Robustness :: enum u8 {
 	MAX_NUM = 4,
 }
 
+GraphicsPipelineBits :: enum u8 {
+	NONE               = 0,
+	FAIL_ON_CACHE_MISS = 1,
+}
+
+ComputePipelineBits :: enum u8 {
+	NONE               = 0,
+	FAIL_ON_CACHE_MISS = 1,
+}
+
+PipelineCacheDesc :: struct {
+	data: rawptr, // "data = NULL" means empty cache
+	size: u64,
+}
+
 // It's recommended to use "NRI.hlsl" in the shader code
 ShaderDesc :: struct {
 	stage:          StageBits,
@@ -3862,13 +3839,17 @@ GraphicsPipelineDesc :: struct {
 	outputMerger:   OutputMergerDesc,
 	shaders:        [^]ShaderDesc,
 	shaderNum:      u32,
+	flags:          GraphicsPipelineBits,
 	robustness:     Robustness,
+	cache:          ^PipelineCache, // if non-NULL, pipeline creation can be served from a cached blob and the result will be added to the cache on a miss
 }
 
 ComputePipelineDesc :: struct {
 	pipelineLayout: ^PipelineLayout,
 	shader:         ShaderDesc,
+	flags:          ComputePipelineBits,
 	robustness:     Robustness,
+	cache:          ^PipelineCache, // if non-NULL, pipeline creation can be served from a cached blob and the result will be added to the cache on a miss
 }
 
 // https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ne-d3d12-d3d12_render_pass_beginning_access_type
@@ -3902,9 +3883,13 @@ AttachmentDesc :: struct {
 	loadOp:     LoadOp,
 	storeOp:    StoreOp,
 	resolveOp:  ResolveOp,
-	resolveDst: ^Descriptor, // must be valid during "CmdEndRendering"
+	resolveDst: ^Descriptor, // must be in "COLOR_ATTACHMENT" state and valid during "CmdEndRendering"
 }
 
+// If "VK_KHR_dynamic_rendering" is not supported:
+// - "VkRenderPass" is used under the hood
+// - input attachments must be transitioned to "Layout::INPUT_ATTACHMENT" in the same command buffer before "CmdBeginRendering"
+// - matching pipeline input attachment indices are inferred from these transitions
 RenderingDesc :: struct {
 	colors:      [^]AttachmentDesc,
 	colorNum:    u32,
@@ -3978,6 +3963,7 @@ DispatchDesc :: struct {
 }
 
 // Modified draw command signatures, if the bound pipeline layout has "PipelineLayoutBits::ENABLE_DRAW_PARAMETERS_EMULATION"
+// "PipelineLayoutBits::ENABLE_DRAW_INDEX_EMULATION" does not change the command layout
 DrawBaseDesc :: struct {
 	shaderEmulatedBaseVertex:   u32, // root constant
 	shaderEmulatedBaseInstance: u32, // root constant
@@ -4080,9 +4066,11 @@ Vendor :: enum u8 {
 // https://docs.vulkan.org/refpages/latest/refpages/source/VkPhysicalDeviceType.html
 Architecture :: enum u8 {
 	UNKNOWN    = 0,
-	INTEGRATED = 1,
-	DESCRETE   = 2,
-	MAX_NUM    = 3,
+	SOFTWARE   = 1,
+	VIRTUAL    = 2,
+	INTEGRATED = 3,
+	DISCRETE   = 4,
+	MAX_NUM    = 5,
 }
 
 // https://docs.vulkan.org/refpages/latest/refpages/source/VkQueueFlagBits.html
@@ -4100,9 +4088,11 @@ AdapterDesc :: struct {
 	videoMemorySize:        u64,
 	sharedSystemMemorySize: u64,
 	deviceId:               u32,
+	driverVersion:          u32,   // GAPI and OS dependent
 	queueNum:               [3]u32,
 	vendor:                 Vendor,
 	architecture:           Architecture,
+	supportedGraphicsAPIs:  GraphicsAPI,
 }
 
 // Feature support coverage: https://vulkan.gpuinfo.org/ and https://d3d12infodb.boolka.dev/
@@ -4111,12 +4101,12 @@ DeviceDesc :: struct {
 	adapterDesc: AdapterDesc, // "queueNum" reflects available number of queues per "QueueType"
 	graphicsAPI: GraphicsAPI,
 	nriVersion:  u16,
-	shaderModel: u8,          // major * 10 + minor
+	shaderModel: u16,         // see "NriShaderModel"
 
 	viewport: struct {
 		maxNum:    u32,
-		boundsMin: i16,
-		boundsMax: i16,
+		boundsMin: i32,
+		boundsMax: i32,
 	},
 
 	dimensions: struct {
@@ -4331,83 +4321,103 @@ DeviceDesc :: struct {
 	},
 
 	features: struct {
-		// Bigger
-		getMemoryDesc2:   u32, // "GetXxxMemoryDesc2" support (VK: requires "maintenance4", D3D: supported)
-		enhancedBarriers: u32, // VK: supported, D3D12: requires "AgilitySDK", D3D11: unsupported
-		swapChain:        u32, // NRISwapChain
-		meshShader:       u32, // NRIMeshShader
-		lowLatency:       u32, // NRILowLatency
+		// Swap chain
+		swapChain:          bool, // NRISwapChain
+		presentFromCompute: bool, // see "SwapChainDesc::queue"
+		waitableSwapChain:  bool, // see "SwapChainDesc::waitable"
+		resizableSwapChain: bool, // swap chain can be resized without triggering an "OUT_OF_DATE" error
 
-		// Smaller
-		componentSwizzle:                                u32, // see "ComponentSwizzle" (unsupported only in D3D11)
-		independentFrontAndBackStencilReferenceAndMasks: u32, // see "StencilAttachmentDesc::back"
-		filterOpMinMax:                                  u32, // see "FilterOp"
-		logicOp:                                         u32, // see "LogicOp"
-		depthBoundsTest:                                 u32, // see "DepthAttachmentDesc::boundsTest"
-		drawIndirectCount:                               u32, // see "countBuffer" and "countBufferOffset"
-		lineSmoothing:                                   u32, // see "RasterizationDesc::lineSmoothing"
-		copyQueueTimestamp:                              u32, // see "QueryType::TIMESTAMP_COPY_QUEUE"
-		meshShaderPipelineStats:                         u32, // see "PipelineStatisticsDesc"
-		dynamicDepthBias:                                u32, // see "CmdSetDepthBias"
-		additionalShadingRates:                          u32, // see "ShadingRate"
-		viewportOriginBottomLeft:                        u32, // see "Viewport"
-		regionResolve:                                   u32, // see "CmdResolveTexture"
-		resolveOpMinMax:                                 u32, // see "ResolveOp"
-		flexibleMultiview:                               u32, // see "Multiview::FLEXIBLE"
-		layerBasedMultiview:                             u32, // see "Multiview::LAYRED_BASED"
-		viewportBasedMultiview:                          u32, // see "Multiview::VIEWPORT_BASED"
-		presentFromCompute:                              u32, // see "SwapChainDesc::queue"
-		waitableSwapChain:                               u32, // see "SwapChainDesc::waitable"
-		resizableSwapChain:                              u32, // swap chain can be resized without triggering an "OUT_OF_DATE" error
-		pipelineStatistics:                              u32, // see "QueryType::PIPELINE_STATISTICS"
-		rootConstantsOffset:                             u32, // see "SetRootConstantsDesc" (unsupported only in D3D11)
-		nonConstantBufferRootDescriptorOffset:           u32, // see "SetRootDescriptorDesc" (unsupported only in D3D11)
-		mutableDescriptorType:                           u32, // see "DescriptorType::MUTABLE"
-		unifiedTextureLayouts:                           u32, // allows to use "GENERAL" everywhere: https://docs.vulkan.org/refpages/latest/refpages/source/VK_KHR_unified_image_layouts.html
-		textureCompressionBC:                            u32, // all "BC" texture formats are supported
-		textureCompressionETC2:                          u32, // all "ETC2" texture formats are supported
-		textureCompressionASTC:                          u32, // all "ASTC" texture formats are supported
-		shaderBytecodeDXBC:                              u32, // DXBC can be passed to "ShaderDesc::bytecode"
-		shaderBytecodeDXIL:                              u32, // DXIL can be passed to "ShaderDesc::bytecode"
-		shaderBytecodeSPIRV:                             u32, // SPIRV can be passed to "ShaderDesc::bytecode"
+		// Multi view
+		flexibleMultiview:      bool, // see "Multiview::FLEXIBLE"
+		layerBasedMultiview:    bool, // see "Multiview::LAYRED_BASED"
+		viewportBasedMultiview: bool, // see "Multiview::VIEWPORT_BASED"
+
+		// Texture compression
+		textureCompressionBC:   bool, // all "BC" texture formats are supported
+		textureCompressionETC2: bool, // all "ETC2" texture formats are supported
+		textureCompressionASTC: bool, // all "ASTC" texture formats are supported
+
+		// Shader bytecode
+		shaderBytecodeDXBC:  bool, // DXBC can be passed to "ShaderDesc::bytecode"
+		shaderBytecodeDXIL:  bool, // DXIL can be passed to "ShaderDesc::bytecode"
+		shaderBytecodeSPIRV: bool, // SPIRV can be passed to "ShaderDesc::bytecode", WGPU expects Vulkan 1.2 environment
+		shaderBytecodeWGSL:  bool, // WGSL can be passed to "ShaderDesc::bytecode"
+
+		// Queries
+		occlusion:            bool, // see "QueryType::OCCLUSION"
+		timestamp:            bool, // see "QueryType::TIMESTAMP"
+		timestampCopyQueue:   bool, // see "QueryType::TIMESTAMP_COPY_QUEUE"
+		calibratedTimestamps: bool, // see "GetCalibratedTimestamps"
+
+		// Shading rate
+		additionalShadingRates: bool, // see "ShadingRate"
+		sumShadingRateCombiner: bool, // see "ShadingRateCombiner::SUM"
+
+		// Resolve
+		regionResolve:   bool, // see "CmdResolveTexture"
+		resolveOpMinMax: bool, // see "ResolveOp"
+
+		// Pipeline cache
+		pipelineCache:        bool, // "PipelineCache" support (NOP fallback if unsupported, except on error)
+		pipelineCacheControl: bool, // "FAIL_ON_CACHE_MISS" enforces "FAILURE", useful for platforms that prohibit runtime PSO compilation (e.g., Xbox GDK)
+
+		// Other
+		getMemoryDesc2:                                  bool, // "GetXxxMemoryDesc2" support (VK: requires "maintenance4", D3D: supported)
+		enhancedBarriers:                                bool, // VK: supported, D3D12: requires "AgilitySDK", D3D11: unsupported
+		tessellationShader:                              bool, // Tessellation control and evaluation shader stages
+		geometryShader:                                  bool, // Geometry shader stage
+		meshShader:                                      bool, // NRIMeshShader
+		lowLatency:                                      bool, // NRILowLatency
+		componentSwizzle:                                bool, // see "ComponentSwizzle" (unsupported only in D3D11)
+		independentFrontAndBackStencilReferenceAndMasks: bool, // see "StencilAttachmentDesc::back"
+		filterOpMinMax:                                  bool, // see "FilterOp"
+		logicOp:                                         bool, // see "LogicOp"
+		depthBoundsTest:                                 bool, // see "DepthAttachmentDesc::boundsTest"
+		drawIndirectCount:                               bool, // see "countBuffer" and "countBufferOffset"
+		lineSmoothing:                                   bool, // see "RasterizationDesc::lineSmoothing"
+		meshShaderPipelineStats:                         bool, // see "PipelineStatisticsDesc"
+		dynamicDepthBias:                                bool, // see "CmdSetDepthBias"
+		viewportOriginBottomLeft:                        bool, // see "Viewport"
+		pipelineStatistics:                              bool, // see "QueryType::PIPELINE_STATISTICS"
+		rootConstantsOffset:                             bool, // see "SetRootConstantsDesc" (unsupported only in D3D11)
+		nonConstantBufferRootDescriptorOffset:           bool, // see "SetRootDescriptorDesc" (unsupported only in D3D11)
+		mutableDescriptorType:                           bool, // see "DescriptorType::MUTABLE"
+		extendedDynamicState:                            bool, // VK: allows to use "VertexBufferDesc::stride" (dynamic) instead of "VertexStreamDesc::stride" (static). Widely supported
+		unifiedTextureLayouts:                           bool, // VK: allows to use "GENERAL" everywhere: https://docs.vulkan.org/refpages/latest/refpages/source/VK_KHR_unified_image_layouts.html
 	},
 
 	shaderFeatures: struct {
-		nativeI8:                  u32, // "(u)int8_t"
-		nativeI16:                 u32, // "(u)int16_t"
-		nativeF16:                 u32, // "float16_t"
-		nativeI64:                 u32, // "(u)int64_t"
-		nativeF64:                 u32, // "double"
-		atomicsI16:                u32, // "(u)int16_t" atomics
-		atomicsF16:                u32, // "float16_t" atomics
-		atomicsF32:                u32, // "float" atomics
-		atomicsI64:                u32, // "(u)int64_t" atomics
-		atomicsF64:                u32, // "double" atomics
-		storageReadWithoutFormat:  u32, // NRI_FORMAT("unknown") is allowed for storage reads
-		storageWriteWithoutFormat: u32, // NRI_FORMAT("unknown") is allowed for storage writes
-		waveQuery:                 u32, // WaveIsFirstLane, WaveGetLaneCount, WaveGetLaneIndex
-		waveVote:                  u32, // WaveActiveAllTrue, WaveActiveAnyTrue, WaveActiveAllEqual
-		waveShuffle:               u32, // WaveReadLaneFirst, WaveReadLaneAt
-		waveArithmetic:            u32, // WaveActiveSum, WaveActiveProduct, WaveActiveMin, WaveActiveMax, WavePrefixProduct, WavePrefixSum
-		waveReduction:             u32, // WaveActiveCountBits, WaveActiveBitAnd, WaveActiveBitOr, WaveActiveBitXor, WavePrefixCountBits
-		waveQuad:                  u32, // QuadReadLaneAt, QuadReadAcrossX, QuadReadAcrossY, QuadReadAcrossDiagonal
+		nativeI8:                  bool, // "(u)int8_t"
+		nativeI16:                 bool, // "(u)int16_t"
+		nativeF16:                 bool, // "float16_t"
+		nativeI64:                 bool, // "(u)int64_t"
+		nativeF64:                 bool, // "double"
+		atomicsI16:                bool, // "(u)int16_t" atomics
+		atomicsF16:                bool, // "float16_t" atomics
+		atomicsF32:                bool, // "float" atomics
+		atomicsI64:                bool, // "(u)int64_t" atomics
+		atomicsF64:                bool, // "double" atomics
+		storageReadWithoutFormat:  bool, // NRI_FORMAT("unknown") is allowed for storage reads
+		storageWriteWithoutFormat: bool, // NRI_FORMAT("unknown") is allowed for storage writes
+		waveQuery:                 bool, // WaveIsFirstLane, WaveGetLaneCount, WaveGetLaneIndex
+		waveVote:                  bool, // WaveActiveAllTrue, WaveActiveAnyTrue, WaveActiveAllEqual
+		waveShuffle:               bool, // WaveReadLaneFirst, WaveReadLaneAt
+		waveArithmetic:            bool, // WaveActiveSum, WaveActiveProduct, WaveActiveMin, WaveActiveMax, WavePrefixProduct, WavePrefixSum
+		waveReduction:             bool, // WaveActiveCountBits, WaveActiveBitAnd, WaveActiveBitOr, WaveActiveBitXor, WavePrefixCountBits
+		waveQuad:                  bool, // QuadReadLaneAt, QuadReadAcrossX, QuadReadAcrossY, QuadReadAcrossDiagonal
 
 		// Other
-		viewportIndex:           u32, // SV_ViewportArrayIndex, always can be used in geometry shaders
-		layerIndex:              u32, // SV_RenderTargetArrayIndex, always can be used in geometry shaders
-		unnormalizedCoordinates: u32, // https://microsoft.github.io/DirectX-Specs/d3d/VulkanOn12.html#non-normalized-texture-sampling-coordinates
-		clock:                   u32, // https://github.com/Microsoft/DirectXShaderCompiler/blob/main/docs/SPIR-V.rst#readclock
-		rasterizedOrderedView:   u32, // https://microsoft.github.io/DirectX-Specs/d3d/RasterOrderViews.html (aka fragment shader interlock)
-		barycentric:             u32, // https://github.com/microsoft/DirectXShaderCompiler/wiki/SV_Barycentrics
-		rayTracingPositionFetch: u32, // https://docs.vulkan.org/features/latest/features/proposals/VK_KHR_ray_tracing_position_fetch.html
-		integerDotProduct:       u32, // https://github.com/microsoft/DirectXShaderCompiler/wiki/Shader-Model-6.4
-		inputAttachments:        u32, // https://github.com/Microsoft/DirectXShaderCompiler/blob/main/docs/SPIR-V.rst#subpass-inputs
-		drawParameters:          u32, // SV_StartVertexLocation, SV_StartInstanceLocation (native support)
-
-		// For shaders using "draw parameters":
-		//   - "ENABLE_DRAW_PARAMETERS_EMULATION" must be set for a corresponding "PipelineLayout"
-		//   - "NRI_ENABLE_DRAW_PARAMETERS_EMULATION" must be defined prior inclusion of "NRI.hlsl" for such shaders
-		drawParametersEmulation: u32, // emulation of "drawParameters"
+		viewportIndex:           bool, // SV_ViewportArrayIndex, always can be used in geometry shaders
+		layerIndex:              bool, // SV_RenderTargetArrayIndex, always can be used in geometry shaders
+		unnormalizedCoordinates: bool, // https://microsoft.github.io/DirectX-Specs/d3d/VulkanOn12.html#non-normalized-texture-sampling-coordinates
+		clock:                   bool, // https://github.com/Microsoft/DirectXShaderCompiler/blob/main/docs/SPIR-V.rst#readclock
+		rasterizedOrderedView:   bool, // https://microsoft.github.io/DirectX-Specs/d3d/RasterOrderViews.html (aka fragment shader interlock)
+		barycentric:             bool, // https://github.com/microsoft/DirectXShaderCompiler/wiki/SV_Barycentrics
+		rayTracingPositionFetch: bool, // https://docs.vulkan.org/features/latest/features/proposals/VK_KHR_ray_tracing_position_fetch.html
+		integerDotProduct:       bool, // https://github.com/microsoft/DirectXShaderCompiler/wiki/Shader-Model-6.4
+		inputAttachments:        bool, // https://github.com/Microsoft/DirectXShaderCompiler/blob/main/docs/SPIR-V.rst#subpass-inputs
+		drawParameters:          bool, // GAPI-independent "NRI_BASE_VERTEX", "NRI_BASE_INSTANCE", "NRI_VERTEX_ID_OFFSET" and "NRI_INSTANCE_ID_OFFSET" (see "NRI.hlsl" for expected usage)
+		drawIndex:               bool, // GAPI-independent "NRI_DRAW_ID" (see "NRI.hlsl" for expected usage)
 	},
 }
 
