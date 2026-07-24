@@ -2,7 +2,7 @@
 
 Bindings for [Nvidia NRI](https://github.com/NVIDIA-RTX/NRI) version 180 in Odin.
 
-D3D11, D3D12 and Vulkan are enabled in the included binaries. The Imgui extension is also enabled.
+D3D11, D3D12, Vulkan and WebGPU backends are enabled in the included binaries. The Imgui extension is also enabled.
 
 ## Getting started
 Copy NRI.dll to the root directory of your project to use the library. Currently, only Windows binaries are included. You can use them directly, or compile NRI from source and replace the lib and dll files yourself. 
