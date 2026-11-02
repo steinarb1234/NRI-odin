@@ -61,8 +61,8 @@ when ODIN_OS == .Windows {
 	// } else do #panic("Unsupported architecture")
 } else do #panic("Unsupported OS")
 
-NRI_VERSION      :: 180
-NRI_VERSION_DATE :: "23 June 2026"
+NRI_VERSION      :: 191
+NRI_VERSION_DATE :: "28 October 2026"
 
 // Threadsafe: yes
 CoreInterface :: struct {
@@ -72,17 +72,18 @@ CoreInterface :: struct {
 	GetTextureDesc:   proc "c" (texture: ^Texture) -> ^TextureDesc,
 	GetFormatSupport: proc "c" (device: ^Device, format: Format) -> FormatSupportBits,
 
-	// Returns one of the pre-created queues (see "DeviceCreationDesc" or wrapper extensions)
-	// Return codes: "UNSUPPORTED" (no queues of "queueType") or "INVALID_ARGUMENT" (if "queueIndex" is out of bounds).
-	// Getting "COMPUTE" and/or "COPY" queues switches VK sharing mode to "VK_SHARING_MODE_CONCURRENT" for resources created without "queueExclusive" flag.
-	// This approach is used to minimize number of "queue ownership transfers", but also adds a requirement to "get" all async queues BEFORE creation of
-	// resources participating into multi-queue activities. Explicit use of "queueExclusive" removes any restrictions.
+	// Returns a pre-created queue (see "DeviceCreationDesc" or wrapper extensions).
+	// "UNSUPPORTED" if no queues of "queueType"; "INVALID_ARGUMENT" if "queueIndex" is out of range.
+	// VK: with only one queue type obtained (e.g. "GRAPHICS"), NRI can use "EXCLUSIVE" sharing internally: no local ownership transfers are needed.
+	// Additional queues (e.g. "COMPUTE" or "COPY") enable "CONCURRENT" sharing for new resources where needed.
+	// Get all participating queues before resource creation; explicit "SharingMode::EXCLUSIVE" textures are exempt.
+	// Buffers follow D3D12: ownership transfers are only needed to or from an external user
 	GetQueue: proc "c" (device: ^Device, queueType: QueueType, queueIndex: u32, queue: ^^Queue) -> Result,
 
 	// Create (doesn't assume allocation of big chunks of memory on the device, but it happens for some entities implicitly)
 	CreateCommandAllocator: proc "c" (queue: ^Queue, commandAllocator: ^^CommandAllocator) -> Result,
 	CreateCommandBuffer:    proc "c" (commandAllocator: ^CommandAllocator, commandBuffer: ^^CommandBuffer) -> Result,
-	CreateFence:            proc "c" (device: ^Device, initialValue: u64, fence: ^^Fence) -> Result,
+	CreateFence:            proc "c" (device: ^Device, fenceDesc: ^FenceDesc, fence: ^^Fence) -> Result,
 	CreateDescriptorPool:   proc "c" (device: ^Device, descriptorPoolDesc: ^DescriptorPoolDesc, descriptorPool: ^^DescriptorPool) -> Result,
 	CreatePipelineLayout:   proc "c" (device: ^Device, pipelineLayoutDesc: ^PipelineLayoutDesc, pipelineLayout: ^^PipelineLayout) -> Result,
 	CreateGraphicsPipeline: proc "c" (device: ^Device, graphicsPipelineDesc: ^GraphicsPipelineDesc, pipeline: ^^Pipeline) -> Result,
@@ -139,7 +140,7 @@ CoreInterface :: struct {
 	// - if "ALLOW_UPDATE_AFTER_SET" not used, descriptor sets (and data pointed to by descriptors) must be updated before "CmdSetDescriptorSet"
 	// - "ResetDescriptorPool" resets the entire pool and wipes out all allocated descriptor sets. "DescriptorSet" is a tiny struct (<= 48 bytes),
 	//   so lots of descriptor sets can be created in advance and reused without calling "ResetDescriptorPool"
-	// - if there is a directly indexed descriptor heap:
+	// - when directly indexed, a descriptor pool backs the directly indexed arrays:
 	//   - D3D12: "GetDescriptorSetOffsets" returns offsets in resource and sampler descriptor heaps
 	//     - these offsets are needed in shaders, if the corresponding descriptor set is not the first allocated from the descriptor pool
 	//   - VK: "GetDescriptorSetOffsets" returns "0"
@@ -189,7 +190,7 @@ CoreInterface :: struct {
 	CmdBeginRendering: proc "c" (commandBuffer: ^CommandBuffer, renderingDesc: ^RenderingDesc),
 
 	// {                {
-	// Clear
+	// Clear ("rects" require the corresponding "features.rectColorClears" or "features.rectDepthStencilClears")
 	CmdClearAttachments: proc "c" (commandBuffer: ^CommandBuffer, clearAttachmentDescs: [^]ClearAttachmentDesc, clearAttachmentDescNum: u32, rects: [^]Rect, rectNum: u32),
 
 	// Draw
@@ -211,21 +212,21 @@ CoreInterface :: struct {
 
 	// Copy (outside of rendering)
 	CmdCopyBuffer:              proc "c" (commandBuffer: ^CommandBuffer, dstBuffer: ^Buffer, dstOffset: u64, srcBuffer: ^Buffer, srcOffset: u64, size: u64),
-	CmdCopyTexture:             proc "c" (commandBuffer: ^CommandBuffer, dstTexture: ^Texture, dstRegion: ^TextureRegionDesc, srcTexture: ^Texture, srcRegion: ^TextureRegionDesc),
+	CmdCopyTexture:             proc "c" (commandBuffer: ^CommandBuffer, dstTexture: ^Texture, dstRegion: ^TextureRegionDesc, srcTexture: ^Texture, srcRegion: ^TextureRegionDesc), // METAL: a single-plane depth-stencil copy requires identical non-multisampled formats
 	CmdUploadBufferToTexture:   proc "c" (commandBuffer: ^CommandBuffer, dstTexture: ^Texture, dstRegion: ^TextureRegionDesc, srcBuffer: ^Buffer, srcDataLayout: ^TextureDataLayoutDesc),
 	CmdReadbackTextureToBuffer: proc "c" (commandBuffer: ^CommandBuffer, dstBuffer: ^Buffer, dstDataLayout: ^TextureDataLayoutDesc, srcTexture: ^Texture, srcRegion: ^TextureRegionDesc),
 	CmdZeroBuffer:              proc "c" (commandBuffer: ^CommandBuffer, buffer: ^Buffer, offset: u64, size: u64),
 
-	// Resolve (outside of rendering)
+	// Resolve (outside of rendering). METAL: color only, use "RenderingDesc::depth.resolveDst" for depth
 	CmdResolveTexture: proc "c" (commandBuffer: ^CommandBuffer, dstTexture: ^Texture, dstRegion: ^TextureRegionDesc, srcTexture: ^Texture, srcRegion: ^TextureRegionDesc, resolveOp: ResolveOp), // "features.regionResolve" is needed for region specification
 
 	// Clear (outside of rendering)
 	CmdClearStorage: proc "c" (commandBuffer: ^CommandBuffer, clearStorageDesc: ^ClearStorageDesc),
 
-	// Query (outside of rendering, except Begin/End query)
-	CmdResetQueries: proc "c" (commandBuffer: ^CommandBuffer, queryPool: ^QueryPool, offset: u32, num: u32),
+	// Query and timestamps (outside of rendering, except Begin/End query)
+	CmdResetQueries: proc "c" (commandBuffer: ^CommandBuffer, queryPool: ^QueryPool, offset: u32, num: u32), // can't be used with a COPY queue
 	CmdBeginQuery:   proc "c" (commandBuffer: ^CommandBuffer, queryPool: ^QueryPool, offset: u32),
-	CmdEndQuery:     proc "c" (commandBuffer: ^CommandBuffer, queryPool: ^QueryPool, offset: u32),
+	CmdEndQuery:     proc "c" (commandBuffer: ^CommandBuffer, queryPool: ^QueryPool, offset: u32),           // writes a timestamp for timestamp query pools
 	CmdCopyQueries:  proc "c" (commandBuffer: ^CommandBuffer, queryPool: ^QueryPool, offset: u32, num: u32, dstBuffer: ^Buffer, dstOffset: u64),
 
 	// Annotations for profiling tools: command buffer
@@ -263,8 +264,15 @@ CoreInterface :: struct {
 	MapBuffer:   proc "c" (buffer: ^Buffer, offset: u64, size: u64) -> rawptr,
 	UnmapBuffer: proc "c" (buffer: ^Buffer),
 
-	// Device address (aka GPU virtual address)
-	// D3D11: returns "0"
+	// Synchronous host copies
+	// - all prior GPU access to the copied subresources must be complete before the call
+	// - host memory is no longer accessed and readback data is available after the call returns
+	// - textures must be created with "TextureUsageBits::HOST_TRANSFER"
+	// - destination regions in a single "UploadHostMemoryToTexture" call must not overlap
+	UploadHostMemoryToTexture:   proc "c" (queue: ^Queue, copyDescs: ^UploadHostMemoryToTextureDesc, copyDescNum: u32) -> Result,
+	ReadbackTextureToHostMemory: proc "c" (queue: ^Queue, copyDescs: ^ReadbackTextureToHostMemoryDesc, copyDescNum: u32) -> Result,
+
+	// Device address (aka GPU virtual address or "0" if unsupported)
 	GetBufferDeviceAddress: proc "c" (buffer: ^Buffer) -> u64,
 
 	// Pipeline cache (PSO blob storage, persisted across runs)
@@ -278,10 +286,16 @@ CoreInterface :: struct {
 	// Native objects                                                                                            ___D3D11 (latest interface)________|_D3D12 (latest interface)____|_VK_________________________________|_WGPU__________________________________
 	GetDeviceNativeObject:        proc "c" (device: ^Device) -> rawptr,               // ID3D11Device*                   | ID3D12Device*               | VkDevice                           | WGPUDevice
 	GetQueueNativeObject:         proc "c" (queue: ^Queue) -> rawptr,                 // -                               | ID3D12CommandQueue*         | VkQueue                            | WGPUQueue
-	GetCommandBufferNativeObject: proc "c" (commandBuffer: ^CommandBuffer) -> rawptr, // ID3D11DeviceContext*            | ID3D12GraphicsCommandList*  | VkCommandBuffer                    | WGPUCommandBuffer
+	GetCommandBufferNativeObject: proc "c" (commandBuffer: ^CommandBuffer) -> rawptr, // ID3D11DeviceContext*            | ID3D12CommandList*          | VkCommandBuffer                    | WGPUCommandBuffer
 	GetBufferNativeObject:        proc "c" (buffer: ^Buffer) -> u64,                  // ID3D11Buffer*                   | ID3D12Resource*             | VkBuffer                           | WGPUBuffer
 	GetTextureNativeObject:       proc "c" (texture: ^Texture) -> u64,                // ID3D11Resource*                 | ID3D12Resource*             | VkImage                            | WGPUTexture
 	GetDescriptorNativeObject:    proc "c" (descriptor: ^Descriptor) -> u64,          // ID3D11View/ID3D11SamplerState*  | D3D12_CPU_DESCRIPTOR_HANDLE | VkImageView/VkBufferView/VkSampler | WGPUTextureView/WGPUBuffer/WGPUSampler
+
+	// Shared handles: each successful call returns a new caller-owned handle (see "SharedHandle")
+	GetBufferSharedHandle:  proc "c" (buffer: ^Buffer, sharedHandle: ^SharedHandle) -> Result,
+	GetTextureSharedHandle: proc "c" (texture: ^Texture, sharedHandle: ^SharedHandle) -> Result,
+	GetFenceSharedHandle:   proc "c" (fence: ^Fence, sharedHandle: ^SharedHandle) -> Result,
+	DestroySharedHandle:    proc "c" (sharedHandle: ^SharedHandle), // closes the caller-owned handle and clears the struct
 }
 
 @(default_calling_convention="c", link_prefix="nri")

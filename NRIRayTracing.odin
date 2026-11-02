@@ -72,7 +72,7 @@ RayTracingPipelineDesc :: struct {
 	rayHitAttributeMaxSize: u32,
 	flags:                  RayTracingPipelineBits,
 	robustness:             Robustness,
-	cache:                  ^PipelineCache, // if non-NULL, pipeline creation can be served from a cached blob and the result will be added to the cache on a miss
+	cache:                  ^PipelineCache, // uses a cached blob on a hit and stores the result on a miss
 }
 
 //============================================================================================================================================================================================
@@ -110,7 +110,7 @@ MicromapUsageDesc :: struct {
 }
 
 MicromapDesc :: struct {
-	optimizedSize: u64, // can be retrieved by "CmdWriteMicromapsSizes" and used for compaction via "CmdCopyMicromap"
+	optimizedSize: u64, // can be retrieved by "CmdWriteMicromapSizes" and used for compaction via "CmdCopyMicromap"
 	usages:        ^MicromapUsageDesc,
 	usageNum:      u32,
 	flags:         MicromapBits,
@@ -132,7 +132,7 @@ BuildMicromapDesc :: struct {
 	scratchOffset:  u64,
 }
 
-BottomLevelMicromapDesc :: struct {
+BottomLevelTrianglesMicromapDesc :: struct {
 	// For each triangle in the geometry, the acceleration structure build fetches an index from "indexBuffer".
 	// If an index is the unsigned cast of one of the values from "MicromapSpecialIndex" then that triangle behaves as described for that special value.
 	// Otherwise that triangle uses the micromap information from "micromap" at that index plus "baseTriangle".
@@ -189,7 +189,7 @@ BottomLevelTrianglesDesc :: struct {
 	transformOffset: u64,
 
 	// Micromap
-	micromap: ^BottomLevelMicromapDesc,
+	micromap: ^BottomLevelTrianglesMicromapDesc,
 }
 
 BottomLevelAabbsDesc :: struct {
@@ -211,7 +211,7 @@ BottomLevelGeometryDesc :: struct {
 
 // Data layout
 TransformMatrix :: struct {
-	transform: [3][4]f32, // 3x4 row-major affine transformation matrix, the first three columns of matrix must define an invertible 3x3 matrix
+	_matrix: [3][4]f32, // 3x4 row-major affine transformation matrix, the first three columns of matrix must define an invertible 3x3 matrix
 }
 
 BottomLevelAabb :: struct {
@@ -247,12 +247,12 @@ TopLevelInstanceBitsEnum :: enum u32 {
 TopLevelInstanceBits :: bit_set[TopLevelInstanceBitsEnum; u32]
 
 TopLevelInstance :: struct {
-	transform:                     [3][4]f32,
-	instanceId:                    u32,
-	mask:                          u32,
-	shaderBindingTableLocalOffset: u32,
-	flags:                         TopLevelInstanceBits,
-	accelerationStructureHandle:   u64,
+	transform:                      [3][4]f32,
+	instanceId:                     u32,
+	mask:                           u32,
+	shaderBindingTableRecordOffset: u32, // final hit shader binding table record index = shaderBindingTableRecordOffset + geometryIndex (from BLAS) * geometryStride (from shader) + rayOffset (from shader)
+	flags:                          TopLevelInstanceBits,
+	accelerationStructureHandle:    u64,
 }
 
 //============================================================================================================================================================================================
@@ -280,7 +280,7 @@ AccelerationStructureBitsEnum :: enum u8 {
 AccelerationStructureBits :: bit_set[AccelerationStructureBitsEnum; u8]
 
 AccelerationStructureDesc :: struct {
-	optimizedSize:         u64,                        // can be retrieved by "CmdWriteAccelerationStructuresSizes" and used for compaction via "CmdCopyAccelerationStructure"
+	optimizedSize:         u64,                        // can be retrieved by "CmdWriteAccelerationStructureSizes" and used for compaction via "CmdCopyAccelerationStructure"
 	geometries:            [^]BottomLevelGeometryDesc, // needed only for "BOTTOM_LEVEL", "HAS_BUFFER" can be used to indicate a buffer presence (no real entities needed at initialization time)
 	geometryOrInstanceNum: u32,
 	flags:                 AccelerationStructureBits,
@@ -332,11 +332,11 @@ StridedBufferRegion :: struct {
 }
 
 DispatchRaysDesc :: struct {
-	raygenShader:    StridedBufferRegion,
-	missShaders:     StridedBufferRegion,
-	hitShaderGroups: StridedBufferRegion,
-	callableShaders: StridedBufferRegion,
-	x, y, z:         u32,
+	raygenShaderRecord:         StridedBufferRegion,
+	missShaderBindingTable:     StridedBufferRegion,
+	hitShaderBindingTable:      StridedBufferRegion,
+	callableShaderBindingTable: StridedBufferRegion,
+	width, height, depth:       u32,
 }
 
 DispatchRaysIndirectDesc :: struct {
@@ -351,7 +351,7 @@ DispatchRaysIndirectDesc :: struct {
 	callableShaderBindingTableAddress: u64,
 	callableShaderBindingTableSize:    u64,
 	callableShaderBindingTableStride:  u64,
-	x, y, z:                           u32,
+	width, height, depth:              u32,
 }
 
 // Threadsafe: yes
@@ -390,22 +390,22 @@ RayTracingInterface :: struct {
 	CreatePlacedAccelerationStructure:    proc "c" (device: ^Device, memory: ^Memory, offset: u64, accelerationStructureDesc: ^AccelerationStructureDesc, accelerationStructure: ^^AccelerationStructure) -> Result,
 	CreatePlacedMicromap:                 proc "c" (device: ^Device, memory: ^Memory, offset: u64, micromapDesc: ^MicromapDesc, micromap: ^^Micromap) -> Result,
 
-	// Shader table
-	// "dst" size must be >= "shaderGroupNum * rayTracingShaderGroupIdentifierSize" bytes
-	// VK doesn't have a "local root signature" analog, thus stride = "rayTracingShaderGroupIdentifierSize", i.e. tight packing
-	WriteShaderGroupIdentifiers: proc "c" (pipeline: ^Pipeline, baseShaderGroupIndex: u32, shaderGroupNum: u32, dst: rawptr) -> Result,
+	// (HOST) Shader binding table: writes shader group identifiers to "dst" with "dstStride"
+	// "dstStride" must be >= "shaderStage.rayTracing.shaderGroupIdentifierSize"; bytes after each identifier are preserved
+	// "dst" size must be >= "shaderGroupNum * dstStride" bytes
+	WriteShaderGroupIdentifiers: proc "c" (pipeline: ^Pipeline, baseShaderGroupIndex: u32, shaderGroupNum: u32, dstStride: u32, dst: rawptr) -> Result,
 
 	// Command buffer
 	// {
 	// Micromap
-	CmdBuildMicromaps:      proc "c" (commandBuffer: ^CommandBuffer, buildMicromapDescs: [^]BuildMicromapDesc, buildMicromapDescNum: u32),
-	CmdWriteMicromapsSizes: proc "c" (commandBuffer: ^CommandBuffer, micromaps: [^]^Micromap, micromapNum: u32, queryPool: ^QueryPool, queryPoolOffset: u32),
-	CmdCopyMicromap:        proc "c" (commandBuffer: ^CommandBuffer, dst: ^Micromap, src: ^Micromap, copyMode: CopyMode),
+	CmdBuildMicromaps:     proc "c" (commandBuffer: ^CommandBuffer, buildMicromapDescs: [^]BuildMicromapDesc, buildMicromapDescNum: u32),
+	CmdWriteMicromapSizes: proc "c" (commandBuffer: ^CommandBuffer, micromaps: ^^Micromap, micromapNum: u32, queryPool: ^QueryPool, queryPoolOffset: u32),
+	CmdCopyMicromap:       proc "c" (commandBuffer: ^CommandBuffer, dst: ^Micromap, src: ^Micromap, copyMode: CopyMode),
 
 	// Acceleration structure
 	CmdBuildTopLevelAccelerationStructures:    proc "c" (commandBuffer: ^CommandBuffer, buildTopLevelAccelerationStructureDescs: [^]BuildTopLevelAccelerationStructureDesc, buildTopLevelAccelerationStructureDescNum: u32),
-	CmdBuildBottomLevelAccelerationStructures: proc "c" (commandBuffer: ^CommandBuffer, buildBotomLevelAccelerationStructureDescs: [^]BuildBottomLevelAccelerationStructureDesc, buildBotomLevelAccelerationStructureDescNum: u32),
-	CmdWriteAccelerationStructuresSizes:       proc "c" (commandBuffer: ^CommandBuffer, accelerationStructures: [^]^AccelerationStructure, accelerationStructureNum: u32, queryPool: ^QueryPool, queryPoolOffset: u32),
+	CmdBuildBottomLevelAccelerationStructures: proc "c" (commandBuffer: ^CommandBuffer, buildBottomLevelAccelerationStructureDescs: ^BuildBottomLevelAccelerationStructureDesc, buildBottomLevelAccelerationStructureDescNum: u32),
+	CmdWriteAccelerationStructureSizes:        proc "c" (commandBuffer: ^CommandBuffer, accelerationStructures: ^^AccelerationStructure, accelerationStructureNum: u32, queryPool: ^QueryPool, queryPoolOffset: u32),
 	CmdCopyAccelerationStructure:              proc "c" (commandBuffer: ^CommandBuffer, dst: ^AccelerationStructure, src: ^AccelerationStructure, copyMode: CopyMode),
 
 	// Ray tracing

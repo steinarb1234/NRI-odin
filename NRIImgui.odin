@@ -32,7 +32,7 @@ ImTextureData :: struct {}
 Imgui         :: struct {}
 
 ImguiDesc :: struct {
-	descriptorPoolSize: u32, // upper bound of textures used by Imgui for drawing: {number of queued frames} * {number of "CmdDrawImgui" calls} * (1 + {"drawList->AddImage*" calls})
+	descriptorPoolSize: u32, // upper bound of textures used by Imgui for drawing across all threads: {number of queued frames} * {number of "CmdDrawImgui" calls} * (1 + {"drawList->AddImage*" calls})
 }
 
 CopyImguiDataDesc :: struct {
@@ -43,15 +43,23 @@ CopyImguiDataDesc :: struct {
 }
 
 DrawImguiDesc :: struct {
-	drawLists:        [^]^ImDrawList, // ImDrawData::CmdLists.Data (same as for "CopyImguiDataDesc")
-	drawListNum:      u32,            // ImDrawData::CmdLists.Size (same as for "CopyImguiDataDesc")
-	displaySize:      Dim2_t,         // ImDrawData::DisplaySize
-	hdrScale:         f32,            // SDR intensity in HDR mode (1 by default)
-	attachmentFormat: Format,         // destination attachment (render target) format
-	linearColor:      bool,           // apply de-gamma to vertex colors (needed for sRGB attachments and HDR)
+	displaySize:      Dim2_t, // ImDrawData::DisplaySize
+	hdrScale:         f32,    // SDR intensity in HDR mode (1 by default)
+	attachmentFormat: Format, // destination attachment (render target) format
+	linearColor:      bool,   // apply de-gamma to vertex colors (needed for sRGB attachments and HDR)
 }
 
-// Threadsafe: yes
+// Read-only input for "CmdDrawImgui"
+ImguiRenderData :: struct {
+	imgui:             ^Imgui,       // producing instance
+	drawCommands:      rawptr,       // in transient Streamer host data
+	vertices:          BufferOffset, // in transient Streamer buffer
+	indexBufferOffset: u64,          // in "vertices.buffer"
+	drawCmdNum:        u32,
+}
+
+// Threadsafe: yes, if command buffers are externally synchronized and Streamer thread safety is enabled (or provided externally).
+// Access to shared "ImTextureData" is internally synchronized.
 ImguiInterface :: struct {
 	CreateImgui:  proc "c" (device: ^Device, imguiDesc: ^ImguiDesc, imgui: ^^Imgui) -> Result,
 	DestroyImgui: proc "c" (imgui: ^Imgui),
@@ -59,9 +67,9 @@ ImguiInterface :: struct {
 	// Command buffer
 	// {
 	// Copy
-	CmdCopyImguiData: proc "c" (commandBuffer: ^CommandBuffer, streamer: ^Streamer, imgui: ^Imgui, streamImguiDesc: ^CopyImguiDataDesc),
+	CmdCopyImguiData: proc "c" (commandBuffer: ^CommandBuffer, streamer: ^Streamer, imgui: ^Imgui, copyImguiDataDesc: ^CopyImguiDataDesc, imguiRenderData: ^ImguiRenderData),
 
 	// Draw (changes descriptor pool, pipeline layout and pipeline, barriers are externally controlled)
-	CmdDrawImgui: proc "c" (commandBuffer: ^CommandBuffer, imgui: ^Imgui, drawImguiDesc: ^DrawImguiDesc),
+	CmdDrawImgui: proc "c" (commandBuffer: ^CommandBuffer, imguiRenderData: ^ImguiRenderData, drawImguiDesc: ^DrawImguiDesc),
 }
 

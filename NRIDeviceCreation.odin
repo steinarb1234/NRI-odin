@@ -36,6 +36,18 @@ Message :: enum u8 {
 	MAX_NUM = 3,
 }
 
+DeviceLostInfoLevel :: enum u8 {
+	NONE    = 0,
+	BASIC   = 1,
+	VERBOSE = 2,
+	MAX_NUM = 3,
+}
+
+DeviceLostDump :: struct {
+	data: rawptr, // opaque backend-specific binary data, NRI-owned and valid until device destruction
+	size: u64,    // bytes, 0 if "data" is NULL
+}
+
 // Callbacks must be thread safe
 AllocationCallbacks :: struct {
 	Allocate:                           proc "c" (userArg: rawptr, size: c.size_t, alignment: c.size_t) -> rawptr,
@@ -73,9 +85,11 @@ QueueFamilyDesc :: struct {
 	queueType:       QueueType,
 }
 
+// D3D12: process-global settings affect all subsequently created D3D12 devices; later NRI device creation does not disable them
 DeviceCreationDesc :: struct {
 	graphicsAPI:         GraphicsAPI,
 	robustness:          Robustness,
+	deviceLostInfoLevel: DeviceLostInfoLevel, // D3D12: process-global
 	adapterDesc:         ^AdapterDesc,
 	callbackInterface:   CallbackInterface,
 	allocationCallbacks: AllocationCallbacks,
@@ -94,7 +108,7 @@ DeviceCreationDesc :: struct {
 
 	// Switches (disabled by default)
 	enableNRIValidation:               bool, // embedded validation layer, checks for NRI specifics
-	enableGraphicsAPIValidation:       bool, // GAPI-provided validation layer
+	enableGraphicsAPIValidation:       bool, // GAPI-provided validation layer (D3D12: process-global; METAL: ignored, set "MTL_DEBUG_LAYER=1" instead)
 	enableD3D11CommandBufferEmulation: bool, // enable? but why? (auto-enabled if deferred contexts are not supported)
 	enableD3D12RayTracingValidation:   bool, // slow but useful, can only be enabled if envvar "NV_ALLOW_RAYTRACING_VALIDATION" is set to "1"
 	enableMemoryZeroInitialization:    bool, // page-clears are fast, but memory is not cleared by default in VK
@@ -108,11 +122,16 @@ DeviceCreationDesc :: struct {
 foreign lib {
 	// if "adapterDescs == NULL", then "adapterDescNum" is set to the number of adapters
 	// else "adapterDescNum" must be set to number of elements in "adapterDescs"
-	EnumerateAdapters :: proc(adapterDescs: [^]AdapterDesc, adapterDescNum: ^u32) -> Result ---
+	// "desiredGraphicsAPIs" selects backends to probe, not adapters to return; "ALL" probes every enabled backend
+	// Adapter properties can differ depending on the probed backends
+	EnumerateAdapters :: proc(adapterDescs: [^]AdapterDesc, adapterDescNum: ^u32, desiredGraphicsAPIs: GraphicsAPI) -> Result ---
 	CreateDevice      :: proc(deviceCreationDesc: ^DeviceCreationDesc, device: ^^Device) -> Result ---
 	DestroyDevice     :: proc(device: ^Device) ---
 
 	// It's global state for D3D, not needed for VK because validation is tied to the logical device
 	ReportLiveObjects :: proc() ---
+
+	// Reports backend-specific device lost diagnostics and returns a binary dump (if available), "device" must be in a lost state (see "DEVICE_LOST")
+	ReportDeviceLostInfo :: proc(device: ^Device, deviceLostDump: ^DeviceLostDump) -> Result ---
 }
 

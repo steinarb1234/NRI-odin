@@ -102,12 +102,17 @@ MetalWindow :: struct {
 	caMetalLayer: rawptr, //    CAMetalLayer
 } // Expects "APPLE" platform macro
 
+AndroidWindow :: struct {
+	nativeWindow: rawptr, //    ANativeWindow
+} // Expects "__ANDROID__" platform macro
+
 Window :: struct {
 	// Only one entity must be initialized
 	windows: WindowsWindow,
 	x11:     X11Window,
 	wayland: WaylandWindow,
 	metal:   MetalWindow,
+	android: AndroidWindow,
 }
 
 // SwapChain textures will be created as "color attachment" resources
@@ -162,9 +167,16 @@ SwapChainInterface :: struct {
 	// Returns "FAILURE" if swap chain's window is outside of all monitors
 	GetDisplayDesc: proc "c" (swapChain: ^SwapChain, displayDesc: ^DisplayDesc) -> Result,
 
-	// VK only: may return "OUT_OF_DATE", fences must be created with "SWAPCHAIN_SEMAPHORE" initial value
+	// "acquireSemaphore" must be created with "SWAPCHAIN_SEMAPHORE" initial value (ignored in D3D and WGPU). VK/WGPU: may return "OUT_OF_DATE"
+	// WGPU: "NOT_READY" means no texture was acquired; skip the frame, process window events and retry without recreating the swap chain
 	AcquireNextTexture: proc "c" (swapChain: ^SwapChain, acquireSemaphore: ^Fence, textureIndex: ^u32) -> Result,
-	WaitForPresent:     proc "c" (swapChain: ^SwapChain) -> Result, // call once right before input sampling (must be called starting from the 1st frame)
-	QueuePresent:       proc "c" (swapChain: ^SwapChain, releaseSemaphore: ^Fence) -> Result,
+
+	// "presentId" must identify a previously queued presentation. Call once immediately before input sampling
+	WaitForPresent: proc "c" (swapChain: ^SwapChain, presentId: u64) -> Result,
+
+	// A non-zero "presentId" associates the presentation with a tracked frame. Use 0 for an untracked presentation.
+	// Non-zero "presentId" values must strictly increase across frames for each swap chain, i.e. gaps are allowed
+	// "releaseSemaphore" must be created with "SWAPCHAIN_SEMAPHORE" initial value (ignored in D3D)
+	QueuePresent: proc "c" (swapChain: ^SwapChain, releaseSemaphore: ^Fence, presentId: u64) -> Result,
 }
 

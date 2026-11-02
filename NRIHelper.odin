@@ -58,8 +58,9 @@ ResourceGroupDesc :: struct {
 	textureNum:          u32,
 	buffers:             [^]^Buffer,
 	bufferNum:           u32,
-	preferredMemorySize: u64, // desired chunk size (but can be greater if a resource doesn't fit), 256 Mb if 0
-	residencyPriority:   f32, // [-1; 1]: low < 0, normal = 0, high > 0
+	preferredMemorySize: u64,  // desired chunk size (but can be greater if a resource doesn't fit), 256 Mb if 0
+	residencyPriority:   f32,  // [-1; 1]: low < 0, normal = 0, high > 0
+	vma:                 bool, // memory allocation goes through "AMD Virtual Memory Allocator"
 }
 
 FormatProps :: struct {
@@ -98,13 +99,15 @@ HelperInterface :: struct {
 	QueryVideoMemoryInfo: proc "c" (device: ^Device, memoryLocation: MemoryLocation, videoMemoryInfo: ^VideoMemoryInfo) -> Result,
 }
 
-// A convinient way to fit pipeline layout settings into the device limits, respecting various restrictions
+// A convenient way to fit pipeline layout settings into the device limits, respecting various restrictions
 PipelineLayoutSettingsDesc :: struct {
 	descriptorSetNum:                   u32,
 	descriptorRangeNum:                 u32,
 	rootConstantSize:                   u32,
 	rootDescriptorNum:                  u32,
+	rootSamplerNum:                     u32,
 	preferRootDescriptorsOverConstants: bool,
+	useDescriptorHeap:                  bool, // uses "DeviceDesc::descriptorHeap" limits and fits descriptor sets and ranges to 0
 
 	// D3D12 only (see "NRI.hlsl" for more details)
 	enableD3D12DrawParametersEmulation: bool,
@@ -121,6 +124,7 @@ foreign lib {
 	GetFormatProps         :: proc(format: Format) -> [^]FormatProps ---
 
 	// Strings
-	GetGraphicsAPIString :: proc(graphicsAPI: GraphicsAPI) -> cstring ---
+	GetGraphicsAPIString                      :: proc(graphicsAPI: GraphicsAPI) -> cstring ---
+	FitPipelineLayoutSettingsIntoDeviceLimits :: proc(deviceDesc: ^DeviceDesc, pipelineLayoutSettingsDesc: ^PipelineLayoutSettingsDesc) -> PipelineLayoutSettingsDesc ---
 }
 

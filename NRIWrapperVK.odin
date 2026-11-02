@@ -137,11 +137,13 @@ WrapperVKInterface :: struct {
 	CreateQueryPoolVK:             proc "c" (device: ^Device, queryPoolVKDesc: ^QueryPoolVKDesc, queryPool: ^^QueryPool) -> Result,
 	CreateFenceVK:                 proc "c" (device: ^Device, fenceVKDesc: ^FenceVKDesc, fence: ^^Fence) -> Result,
 	CreateAccelerationStructureVK: proc "c" (device: ^Device, accelerationStructureVKDesc: ^AccelerationStructureVKDesc, accelerationStructure: ^^AccelerationStructure) -> Result,
-	GetQueueFamilyIndexVK:         proc "c" (queue: ^Queue) -> u32,
-	GetPhysicalDeviceVK:           proc "c" (device: ^Device) -> VKHandle,
-	GetInstanceVK:                 proc "c" (device: ^Device) -> VKHandle,
-	GetInstanceProcAddrVK:         proc "c" (device: ^Device) -> rawptr,
-	GetDeviceProcAddrVK:           proc "c" (device: ^Device) -> rawptr,
+
+	// TODO-VIDEO: add CreateVideoSession
+	GetQueueFamilyIndexVK: proc "c" (queue: ^Queue) -> u32,
+	GetPhysicalDeviceVK:   proc "c" (device: ^Device) -> VKHandle,
+	GetInstanceVK:         proc "c" (device: ^Device) -> VKHandle,
+	GetInstanceProcAddrVK: proc "c" (device: ^Device) -> rawptr,
+	GetDeviceProcAddrVK:   proc "c" (device: ^Device) -> rawptr,
 }
 
 @(default_calling_convention="c", link_prefix="nri")

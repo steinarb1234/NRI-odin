@@ -71,12 +71,13 @@ LatencyReport :: struct {
 } // The time stamp written:
 
 // Multi-swapchain is supported only by VK
-// "QueueSubmitDesc::swapChain" must be used to associate work submission with a low latency swap chain
-// Threadsafe: no
+// "QueueSubmitDesc::swapChain" must be used to associate work submissions with a low latency swap chain
+// "presentId" must be non-zero and match the value passed to "QueueSubmit" and "QueuePresent" for the frame
+// Threadsafe: yes
 LowLatencyInterface :: struct {
 	SetLatencySleepMode: proc "c" (swapChain: ^SwapChain, latencySleepMode: ^LatencySleepMode) -> Result,
-	SetLatencyMarker:    proc "c" (swapChain: ^SwapChain, latencyMarker: LatencyMarker) -> Result,
-	LatencySleep:        proc "c" (swapChain: ^SwapChain) -> Result, // call once before "INPUT_SAMPLE"
+	SetLatencyMarker:    proc "c" (swapChain: ^SwapChain, presentId: u64, latencyMarker: LatencyMarker) -> Result,
+	LatencySleep:        proc "c" (swapChain: ^SwapChain, presentId: u64) -> Result, // call once before "INPUT_SAMPLE"
 	GetLatencyReport:    proc "c" (swapChain: ^SwapChain, latencyReport: ^LatencyReport) -> Result,
 }
 

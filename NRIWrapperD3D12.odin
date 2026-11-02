@@ -27,16 +27,16 @@ when ODIN_OS == .Windows {
 
 NRI_WRAPPER_D3D12_H :: 1
 
-DXGIFormat                :: i32
-AGSContext                :: struct {}
-ID3D12Heap                :: struct {}
-ID3D12Fence               :: struct {}
-ID3D12Device              :: struct {}
-ID3D12Resource            :: struct {}
-ID3D12CommandQueue        :: struct {}
-ID3D12DescriptorHeap      :: struct {}
-ID3D12CommandAllocator    :: struct {}
-ID3D12GraphicsCommandList :: struct {}
+DXGIFormat             :: i32
+AGSContext             :: struct {}
+ID3D12Heap             :: struct {}
+ID3D12Fence            :: struct {}
+ID3D12Device           :: struct {}
+ID3D12Resource         :: struct {}
+ID3D12CommandList      :: struct {}
+ID3D12CommandQueue     :: struct {}
+ID3D12DescriptorHeap   :: struct {}
+ID3D12CommandAllocator :: struct {}
 
 // A collection of queues of the same type
 QueueFamilyD3D12Desc :: struct {
@@ -65,7 +65,7 @@ DeviceCreationD3D12Desc :: struct {
 }
 
 CommandBufferD3D12Desc :: struct {
-	d3d12CommandList:      ^ID3D12GraphicsCommandList,
+	d3d12CommandList:      ^ID3D12CommandList,
 	d3d12CommandAllocator: ^ID3D12CommandAllocator, // needed only for "BeginCommandBuffer"
 }
 
