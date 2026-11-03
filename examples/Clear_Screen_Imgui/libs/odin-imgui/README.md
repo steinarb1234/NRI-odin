@@ -1,114 +1,155 @@
 # Odin ImGui
 
-## Notice for this repo!
-- This is a modified version of the Odim Imgui bindings by L4. The changes are to add SDL3 support and update to imgui version 1.92.1.
-- I have enabled #define IMGUI_DISABLE_OBSOLETE_FUNCTIONS in imconfig.h which is required for the dx12 imgui implementation to compile and run. 
+[Odin Language][] bindings for **Dear ImGui v1.92.9b-docking**.
 
+## Table of Contents
 
-## Generated Dear ImGui bindings using dear_bindings
+- [Features](#features)
+- [Building](#building)
+  - [Prerequisites](#prerequisites)
+  - [Windows](#windows)
+  - [Unix (macOS/Linux)](#unix-macoslinux)
+- [TODO](#todo)
+- [Acknowledgements](#acknowledgements)
+- [License](#license)
 
- - Generates bindings for the and `docking` ImGui branche, using [`dear_bindings`](https://github.com/dearimgui/dear_bindings)
-	- No longer supports `master` branch.
- - Contains bindings for most of the Dear ImGui implementations
-	- All backends which exist in `vendor:` have bindings
-	- These include: `vulkan, sdl2, opengl3, sdlrenderer2, glfw, dx11, dx12, win32, osx, metal, wgpu`
- - Compiles bindings as well as any wanted backends
- - Tested on Windows, Linux, and Mac
- - Includes several examples which can be used as a reference
-	- `GLFW + OpenGL, SDL2 + D3D11, SDL2 + Metal, SDL2 + OpenGL, SDL2 + SDL2 Renderer, SDL2 + Vulkan, GLFW + WGPU, JS/GLFW + W(eb)GPU, JS + WebGL`
+## Features
 
-## Usage
-If you don't want to configure and or build yourself, a prebuilt binary has been committed to the repository.
- - Only binaries for Windows are committed at the moment. I've tested on Linux, it's just hard to manually get both binaries in there.
- - It has all backends listed in `build.py` enabled, which almost definitely more than you need. I strongly suggest building yourself with your wanted backends.
+- Uses [dear_bindings][] to generate the C API.
+- Generates bindings for the `docking` ImGui branch
+- Generator is written in Odin
+- Contains bindings for most of the backends
+  - All backends which exist in vendor have bindings
+  - These include: `dx11`, `dx12`, `glfw`, `metal`, `opengl3`, `osx`, `sdl2`, `sdl3`,
+   `sdlgpu3`, `sdlrenderer2`, `sdlrenderer3`, `vulkan`, `wgpu`, `win32`
 
 ## Building
 
-Building is entirely automated, using `build.py`. All platforms should work (not not: open an issue!), but currently Mac backends are untested as I don't have a Mac (help wanted!)
+Building ImGui requires utilizing a tool called **premake** found at
+<https://premake.github.io>. Although the process involves several steps, they are relatively
+straightforward.
 
- 0. Dependencies
-	- `git` must be in your path
-	- `dear_bindings` depends on a library called "`ply`". [link](https://www.dabeaz.com/ply/).
-		- You can probably install this with `python -m pip install ply`
-		- If your distro manages Python packages, it may be called `python-ply` or similar.
-	- Windows depends on that [`vcvarsall.bat`](https://learn.microsoft.com/en-us/cpp/build/building-on-the-command-line?view=msvc-170) is in your path.
-	- Linux and OSX depend on `clang`, `ar`
- 1. Clone this repository.
-	- Optionally configure build at the top of `build.py`
- 2. Run `python build.py`
- 3. Repository is importable. Copy into your project, or import directly.
+### Prerequisites
 
-## Configuring
+- [Premake5](https://premake.github.io) - the build configuration
+  - You can download the [Pre-Built Binaries](https://premake.github.io/download), simply need
+   to be unpacked and placed somewhere on the system search path or any other convenient
+   location.
+  - For Unix, also requires **GNU libc 2.38**.
+- [Git](http://git-scm.com/downloads) - required for clone backend dependencies
+- [Python](https://www.python.org/downloads/) - version 3.3.x or higher is required by
+  [dear_bindings][]
+  - **Linux users:** You also need the `venv` and `pip` modules, which may not be installed by
+     default:
 
-Search for `@CONFIGURE` to see everything configurable.
+   ```bash
+   sudo apt install python3-venv python3-pip
+   ```
 
-### `wanted_backends`
-This project allows you to compile ImGui backends alongside imgui itself, which is what Dear ImGui recommends you do.
-Bindings have been written for a subset of the backends provided by ImGui
- - You can see if a backend is supported by checking the `backends` table in `build.py`.
- - If a backend is supported it means that:
-	- Bindings have been written in `imgui_impl_xyz/`
-	- It has been successfully compiled and run in one of the `examples/`
- - Some backends have external dependencies. These will automatically be cloned into `backend_deps` if necessary.
- - You can enable a backend by adding it to `wanted_backends`
- - You can enable backends not officially supported.
+### Windows
 
-### `compile_debug`
-If set to true, will compile with debug flags
+1. Clone or [download](https://github.com/Capati/odin-imgui/archive/refs/heads/main.zip) this
+   repository
 
-### `build_wasm`
-If set to true, will compile WASM object files too
+2. Download and install **premake5.exe**.
 
-## Examples
+   Either add to PATH or copy to project directory.
 
-There are some examples in `examples/`. They are runnable directly.
+3. Open a command window, navigate to the project directory and generate Visual Studio 2022
+   project files with desired backends:
 
-## Available backends
+   ```shell
+   premake5 --backends=glfw,opengl3 vs2026
+   ```
 
-All backends which can be supported with only `vendor` have bindings now.
-It seems likely to me that SDL3, and maybe Android will exist in vendor in the future, at which point I'll add support.
+4. From the project folder, open the directory `build\make\windows`, them open the generated
+   solution **ImGui.sln**.
 
-| Backend        | Has bindings | Has example | Comment                                                              |
-|----------------|:------------:|:-----------:|----------------------------------------------------------------------|
-| Allegro 5      |      No      |     No      | No odin bindings in vendor                                           |
-| Android        |      No      |     No      | No odin bindings in vendor                                           |
-| Directx 9      |      No      |     No      | No odin bindings in vendor                                           |
-| Directx 10     |      No      |     No      | No odin bindings in vendor                                           |
-| Directx 11     |     Yes      |     Yes     |                                                                      |
-| Directx 12     |     Yes      |     No      | Bindings created, but not tested                                     |
-| GLFW           |     Yes      |     Yes     |                                                                      |
-| GLUT           |      No      |     No      | Obsolete. Likely will never be implemented.                          |
-| Metal          |     Yes      |     Yes     |                                                                      |
-| OpenGL 2       |      No      |     No      |                                                                      |
-| OpenGL 3       |     Yes      |     Yes     |                                                                      |
-| OSX            |     Yes      |     No      |                                                                      |
-| SDL 2          |     Yes      |     Yes     |                                                                      |
-| SDL 3          |      No      |     No      | No odin bindings in vendor (yet)                                     |
-| SDL_Renderer 2 |     Yes      |     Yes     | Has example, but Odin vendor library lacks required version (2.0.18) |
-| SDL_Renderer 3 |      No      |     No      | No odin bindings in vendor (yet)                                     |
-| Vulkan         |     Yes      |     No      | Tested in my own engine, but no example yet due to size              |
-| win32          |     Yes      |     No      | Bindings created, but not tested. Note: as of v1.91.5, this backend can no longer be compiled due to ImGui_ImplWin32_WndProcHandler and ImGui_ImplWin32_WndProcHandlerEx |
-| JS             |     Yes      |     Yes     | Native Odin backend - Docking doesn't work for some reason           |
-| WebGPU         |     Yes      |     Yes     | Native Odin backend                                                  |
-| WebGL          |     Yes      |     Yes     | Native Odin backend - WebGL 2 only                                   |
+5. In Visual Studio, confirm that the dropdown box at the top says “x64” (not “x86”); and then
+   use **Build** > **Build Solution**.
 
-## Updating
+   The generated library file `imgui_windows_x86_64.lib` will be located in the root of the
+   project directory.
 
-The Dear ImGui commits which have been tested against are listed in `build.py`.
-You can mess with these all you want and see if it works.
+#### Compiling Without Visual Studio
 
-To update:
- - Use next `docking` tag in `build.py` (eg. if current tag is `v1.91.1-docking`, then take `v1.91.2-docking`)
- - Go over all `imgui_impl_xyz` files, check if they have changes on dear imgui, then update the "last update" comment.
- - If an example stops working, the same process should be applied to these.
- - Finally, all possible examples should be run.
+If you do not have Visual Studio installed, you can use the **Build Tools for Visual Studio
+2022**, which includes only the required tools to build.
 
-## Help wanted!
+1. Follow the steps above to use `premake5` for generating the project files.
+2. [Download MSVC compiler/linker][] & Windows SDK without installing full Visual Studio.
+3. Make sure you have the required folder in the PATH:
 
- - If there are any issues, or this package doesn't do everything you want it to, feel free to make an issue, or message me on Discord @ldash4.
- - I have not yet tested on Apple devices (though I intend to). If someone with more knowledge about OSX started this initiative though, it would be appreciated!
- - A few useful examples have yet to be created in `examples/`.
-	- Vulkan - This is implicitly tested against my own private project, but it would be good to have an example.
-	- Win32 - This should be quite easy, I just haven't had the time.
-	- DX12 - I'm not a DX12 expert, and this is one of the more complicated examples.
-	- The remaining Apple examples
+   - `<portable-msvc>\msvc\VC\Auxiliary\Build` - for `vcvars64.bat`
+   - `<portable-msvc>\msvc\VC\Tools\MSVC\14.43.34808\bin\Hostx64\x64` - for `cl` and `lib`
+
+4. Open a command window, navigate to the `build` directory, and locate the `build.bat` file.
+   This batch file will use the generated project files to build ImGui.
+5. Compile and link ImGui:
+
+   ```bash
+   build.bat
+   ```
+
+[Download MSVC compiler/linker]: https://gist.github.com/mmozeiko/7f3162ec2988e81e56d5c4e22cde9977
+
+### Unix (macOS/Linux)
+
+1. Clone or [download](https://github.com/Capati/odin-imgui/archive/refs/heads/main.zip) this
+   repository
+
+2. Download and install **premake5**
+
+3. Open a terminal window, navigate to the project directory and generate the makefiles with
+   desired backends:
+
+   ```bash
+   premake5 --backends=glfw,opengl3 gmake
+   # On macOS, you can also use Xcode:
+   premake5 --backends=glfw,opengl3 xcode4
+   ```
+
+4. From the project folder, navigate to the generated build directory:
+
+   ```bash
+   cd build/make/linux
+   # Or
+   cd build/make/macosx
+   ```
+
+5. Compile the project using the `make` command:
+
+   ```bash
+   make config=release_x86_64
+   # Or for debug build:
+   # make config=debug_x86_64
+   ```
+
+   On macOS, the `make` command might need different configuration flags:
+
+   ```bash
+   make config=release_x86_64   # For Intel Macs
+   # or
+   make config=release_arm64    # For Apple Silicon (M1/M2/M3) Macs
+   ```
+
+   The generated library file will be located in the root of the project directory.
+
+## TODO
+
+- [ ] Internal
+- [ ] Examples for reference
+
+## Acknowledgements
+
+- [odin-imgui](https://gitlab.com/L-4/odin-imgui/-/tree/main?ref_type=heads)
+- [Odin Language](https://odin-lang.org/) - **Odin** Programming Language
+- [Dear Bindings](https://github.com/dearimgui/dear_bindings) - Tool to generate the C API
+- [Dear ImGui](https://github.com/ocornut/imgui) - The original ImGui library
+
+## License
+
+MIT License.
+
+[dear_bindings]: https://github.com/dearimgui/dear_bindings
+[Odin Language]: https://odin-lang.org

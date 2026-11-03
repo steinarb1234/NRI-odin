@@ -58,43 +58,40 @@ Float2_t :: struct {
 	x, y: f32,
 }
 
-// "AdapterDesc::supportedGraphicsAPIs" is a mask of supported graphics APIs
-GraphicsAPI :: enum u8 {
+GraphicsAPIEnum :: enum i32 {
 	//============================================================================================================================================================================================
 	
 	// "AdapterDesc::supportedGraphicsAPIs" is a mask of supported graphics APIs
-	ALL   = 0,
+	NONE  = 0,
 
 	//============================================================================================================================================================================================
 	
 	// "AdapterDesc::supportedGraphicsAPIs" is a mask of supported graphics APIs
-	NONE  = 1,
+	D3D11 = 1,
 
 	//============================================================================================================================================================================================
 	
 	// "AdapterDesc::supportedGraphicsAPIs" is a mask of supported graphics APIs
-	D3D11 = 2,
+	D3D12 = 2,
 
 	//============================================================================================================================================================================================
 	
 	// "AdapterDesc::supportedGraphicsAPIs" is a mask of supported graphics APIs
-	D3D12 = 4,
+	VK    = 3,
 
 	//============================================================================================================================================================================================
 	
 	// "AdapterDesc::supportedGraphicsAPIs" is a mask of supported graphics APIs
-	VK    = 8,
+	WGPU  = 4,
 
 	//============================================================================================================================================================================================
 	
 	// "AdapterDesc::supportedGraphicsAPIs" is a mask of supported graphics APIs
-	WGPU  = 16,
-
-	//============================================================================================================================================================================================
-	
-	// "AdapterDesc::supportedGraphicsAPIs" is a mask of supported graphics APIs
-	METAL = 32,
+	METAL = 5,
 }
+
+// "AdapterDesc::supportedGraphicsAPIs" is a mask of supported graphics APIs
+GraphicsAPI :: bit_set[GraphicsAPIEnum; u8]
 
 Result :: enum i8 {
 	NOT_READY        = -4,
@@ -3277,7 +3274,6 @@ DescriptorPoolBitsEnum :: enum u8 {
 	ALLOW_UPDATE_AFTER_SET = 0,
 	COPY_SOURCE            = 1,
 }
-
 DescriptorPoolBits :: bit_set[DescriptorPoolBitsEnum; u8]
 
 DescriptorRangeBitsEnum :: enum u8 {
@@ -4021,15 +4017,17 @@ Robustness :: enum u8 {
 	MAX_NUM = 4,
 }
 
-GraphicsPipelineBits :: enum u8 {
-	NONE               = 0,
-	FAIL_ON_CACHE_MISS = 1,
+GraphicsPipelineBitsEnum :: enum u8 {
+	FAIL_ON_CACHE_MISS = 0,
 }
 
-ComputePipelineBits :: enum u8 {
-	NONE               = 0,
-	FAIL_ON_CACHE_MISS = 1,
+GraphicsPipelineBits :: bit_set[GraphicsPipelineBitsEnum; u8]
+
+ComputePipelineBitsEnum :: enum u8 {
+	FAIL_ON_CACHE_MISS = 0,
 }
+
+ComputePipelineBits :: bit_set[ComputePipelineBitsEnum; u8]
 
 PipelineCacheDesc :: struct {
 	data: rawptr, // "data = NULL" means empty cache
@@ -4108,23 +4106,22 @@ ResolveOp :: enum u8 {
 	MAX_NUM     = 4,
 }
 
-// "NriBit(ResolveOp)"
-ResolveOpBits :: enum u8 {
+ResolveOpBitsEnum :: enum u8 {
 	// "NriBit(ResolveOp)"
-	NONE        = 0,
+	AVERAGE     = 0,
 
 	// "NriBit(ResolveOp)"
-	AVERAGE     = 1,
+	MIN         = 1,
 
 	// "NriBit(ResolveOp)"
-	MIN         = 2,
+	MAX         = 2,
 
 	// "NriBit(ResolveOp)"
-	MAX         = 4,
-
-	// "NriBit(ResolveOp)"
-	SAMPLE_ZERO = 8,
+	SAMPLE_ZERO = 3,
 }
+
+// "NriBit(ResolveOp)"
+ResolveOpBits :: bit_set[ResolveOpBitsEnum; u8]
 
 // Supported resolve ops of a resolve path
 ResolveOps :: struct {

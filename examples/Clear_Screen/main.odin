@@ -8,6 +8,12 @@ import sdl "vendor:sdl3"
 // Nvidia NRI
 import nri "../../"
 
+@(export, rodata)
+D3D12SDKVersion: u32 = 620
+
+@(export, rodata)
+D3D12SDKPath: cstring = ".\\AgilitySDK\\"
+
 NRI_Interface :: struct {
     using core     : nri.CoreInterface,
     using swapchain: nri.SwapChainInterface,
@@ -51,11 +57,11 @@ main :: proc() {
 	defer sdl.DestroyWindow(window)
 
     // -------- Init NRI ---------
-    graphics_api := nri.GraphicsAPI.D3D12
+    graphics_api := nri.GraphicsAPI{ .D3D12 }
 
 	adapters_num : u32 = 1 // This should choose the best adapter (graphics card)
 	adapter_desc : nri.AdapterDesc // Getting multiple adapters with [^]nri.AdapterDesc is buggy
-	NRI_ABORT_ON_FAILURE(nri.EnumerateAdapters(&adapter_desc, &adapters_num), "EnumerateAdapters")
+	NRI_ABORT_ON_FAILURE(nri.EnumerateAdapters(&adapter_desc, &adapters_num, graphics_api), "EnumerateAdapters")
     // fmt.printfln("Adapter: %v", adapter_desc)
 
     // callback_interface := nri.CallbackInterface {
@@ -98,7 +104,8 @@ main :: proc() {
     NRI_ABORT_ON_FAILURE(NRI.GetQueue(device, .GRAPHICS, 0, &command_queue), "GetQueue")
     
     frame_fence : ^nri.Fence
-    NRI_ABORT_ON_FAILURE(NRI.CreateFence(device, 0, &frame_fence), "CreateFence")
+    frame_fence_desc := nri.FenceDesc{ initialValue = 0 }
+    NRI_ABORT_ON_FAILURE(NRI.CreateFence(device, &frame_fence_desc, &frame_fence), "CreateFence")
     
     window_handle := sdl.GetPointerProperty(sdl.GetWindowProperties(window), sdl.PROP_WINDOW_WIN32_HWND_POINTER, nil)
     
@@ -130,18 +137,21 @@ main :: proc() {
         nri_swapchain_textures := NRI.GetSwapChainTextures(swapchain, &swapchain_texture_num)
         swapchain_format = NRI.GetTextureDesc(nri_swapchain_textures[0]).format
         for i:u32=0; i<swapchain_texture_num; i+=1 {
-            texture_view_desc := nri.TextureViewDesc{nri_swapchain_textures[i], .COLOR_ATTACHMENT, swapchain_format, 0, 0, 0, 0, 0, 0, {}, {}}
+            texture_view_desc := nri.TextureViewDesc{nri_swapchain_textures[i], .COLOR_ATTACHMENT, swapchain_format, 0, 0, 0, 0, 0, 0, {}, {}, {}}
 
             color_attachment : ^nri.Descriptor
             NRI_ABORT_ON_FAILURE(NRI.CreateTextureView(&texture_view_desc, &color_attachment), "CreateTextureView")
 
             SWAPCHAIN_SEMAPHORE :: ~u64(0)
+            semaphore_desc := nri.FenceDesc{
+                initialValue = SWAPCHAIN_SEMAPHORE
+            }
 
             acquire_semaphore : ^nri.Fence
-            NRI_ABORT_ON_FAILURE(NRI.CreateFence(device, SWAPCHAIN_SEMAPHORE, &acquire_semaphore), "CreateFence")
+            NRI_ABORT_ON_FAILURE(NRI.CreateFence(device, &semaphore_desc, &acquire_semaphore), "CreateFence")
 
             release_semaphore : ^nri.Fence
-            NRI_ABORT_ON_FAILURE(NRI.CreateFence(device, SWAPCHAIN_SEMAPHORE, &release_semaphore), "CreateFence")
+            NRI_ABORT_ON_FAILURE(NRI.CreateFence(device, &semaphore_desc, &release_semaphore), "CreateFence")
 
             swapchain_texture := SwapChainTexture{
                 acquire_semaphore = acquire_semaphore,
@@ -300,13 +310,13 @@ main :: proc() {
                 commandBufferNum= 1,
                 signalFences    = &rendering_finished_fence,
                 signalFenceNum  = 1,
-                swapChain       = swapchain, // required if "NRILowLatency" is enabled in the swap chain
+                // swapChain       = swapchain, // required if "NRILowLatency" is enabled in the swap chain
             }
             NRI.QueueSubmit(command_queue, &queue_submit_desc)
         }
 
         // Present
-        NRI.QueuePresent(swapchain, swapchain_texture.release_semaphore)
+        NRI.QueuePresent(swapchain, swapchain_texture.release_semaphore, 0)
 
         { // Signaling after "Present" improves D3D11 performance a bit
             signal_fence := nri.FenceSubmitDesc{

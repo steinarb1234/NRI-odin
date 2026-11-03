@@ -11,6 +11,12 @@ import sdl "vendor:sdl3"
 // Nvidia NRI
 import nri "../../"
 
+@(export, rodata)
+D3D12SDKVersion: u32 = 620
+
+@(export, rodata)
+D3D12SDKPath: cstring = ".\\AgilitySDK\\"
+
 NRI_ABORT_ON_FAILURE :: proc(result: nri.Result, location := #caller_location) {
     if result != .SUCCESS {
         fmt.eprintfln("NRI failure: %v at %s:%d", result, location.file_path, location.line)
@@ -37,7 +43,7 @@ Frame :: struct {
     command_buffer                : ^nri.CommandBuffer,
 }
 
-graphics_api :: nri.GraphicsAPI.VK
+graphics_api :: nri.GraphicsAPI { .VK }
 window : ^sdl.Window
 window_height : i32 = 768
 window_width  : i32 = 1024
@@ -45,8 +51,13 @@ queued_frame_num :: 2
 
 device : ^nri.Device
 
-frag_bytecode :: #load("shaders/triangle.frag.spv")
-vert_bytecode :: #load("shaders/triangle.vert.spv")
+when nri.GraphicsAPI.VK in graphics_api {
+    frag_bytecode :: #load("shaders/triangle.frag.spv")
+    vert_bytecode :: #load("shaders/triangle.vert.spv")
+} else when nri.GraphicsAPI.D3D12 in graphics_api {
+    frag_bytecode :: #load("shaders/triangle.frag.dxil")
+    vert_bytecode :: #load("shaders/triangle.vert.dxil")
+}
 
 CubeVertex :: struct{
     position: [3]f32,
@@ -103,7 +114,7 @@ main :: proc() {
     ok := sdl.Init({.AUDIO, .VIDEO}); sdl_assert(ok) 
     defer sdl.Quit()
 
-    when graphics_api == .VK{
+    when nri.GraphicsAPI.VK in graphics_api{
         window = sdl.CreateWindow("Hello World!", window_width, window_height, {.VULKAN}); sdl_assert(window != nil)
     } else {
         window = sdl.CreateWindow("Hello World!", window_width, window_height, {}); sdl_assert(window != nil)
@@ -114,7 +125,7 @@ main :: proc() {
 
 	adapters_num : u32 = 1 // This should choose the best adapter (graphics card)
 	adapter_desc : nri.AdapterDesc // Getting multiple adapters with [^]nri.AdapterDesc is buggy
-	NRI_ABORT_ON_FAILURE(nri.EnumerateAdapters(&adapter_desc, &adapters_num))
+	NRI_ABORT_ON_FAILURE(nri.EnumerateAdapters(&adapter_desc, &adapters_num, graphics_api))
     // fmt.printfln("Adapter: %v", adapter_desc)
 
     callback_interface := nri.CallbackInterface {
@@ -226,12 +237,15 @@ main :: proc() {
                 NRI_ABORT_ON_FAILURE(NRI.CreateTextureView(&texture_view_desc, &color_attachment))
 
                 SWAPCHAIN_SEMAPHORE :: ~u64(0)
+                semaphore_desc := nri.FenceDesc{
+                    initialValue = SWAPCHAIN_SEMAPHORE
+                }
 
                 acquire_semaphore : ^nri.Fence
-                NRI_ABORT_ON_FAILURE(NRI.CreateFence(device, SWAPCHAIN_SEMAPHORE, &acquire_semaphore))
+                NRI_ABORT_ON_FAILURE(NRI.CreateFence(device, &semaphore_desc, &acquire_semaphore))
 
                 release_semaphore : ^nri.Fence
-                NRI_ABORT_ON_FAILURE(NRI.CreateFence(device, SWAPCHAIN_SEMAPHORE, &release_semaphore))
+                NRI_ABORT_ON_FAILURE(NRI.CreateFence(device, &semaphore_desc, &release_semaphore))
 
                 swapchain_texture := SwapChainTexture{
                     acquire_semaphore = acquire_semaphore,
@@ -370,7 +384,7 @@ main :: proc() {
             &{
                 size           = size_of(cube_vertices),
                 structureStride= size_of(CubeVertex),
-                usage          = {.VERTEX_BUFFER},
+                usage          = {.VERTEX},
             }, 
             &vertex_buffer
         ))
@@ -391,7 +405,7 @@ main :: proc() {
             &{
                 size           = size_of(cube_indices),
                 structureStride= size_of(CubeIndex),
-                usage          = {.INDEX_BUFFER},
+                usage          = {.INDEX},
             }, 
             &index_buffer
         ))
@@ -487,7 +501,8 @@ main :: proc() {
     }
     
     frame_fence : ^nri.Fence
-    NRI_ABORT_ON_FAILURE(NRI.CreateFence(device, 0, &frame_fence))
+    frame_fence_desc := nri.FenceDesc{ initialValue = 0 }
+    NRI_ABORT_ON_FAILURE(NRI.CreateFence(device, &frame_fence_desc, &frame_fence))
     
 
     frame_index : u64 = 0
@@ -730,7 +745,7 @@ main :: proc() {
         }
 
         // Present
-        NRI_ABORT_ON_FAILURE(NRI.QueuePresent(swapchain, swapchain_texture.release_semaphore))
+        NRI_ABORT_ON_FAILURE(NRI.QueuePresent(swapchain, swapchain_texture.release_semaphore, 0))
 
         frame_index += 1
     }

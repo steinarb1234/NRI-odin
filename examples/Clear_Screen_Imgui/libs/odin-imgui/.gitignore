@@ -1,14 +1,46 @@
-examples/*.exe
-examples/*.bin
-examples/imgui.ini
-temp/
-imgui/
-dear_bindings/
-backend_deps/
+# Build
+/build/*
+!/build/.gitkeep
+!/build/deps/.gitkeep
+impl_enabled.odin
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+*.o
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+*.obj
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Sublime Text
+*.sublime-workspace
+
+# vs code
+.vscode
+
+# Mac
+**/.DS_Store
+
+# Odin
 ols.json
 
-examples/js_wgpu/web/*
-!examples/js_wgpu/web/index.html
-
-examples/js_webgl/web/*
-!examples/js_webgl/web/index.html
+# Examples
+imgui.ini
+examples/*.ini

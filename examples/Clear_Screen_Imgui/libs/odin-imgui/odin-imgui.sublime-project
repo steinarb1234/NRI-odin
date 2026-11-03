@@ -1,0 +1,121 @@
+{
+	"folders":
+	[
+		{
+			"path": "."
+		}
+	],
+	"build_systems": [
+		{
+			"name": "Odin Run (Debug)",
+			"working_dir": "${project_path}",
+			"file_regex": "^(.+)\\(([0-9]+):([0-9]+)\\) (.+)$",
+			"variants": [
+				{
+                    "name": "Check Version",
+                    "windows": {
+                        "cmd": [
+                            "cmd", "/c",
+                            "odin", "run",
+                            "examples\\check_version",
+                            "-debug",
+                            "-out:build\\check_version.exe"
+                        ],
+                    },
+                    "linux": {
+                        "cmd": [
+                            "odin", "run",
+                            "examples/check_version",
+                            "-debug",
+                            "-out:build/check_version"
+                        ],
+                    },
+                    "osx": {
+                        "cmd": [
+                            "odin", "run",
+                            "examples/check_version",
+                            "-debug",
+                            "-out:build/check_version"
+                        ],
+                    },
+               },
+               {
+                    "name": "GLFW Vulkan",
+                    "windows": {
+                        "cmd": [
+                            "cmd", "/c",
+                            "odin", "run",
+                            "examples\\example_glfw_vulkan",
+                            "-debug",
+                            "-out:build\\example_glfw_vulkan.exe"
+                        ],
+                    },
+                    "linux": {
+                        "cmd": [
+                            "odin", "run",
+                            "examples/example_glfw_vulkan",
+                            "-debug",
+                            "-out:build/example_glfw_vulkan"
+                        ],
+                    },
+                    "osx": {
+                        "cmd": [
+                            "odin", "run",
+                            "examples/example_glfw_vulkan",
+                            "-debug",
+                            "-out:build/example_glfw_vulkan"
+                        ],
+                    },
+               },
+               {
+                    "name": "GLFW OpenGL3",
+                    "windows": {
+                        "cmd": [
+                            "cmd", "/c",
+                            "odin", "run",
+                            "examples\\example_glfw_opengl3",
+                            "-debug",
+                            "-out:build\\example_glfw_opengl3.exe"
+                        ],
+                    },
+                    "linux": {
+                        "cmd": [
+                            "odin", "run",
+                            "examples/example_glfw_opengl3",
+                            "-debug",
+                            "-out:build/example_glfw_opengl3"
+                        ],
+                    },
+                    "osx": {
+                        "cmd": [
+                            "odin", "run",
+                            "examples/example_glfw_opengl3",
+                            "-debug",
+                            "-out:build/example_glfw_opengl3"
+                        ],
+                    },
+               },
+               {
+                    "name": "GLFW DirectX 11",
+                    "windows": {
+                        "cmd": [
+                            "cmd", "/c",
+                            "odin", "run",
+                            "examples\\example_win32_directx11",
+                            "-debug",
+                            "-out:build\\example_win32_directx11.exe"
+                        ],
+                    },
+               },
+			],
+		}
+	],
+	"settings": {
+		"auto_complete": false,
+		"LSP": {
+			"odin": {
+				"enabled": true,
+			},
+		},
+	},
+}

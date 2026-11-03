@@ -247,12 +247,16 @@ TopLevelInstanceBitsEnum :: enum u32 {
 TopLevelInstanceBits :: bit_set[TopLevelInstanceBitsEnum; u32]
 
 TopLevelInstance :: struct {
-	transform:                      [3][4]f32,
-	instanceId:                     u32,
-	mask:                           u32,
-	shaderBindingTableRecordOffset: u32, // final hit shader binding table record index = shaderBindingTableRecordOffset + geometryIndex (from BLAS) * geometryStride (from shader) + rayOffset (from shader)
-	flags:                          TopLevelInstanceBits,
-	accelerationStructureHandle:    u64,
+    transform: [3][4]f32,
+    using instance: bit_field u32 {
+        instanceId: u32 | 24,
+        mask:       u32 | 8,
+    },
+    using shader: bit_field u32 {
+        shaderBindingTableRecordOffset: u32 | 24, // final hit shader binding table record index = shaderBindingTableRecordOffset + geometryIndex (from BLAS) * geometryStride (from shader) + rayOffset (from shader)
+        flags:                          u8  | 8, // Odin bindings note: transmute the bit_set to u8
+    },
+    accelerationStructureHandle: u64,
 }
 
 //============================================================================================================================================================================================

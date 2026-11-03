@@ -8,10 +8,17 @@ import sdl "vendor:sdl3"
 // Nvidia NRI
 import nri "../../"
 
+@(export, rodata)
+D3D12SDKVersion: u32 = 620
+
+@(export, rodata)
+D3D12SDKPath: cstring = ".\\AgilitySDK\\"
+
 // Imgui
 DISABLE_DOCKING :: #config(DISABLE_DOCKING, false) // Allows moving imgui window out of the main window
 import im "libs/odin-imgui"
-import    "libs/odin-imgui/imgui_impl_sdl3"
+// import    "libs/odin-imgui/imgui_impl_sdl3"
+import  imgui_impl_sdl3  "libs/odin-imgui/backends/sdl3"
 
 
 NRI_ABORT_ON_FAILURE :: proc(result: nri.Result, location := #caller_location) {
@@ -66,11 +73,11 @@ main :: proc() {
 	defer sdl.DestroyWindow(window)
 
     // -------- Init NRI ---------
-    graphics_api := nri.GraphicsAPI.D3D12
+    graphics_api := nri.GraphicsAPI{ .D3D12 }
 
 	adapters_num : u32 = 1 // This should choose the best adapter (graphics card)
 	adapter_desc : nri.AdapterDesc // Getting multiple adapters with [^]nri.AdapterDesc is buggy
-	NRI_ABORT_ON_FAILURE(nri.EnumerateAdapters(&adapter_desc, &adapters_num))
+	NRI_ABORT_ON_FAILURE(nri.EnumerateAdapters(&adapter_desc, &adapters_num, graphics_api))
     // fmt.printfln("Adapter: %v", adapter_desc)
 
     callback_interface := nri.CallbackInterface {
@@ -115,12 +122,13 @@ main :: proc() {
             size            = 0,
             // size            = 4 * 1024 * 1024, // 4 MB for dynamic VB/IB
             structureStride = 0,
-            usage           = {.VERTEX_BUFFER, .INDEX_BUFFER},
+            usage           = {.VERTEX, .INDEX},
         },
         constantBufferMemoryLocation = .HOST_UPLOAD,
         // constantBufferSize           = u64,
         // constantBufferSize           = 1 * 1024 * 1024,
         queuedFrameNum               = queued_frame_num,
+        hostDataCapacity = 1024 * 1024, // 1MiB used for imgui
     }
     streamer : ^nri.Streamer
     NRI_ABORT_ON_FAILURE(NRI.CreateStreamer(device, &streamer_desc, &streamer))
@@ -130,7 +138,8 @@ main :: proc() {
     NRI_ABORT_ON_FAILURE(NRI.GetQueue(device, .GRAPHICS, 0, &command_queue))
     
     frame_fence : ^nri.Fence
-    NRI_ABORT_ON_FAILURE(NRI.CreateFence(device, 0, &frame_fence))
+    frame_fence_desc := nri.FenceDesc{ initialValue = 0 }
+    NRI_ABORT_ON_FAILURE(NRI.CreateFence(device, &frame_fence_desc, &frame_fence))
     
     window_handle := sdl.GetPointerProperty(sdl.GetWindowProperties(window), sdl.PROP_WINDOW_WIN32_HWND_POINTER, nil)
     
@@ -162,18 +171,21 @@ main :: proc() {
         nri_swapchain_textures := NRI.GetSwapChainTextures(swapchain, &swapchain_texture_num)
         swapchain_format = NRI.GetTextureDesc(nri_swapchain_textures[0]).format
         for i:u32=0; i<swapchain_texture_num; i+=1 {
-            texture_view_desc := nri.TextureViewDesc{nri_swapchain_textures[i], .COLOR_ATTACHMENT, swapchain_format, 0, 0, 0, 0, 0, 0, {}, {}}
+            texture_view_desc := nri.TextureViewDesc{nri_swapchain_textures[i], .COLOR_ATTACHMENT, swapchain_format, 0, 0, 0, 0, 0, 0, {}, {}, {}}
 
             color_attachment : ^nri.Descriptor
             NRI_ABORT_ON_FAILURE(NRI.CreateTextureView(&texture_view_desc, &color_attachment))
 
-            SWAPCHAIN_SEMAPHORE :: ~u64(0)
+            SWAPCHAIN_SEMAPHORE :: ~u64(0)            
+            semaphore_desc := nri.FenceDesc{
+                initialValue = SWAPCHAIN_SEMAPHORE
+            }
 
             acquire_semaphore : ^nri.Fence
-            NRI_ABORT_ON_FAILURE(NRI.CreateFence(device, SWAPCHAIN_SEMAPHORE, &acquire_semaphore))
+            NRI_ABORT_ON_FAILURE(NRI.CreateFence(device, &semaphore_desc, &acquire_semaphore))
 
             release_semaphore : ^nri.Fence
-            NRI_ABORT_ON_FAILURE(NRI.CreateFence(device, SWAPCHAIN_SEMAPHORE, &release_semaphore))
+            NRI_ABORT_ON_FAILURE(NRI.CreateFence(device, &semaphore_desc, &release_semaphore))
 
             swapchain_texture := SwapChainTexture{
                 acquire_semaphore = acquire_semaphore,
@@ -316,6 +328,7 @@ main :: proc() {
 
             imgui_copy : nri.CopyImguiDataDesc
             imgui_draw_data : ^im.DrawData
+            imgui_render_data : nri.ImguiRenderData
             { // Imgui prepare frame
                 imgui_impl_sdl3.NewFrame()
                 im.NewFrame()
@@ -335,7 +348,7 @@ main :: proc() {
                     textureNum  = u32(textures.Size),
                     // textureNum  = 0,
                 }
-                im_interface.CmdCopyImguiData(command_buffer, streamer, nri_imgui, &imgui_copy)
+                im_interface.CmdCopyImguiData(command_buffer, streamer, nri_imgui, &imgui_copy, &imgui_render_data)
             }
 
             NRI.CmdBeginRendering(command_buffer, &rendering_desc)
@@ -360,14 +373,12 @@ main :: proc() {
 					NRI.CmdBeginAnnotation(command_buffer, "Imgui present", 0); defer(NRI.CmdEndAnnotation(command_buffer))
 
 					draw_imgui_desc := nri.DrawImguiDesc{
-					    drawLists       = imgui_copy.drawLists,
-					    drawListNum     = imgui_copy.drawListNum,
 					    displaySize     = {u16(imgui_draw_data.DisplaySize.x), u16(imgui_draw_data.DisplaySize.y)},
 					    hdrScale        = 1.0,
 					    attachmentFormat= swapchain_texture.attachment_format,
 					    linearColor     = true,
 					}
-					im_interface.CmdDrawImgui(command_buffer, nri_imgui, &draw_imgui_desc)
+					im_interface.CmdDrawImgui(command_buffer, &imgui_render_data, &draw_imgui_desc)
                     
                 }
             
@@ -401,7 +412,7 @@ main :: proc() {
                 commandBufferNum= 1,
                 signalFences    = &rendering_finished_fence,
                 signalFenceNum  = 1,
-                swapChain       = swapchain, // required if "NRILowLatency" is enabled in the swap chain
+                // swapChain       = swapchain, // required if "NRILowLatency" is enabled in the swap chain
             }
             NRI.QueueSubmit(command_queue, &queue_submit_desc)
         }
@@ -409,7 +420,7 @@ main :: proc() {
         NRI.EndStreamerFrame(streamer)
 
         // Present
-        NRI.QueuePresent(swapchain, swapchain_texture.release_semaphore)
+        NRI.QueuePresent(swapchain, swapchain_texture.release_semaphore, 0)
 
         { // Signaling after "Present" improves D3D11 performance a bit
             signal_fence := nri.FenceSubmitDesc{
@@ -429,7 +440,50 @@ main :: proc() {
 
     }
 
-    // Destroy 
+    // Wait until the GPU has finished using all resources.
+    NRI_ABORT_ON_FAILURE(NRI.DeviceWaitIdle(device))
+
+    // Destroy the NRI ImGui renderer.
+    // This also releases its textures, descriptors and pipelines.
+    im_interface.DestroyImgui(nri_imgui)
+
+    // Destroy the streamer.
+    // This releases its internal GPU buffers.
+    NRI.DestroyStreamer(streamer)
+
+    // Destroy per-frame command resources.
+    for &frame in frames[:] {
+        NRI.DestroyCommandBuffer(frame.command_buffer)
+        NRI.DestroyCommandAllocator(frame.command_allocator)
+    }
+
+    // Destroy the fences and texture views created for the swap chain.
+    for &swapchain_texture in swapchain_textures[:] {
+        if swapchain_texture.color_attachment != nil {
+            NRI.DestroyDescriptor(swapchain_texture.color_attachment)
+        }
+
+        if swapchain_texture.acquire_semaphore != nil {
+            NRI.DestroyFence(swapchain_texture.acquire_semaphore)
+        }
+
+        if swapchain_texture.release_semaphore != nil {
+            NRI.DestroyFence(swapchain_texture.release_semaphore)
+        }
+    }
+
+    // Destroy the frame synchronization fence.
+    NRI.DestroyFence(frame_fence)
+
+    // Destroy the swap chain.
+    // Do not explicitly destroy its textures: they are swap-chain-owned.
+    NRI.DestroySwapChain(swapchain)
+
+    // Shut down Dear ImGui's SDL backend and context.
+    imgui_impl_sdl3.Shutdown()
+    im.DestroyContext()
+
+    // Finally destroy the NRI device.
     nri.DestroyDevice(device)
 
 }

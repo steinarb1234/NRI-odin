@@ -14,13 +14,25 @@ echo Compiling shaders...
 @REM     exit /b %errorlevel%
 @REM )
 
-echo Compiling spirv shaders...
-"%VULKAN_SDK%\Bin\dxc.exe" -spirv -T vs_6_0 -E main -Fo shaders/triangle.vert.spv -WX -Zi -Qembed_debug shaders/triangle.vert.hlsl -I shaders -fspv-target-env=vulkan1.3 -fvk-use-dx-layout -fvk-use-dx-position-w
+echo Compiling spirv shaders for D3D12...
+"%VULKAN_SDK%\Bin\dxc.exe" -T vs_6_6 -E main -Fo shaders/triangle.vert.dxil shaders/triangle.vert.hlsl
 if %errorlevel% neq 0 (
     echo Vertex shader compilation failed!
     exit /b %errorlevel%
 )
-"%VULKAN_SDK%\Bin\dxc.exe" -spirv -T ps_6_0 -E main -Fo shaders/triangle.frag.spv -WX -Zi -Qembed_debug shaders/triangle.frag.hlsl -I shaders -fspv-target-env=vulkan1.3 -fvk-use-dx-layout
+"%VULKAN_SDK%\Bin\dxc.exe" -T ps_6_6 -E main -Fo shaders/triangle.frag.dxil shaders/triangle.frag.hlsl
+if %errorlevel% neq 0 (
+    echo Pixel shader compilation failed!
+    exit /b %errorlevel%
+)
+
+echo Compiling spirv shaders for Vulkan...
+"%VULKAN_SDK%\Bin\dxc.exe" -spirv -T vs_6_6 -E main -Fo shaders/triangle.vert.spv -WX -Zi -Qembed_debug shaders/triangle.vert.hlsl -I shaders -fspv-target-env=vulkan1.3 -fvk-use-dx-layout -fvk-use-dx-position-w
+if %errorlevel% neq 0 (
+    echo Vertex shader compilation failed!
+    exit /b %errorlevel%
+)
+"%VULKAN_SDK%\Bin\dxc.exe" -spirv -T ps_6_6 -E main -Fo shaders/triangle.frag.spv -WX -Zi -Qembed_debug shaders/triangle.frag.hlsl -I shaders -fspv-target-env=vulkan1.3 -fvk-use-dx-layout
 if %errorlevel% neq 0 (
     echo Pixel shader compilation failed!
     exit /b %errorlevel%
